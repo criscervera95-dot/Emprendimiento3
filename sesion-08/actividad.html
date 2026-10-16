@@ -153,6 +153,19 @@ h1,h2,h3,h4{font-family:'Raleway',sans-serif}
 .autosave-indicator.show{opacity:1}
 /* ===== PRINT-ONLY ELEMENTS (hidden on screen) ===== */
 .print-header,.print-footer{display:none}
+.stage-inputs .si-field select,.sel{width:100%;margin-top:5px;padding:6px 8px;border:1px solid #e2e8f0;border-radius:6px;font-family:'Poppins',sans-serif;font-size:0.78em;background:#fff;color:#1a3a6b}
+.round-list{display:grid;gap:10px;margin-top:14px}
+.round-card{background:#1a3a6b;color:#fff;border-radius:12px;padding:12px 16px;font-size:0.85em;line-height:1.5}
+.round-card .tag{display:inline-block;background:#e87722;border-radius:12px;padding:2px 10px;font-size:0.72em;font-weight:700;margin-bottom:4px}
+.round-card b{color:#fed7aa}
+.contact-table{width:100%;border-collapse:collapse;font-size:0.8em;margin-top:8px}
+.contact-table th{background:#1a3a6b;color:#fff;padding:7px 6px;text-align:left;font-weight:600}
+.contact-table td{border-bottom:1px solid #e2e8f0;padding:5px 4px}
+.contact-table input[type=text]{width:100%;padding:6px 7px;border:1px solid #e2e8f0;border-radius:6px;font-family:'Poppins',sans-serif;font-size:0.95em}
+.contact-table select{width:100%;padding:5px;border:1px solid #e2e8f0;border-radius:6px;font-family:'Poppins',sans-serif;font-size:0.95em;background:#fff}
+.contact-sum{margin-top:10px;background:#FFF9F0;border:2px solid #f0e0c8;border-radius:10px;padding:10px 14px;font-size:0.82em;font-weight:600;color:#1a3a6b}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:768px){.two-col{grid-template-columns:1fr}}
 @media(max-width:768px){.wizard-content{padding:20px}.spin-grid,.combo-examples,.stage-inputs,.findings-grid{grid-template-columns:1fr}}
 
 /* =========================================================
@@ -219,6 +232,11 @@ h1,h2,h3,h4{font-family:'Raleway',sans-serif}
   .wd-box .wd-gen-btn,.wd-box .wd-add-btn,.wd-remove-btn{ display:none !important; }
   .wd-row{ border:1px solid #cbd5e1 !important; page-break-inside:avoid; }
   .wd-box{ page-break-inside:avoid; }
+  .stage-inputs .si-field select,.sel,.contact-table select{ border:none !important; background:transparent !important; appearance:none; -webkit-appearance:none; font-weight:700; padding:2px !important; }
+  .round-card{ background:#1a3a6b !important; color:#fff !important; page-break-inside:avoid; }
+  .contact-table{ page-break-inside:avoid; }
+  .contact-table input[type=text]{ border:none !important; border-bottom:1px solid #cbd5e1 !important; border-radius:0 !important; }
+  .draw-btns{ display:none !important; }
 }
 </style>
 </head>
@@ -256,10 +274,11 @@ h1,h2,h3,h4{font-family:'Raleway',sans-serif}
 <div class="step-indicator" id="ind-4" onclick="goToStepIdx(4)">5</div>
 <div class="step-indicator" id="ind-5" onclick="goToStepIdx(5)">6</div>
 <div class="step-indicator" id="ind-6" onclick="goToStepIdx(6)">7</div>
+<div class="step-indicator" id="ind-7" onclick="goToStepIdx(7)">8</div>
 </div>
 <div class="progress-percent-wrap">
 <div class="progress-percent-track"><div class="progress-percent-fill" id="progressFill"></div></div>
-<div class="progress-percent-label"><span id="progressStepNum">Paso 1 de 7</span><span class="pp-pct" id="progressPctNum">0%</span></div>
+<div class="progress-percent-label"><span id="progressStepNum">Paso 1 de 8</span><span class="pp-pct" id="progressPctNum">0%</span></div>
 </div>
 </div>
 <div class="wizard-content">
@@ -268,7 +287,7 @@ h1,h2,h3,h4{font-family:'Raleway',sans-serif}
 <div class="step-content active" data-step="0">
 <h2 class="step-title">👥 Identifica a tu equipo</h2>
 <p class="step-subtitle">Antes de comenzar, registren los datos de su equipo.</p>
-<div class="blue-banner"><h4>📘 ¿Qué vamos a hacer hoy?</h4><p>Van a practicar un <strong>role-play de prospección con SPIN</strong>, adaptando su discurso a un cliente y canal asignados al azar. Después, como tarea, calcularán los indicadores de su <strong>embudo de ventas</strong>.</p></div>
+<div class="blue-banner"><h4>📘 ¿Qué vamos a hacer hoy?</h4><p>Van a <strong>aplicar a su propio proyecto</strong> lo visto en clase: un <strong>role-play de venta con SPIN</strong> sobre un caso sorteado (cliente, canal y objeción) que ustedes adaptan a su proyecto, y el <strong>embudo de ventas</strong> de su proyecto. Cada integrante registra su aporte al final.</p></div>
 <div class="form-group"><label>Nombre del equipo *</label><input type="text" id="teamName" placeholder="Ej: Innovadores MX" oninput="saveData()"></div>
 <div class="form-group"><label>Integrantes del equipo *</label><textarea id="teamMembers" placeholder="Nombres separados por coma" oninput="saveData()"></textarea></div>
 <div class="form-group"><label>Nombre de su proyecto *</label><input type="text" id="projectName" placeholder="Ej: EcoSnacks Saludables" oninput="saveData()"></div>
@@ -277,39 +296,34 @@ h1,h2,h3,h4{font-family:'Raleway',sans-serif}
 <!-- PASO 1: ACTIVIDAD - INSTRUCCIONES -->
 <div class="step-content" data-step="1">
 <h2 class="step-title">🎭 Actividad — Objetivo e instrucciones</h2>
-<p class="step-subtitle">Role-play de prospección con SPIN, adaptado a cliente y canal.</p>
-<div class="formula-box"><div class="formula-title">🎯 Objetivo</div><div class="formula-content">Practicar las 4 preguntas de SPIN y, al mismo tiempo, adaptar el discurso de venta según el tipo de cliente y el canal que les toque — no el mismo argumento para todos.</div></div>
+<p class="step-subtitle">Role-play SPIN con un caso sorteado, adaptado a su proyecto.</p>
+<div class="formula-box"><div class="formula-title">🎯 Objetivo</div><div class="formula-content">Aplicar las 4 preguntas SPIN a su propio proyecto y adaptar el discurso según el cliente, el canal y la objeción que les toquen — no el mismo argumento para todos.</div></div>
 <div class="step-list">
-<div class="step-list-item"><strong>01 · Asignen roles.</strong> En equipos del proyecto: uno vende, uno o más son clientes y uno observa para tomar nota.</div>
-<div class="step-list-item"><strong>02 · Usen su propio proyecto.</strong> El "vendedor" ofrece el producto o servicio de su propio proyecto de emprendimiento, no un ejemplo genérico.</div>
-<div class="step-list-item"><strong>03 · Reciban cliente y canal al azar.</strong> Tomen (o el profesor asigna) una tarjeta con un tipo de cliente y un canal. Adapten tono y argumento a lo que les tocó.</div>
-<div class="step-list-item"><strong>04 · Apliquen SPIN.</strong> El vendedor tiene 6 minutos para conducir la conversación con las 4 preguntas SPIN, en orden: Situación → Problema → Implicación → Necesidad de solución.</div>
-<div class="step-list-item"><strong>05 · Observen.</strong> El observador anota: ¿usó las 4 preguntas en orden? ¿adaptó el mensaje al cliente y canal asignados, o dio el mismo discurso de siempre?</div>
-<div class="step-list-item"><strong>06 · Debrief.</strong> Compartan en equipo: ¿qué tuvieron que cambiar de su discurso original para adaptarse al cliente/canal que les tocó?</div>
-</div>
-<h3 style="font-size:0.9em;color:#1a3a6b;margin:18px 0 8px">Ejemplos de combinaciones</h3>
-<div class="combo-examples">
-<div class="combo-chip">🧊 Cliente escéptico y racional — videollamada</div>
-<div class="combo-chip">⚡ Cliente emocional, con poco tiempo — llamada corta</div>
-<div class="combo-chip">📊 Cliente técnico, quiere datos duros — correo escrito</div>
-<div class="combo-chip">🏢 Cliente que decide en comité — reunión presencial</div>
+<div class="step-list-item"><strong>01 · Formen tríos.</strong> Uno vende 🗣️, otro es el cliente 🙋 y otro observa 👀. Rotan en cada ronda (3 rondas de 5 minutos).</div>
+<div class="step-list-item"><strong>02 · Sorteen el caso.</strong> Pulsen el botón: les toca un <b>perfil de cliente</b>, un <b>canal</b> y una <b>objeción</b>.</div>
+<div class="step-list-item"><strong>03 · Adapten el caso a su proyecto.</strong> Contesten abajo: ¿quién sería ese cliente en su proyecto y qué canal usarían de verdad? El vendedor ofrece el producto o servicio de <b>su</b> proyecto.</div>
+<div class="step-list-item"><strong>04 · Apliquen SPIN.</strong> 5 minutos con las 4 preguntas en orden: Situación → Problema → Implicación → Necesidad de solución. El cliente pone la objeción sorteada antes de cerrar.</div>
+<div class="step-list-item"><strong>05 · Observen con evidencia.</strong> El observador anota qué preguntas usó, si adaptó el mensaje y una frase textual del vendedor.</div>
+<div class="step-list-item"><strong>06 · Cambien de rol.</strong> Pulsen "Sortear siguiente ronda" y repitan con otro vendedor.</div>
 </div>
 <div class="draw-area">
-<button class="btn-draw" onclick="drawCombo()">🎲 Asignar cliente y canal al azar</button>
-<div class="assigned-card" id="assignedCard">
-<div class="tag">Les tocó</div>
-<h3 id="assignedClient">—</h3>
-<p id="assignedChannel">—</p>
+<div class="draw-btns"><button class="btn-draw" onclick="drawCase()">🎲 Sortear caso (cliente · canal · objeción)</button></div>
+<div class="round-list" id="roundList"></div>
 </div>
-</div>
+<h3 style="font-size:0.9em;color:#1a3a6b;margin:20px 0 6px">🔁 Adaptación a su proyecto</h3>
+<p class="hint" style="margin-bottom:6px">Respondan en 1–2 líneas; usen el caso de la ronda actual.</p>
+<div class="form-group"><label>¿Quién sería ese cliente en nuestro proyecto?</label><textarea id="adaCliente" oninput="saveData()" placeholder="Ej.: la dueña de una cafetería que compra por impulso y decide sola."></textarea></div>
+<div class="form-group"><label>¿Qué canal usaríamos realmente para venderle y por qué?</label><textarea id="adaCanal" oninput="saveData()" placeholder="Ej.: WhatsApp, porque es donde responden nuestros clientes."></textarea></div>
+<div class="form-group"><label>¿Qué dolor del cliente atacaríamos y qué cambia en nuestro discurso?</label><textarea id="adaDolor" oninput="saveData()" placeholder="Ej.: pierden citas por falta de confirmación; dejamos de hablar de funciones y hablamos de citas perdidas."></textarea></div>
 </div>
 
 <!-- PASO 2: ROLE-PLAY EN VIVO -->
 <div class="step-content" data-step="2">
 <h2 class="step-title">⏱️ Role-play en vivo</h2>
-<p class="step-subtitle">6 minutos. Usen las 4 preguntas SPIN, en orden, sin mencionar el producto antes de la cuarta.</p>
+<p class="step-subtitle">5 minutos por turno (3 turnos, roten roles). Usen las 4 preguntas SPIN, en orden, sin mencionar el producto antes de la cuarta.</p>
+<div class="round-card" id="currentRound" style="margin-bottom:14px">Primero sorteen el caso en el paso anterior.</div>
 <div class="timer-box">
-<div class="timer-display" id="timerDisplay">06:00</div>
+<div class="timer-display" id="timerDisplay">05:00</div>
 <div class="timer-btns">
 <button class="btn-timer start" onclick="startTimer()">▶ Iniciar</button>
 <button class="btn-timer pause" onclick="pauseTimer()">⏸ Pausar</button>
@@ -333,6 +347,7 @@ h1,h2,h3,h4{font-family:'Raleway',sans-serif}
 <div class="form-group"><label>Situación — análisis de la situación</label><textarea id="obsSituacion" oninput="saveData()" placeholder="Describan brevemente el contexto del role-play: cliente, canal, producto."></textarea></div>
 <div class="form-group"><label>Comportamiento — qué hizo (o no hizo) el vendedor para adaptar su discurso</label><textarea id="obsComportamiento" oninput="saveData()" placeholder="Ej.: cambió el tono, usó datos en vez de emociones, mencionó el producto antes de tiempo..."></textarea></div>
 <div class="form-group"><label>Impacto — qué tan efectiva fue esa adaptación para el cliente asignado</label><textarea id="obsImpacto" oninput="saveData()" placeholder="¿El cliente se mostró más receptivo o más resistente?"></textarea></div>
+<div class="form-group"><label>Evidencia — una frase textual del vendedor que muestre la adaptación (o su ausencia)</label><textarea id="obsEvidencia" oninput="saveData()" placeholder="Ej.: \"Entiendo que hoy no es buen momento; ¿qué tendría que pasar para que lo fuera?\""></textarea></div>
 <div class="form-group"><label>Resultado — ¿el cliente cierra la compra?</label>
 <div class="toggle-group">
 <div class="toggle-btn yes" id="toggleYes" onclick="setResultado(true)">Sí cierra</div>
@@ -350,6 +365,7 @@ h1,h2,h3,h4{font-family:'Raleway',sans-serif}
 <h4>✅ Checklist antes de entregar</h4>
 <label><input type="checkbox" class="check-item" onchange="tickSound()"> El vendedor usó las 4 preguntas SPIN en orden.</label>
 <label><input type="checkbox" class="check-item" onchange="tickSound()"> El mensaje se adaptó al cliente y canal asignados.</label>
+<label><input type="checkbox" class="check-item" onchange="tickSound()"> El vendedor respondió la objeción sorteada.</label>
 <label><input type="checkbox" class="check-item" onchange="tickSound()"> El análisis incluye Situación, Comportamiento, Impacto, Resultado y Recomendaciones.</label>
 <label><input type="checkbox" class="check-item" onchange="tickSound()"> Adjuntamos la foto del trabajo en equipo.</label>
 </div>
@@ -357,29 +373,29 @@ h1,h2,h3,h4{font-family:'Raleway',sans-serif}
 
 <!-- PASO 4: TAREA - EMBUDO -->
 <div class="step-content" data-step="4">
-<h2 class="step-title">📊 Tarea — Embudo de ventas del proyecto</h2>
+<h2 class="step-title">📊 Embudo de ventas del proyecto</h2>
 <p class="step-subtitle">Calculen sus indicadores con datos, no con intuición, y decidan dónde enfocar la próxima semana.</p>
 <div class="formula-box"><div class="formula-title">🎯 Objetivo</div><div class="formula-content">Calcular los indicadores básicos de su propio embudo de ventas y decidir, con datos, en qué etapa enfocar los esfuerzos de la próxima semana.</div></div>
-<div class="blue-banner"><h4>📘 Cómo se calcula</h4><p>Conversión por etapa = etapa siguiente ÷ etapa anterior × 100. Llenen "Estimado hoy" con números reales o razonablemente estimados de su proyecto, y "Meta" con el compromiso para el cierre del semestre.</p></div>
+<div class="blue-banner"><h4>📘 Cómo se calcula</h4><p>Conversión por etapa = etapa siguiente ÷ etapa anterior × 100. Marquen cada cifra de hoy como <b>Real</b> (ya sucedió) o <b>Estimada</b> (aún no venden o no llevan registro). Si todavía no venden, estimen con lo que saben y cuenten una <b>preventa o compromiso</b> como cierre. "Meta" es el compromiso al cierre del semestre.</p></div>
 
 <div class="stage-inputs">
-<div class="si-field"><label>Prospectos contactados (hoy)</label><input type="number" id="stg1_hoy" min="0" oninput="calcFunnel()"></div>
+<div class="si-field"><label>Prospectos contactados (hoy)</label><input type="number" id="stg1_hoy" min="0" oninput="calcFunnel()"><select id="stg1_tipo" onchange="calcFunnel()"><option value="est">Estimada</option><option value="real">Real</option></select></div>
 <div class="si-field"><label>Prospectos contactados (meta)</label><input type="number" id="stg1_meta" min="0" oninput="calcFunnel()"></div>
 </div>
 <div class="stage-inputs">
-<div class="si-field"><label>Leads calificados (hoy)</label><input type="number" id="stg2_hoy" min="0" oninput="calcFunnel()"></div>
+<div class="si-field"><label>Leads calificados (hoy)</label><input type="number" id="stg2_hoy" min="0" oninput="calcFunnel()"><select id="stg2_tipo" onchange="calcFunnel()"><option value="est">Estimada</option><option value="real">Real</option></select></div>
 <div class="si-field"><label>Leads calificados (meta)</label><input type="number" id="stg2_meta" min="0" oninput="calcFunnel()"></div>
 </div>
 <div class="stage-inputs">
-<div class="si-field"><label>Propuestas / demos realizadas (hoy)</label><input type="number" id="stg3_hoy" min="0" oninput="calcFunnel()"></div>
+<div class="si-field"><label>Propuestas / demos realizadas (hoy)</label><input type="number" id="stg3_hoy" min="0" oninput="calcFunnel()"><select id="stg3_tipo" onchange="calcFunnel()"><option value="est">Estimada</option><option value="real">Real</option></select></div>
 <div class="si-field"><label>Propuestas / demos realizadas (meta)</label><input type="number" id="stg3_meta" min="0" oninput="calcFunnel()"></div>
 </div>
 <div class="stage-inputs">
-<div class="si-field"><label>Cierres — clientes (hoy)</label><input type="number" id="stg4_hoy" min="0" oninput="calcFunnel()"></div>
+<div class="si-field"><label>Cierres — clientes (hoy)</label><input type="number" id="stg4_hoy" min="0" oninput="calcFunnel()"><select id="stg4_tipo" onchange="calcFunnel()"><option value="est">Estimada</option><option value="real">Real</option></select></div>
 <div class="si-field"><label>Cierres — clientes (meta)</label><input type="number" id="stg4_meta" min="0" oninput="calcFunnel()"></div>
 </div>
 <div class="stage-inputs">
-<div class="si-field"><label>Ticket promedio ($)</label><input type="number" id="ticketProm" min="0" oninput="calcFunnel()"></div>
+<div class="si-field"><label>Ticket promedio ($)</label><input type="number" id="ticketProm" min="0" oninput="calcFunnel()"><select id="ticket_tipo" onchange="calcFunnel()"><option value="est">Estimado</option><option value="real">Real</option></select></div>
 <div class="si-field"><label>Tiempo de ciclo (días)</label><input type="number" id="tiempoCiclo" min="0" oninput="calcFunnel()"></div>
 </div>
 
@@ -391,12 +407,46 @@ h1,h2,h3,h4{font-family:'Raleway',sans-serif}
 <div class="findings-grid">
 <div class="findings-item"><div class="f-label">Conversión total (prospecto → cliente)</div><div class="f-value" id="fConvTotal">0%</div></div>
 <div class="findings-item"><div class="f-label">Ingreso estimado hoy</div><div class="f-value" id="fIngreso">$0.00</div></div>
+<div class="findings-item wide"><div class="f-label">Confiabilidad de las cifras de hoy</div><div class="f-value" id="fConfianza" style="font-size:0.85em">—</div></div>
 <div class="findings-item alert wide" id="fBottleneckItem"><div class="f-label">⚠ Cuello de botella</div><div class="f-value" id="fBottleneck">Ingresen datos en las etapas para detectarlo.</div></div>
-<div class="findings-item wide"><div class="f-label">Acción recomendada para la próxima semana</div><div class="f-value" id="fAccion" style="font-weight:600;font-size:0.85em">—</div></div>
+<div class="findings-item wide"><div class="f-label">Acción para la próxima semana (de su diagnóstico)</div><div class="f-value" id="fAccion" style="font-weight:600;font-size:0.85em">—</div></div>
 </div>
 </div>
 
-<div class="form-group" style="margin-top:16px"><label>Acción concreta para la próxima semana *</label><textarea id="accionSemana" oninput="calcFunnel()" placeholder="Ej.: mejorar el cierre practicando la técnica de resumen, porque ahí se pierde el 75% de las propuestas."></textarea></div>
+<div class="info-banner" style="margin-top:16px"><h4>➡️ Siguiente</h4><p>En el paso de <b>Tarea</b> escriben su diagnóstico en 3 líneas, su guion de prospección y el reporte de sus 5 contactos reales.</p></div>
+</div>
+
+<!-- PASO TAREA -->
+<div class="step-content" data-step="tarea">
+<h2 class="step-title">📚 Tarea — Plan de venta de su proyecto</h2>
+<p class="step-subtitle">Se avanza en clase y se termina durante la semana en este mismo navegador (se guarda solo cada 30 s).</p>
+<h3 style="font-size:0.95em;color:#1a3a6b;margin:6px 0 8px">🔎 1. Diagnóstico en 3 líneas</h3>
+<div class="form-group"><label>Línea 1 — Nuestro cuello de botella es…</label><input type="text" id="dx1" oninput="calcFunnel()" placeholder="Ej.: de leads calificados a propuestas."></div>
+<div class="form-group"><label>Línea 2 — Lo sabemos por este número…</label><input type="text" id="dx2" oninput="calcFunnel()" placeholder="Ej.: solo 20% de los leads recibe propuesta (cifra estimada)."></div>
+<div class="form-group"><label>Línea 3 — La acción que tomamos la próxima semana es…</label><input type="text" id="dx3" oninput="calcFunnel()" placeholder="Ej.: enviar propuesta en menos de 24 h a cada lead calificado."></div>
+
+<h3 style="font-size:0.95em;color:#1a3a6b;margin:22px 0 8px">📝 2. Guion de prospección (5 partes)</h3>
+<div class="two-col" style="margin-bottom:10px">
+<div class="form-group"><label>Técnica que usarán</label><select class="sel" id="gTecnica" onchange="saveData()"><option value="">Elijan…</option><option>SPIN</option><option>AIDA</option><option>Venta consultiva</option><option>Combinación SPIN + AIDA</option></select></div>
+<div class="form-group"><label>Canal de prospección</label><input type="text" id="gCanal" oninput="saveData()" placeholder="Ej.: WhatsApp"></div>
+</div>
+<div class="form-group"><label>① Apertura con nombre y contexto (10 s)</label><textarea id="g1" oninput="saveData()" placeholder="Buenas tardes, licenciada Ramírez. Soy…"></textarea></div>
+<div class="form-group"><label>② Motivo: el dolor del cliente</label><textarea id="g2" oninput="saveData()" placeholder="Le escribo porque varios consultorios nos dicen que…"></textarea></div>
+<div class="form-group"><label>③ Una pregunta de calificación</label><textarea id="g3" oninput="saveData()" placeholder="¿En su consultorio hoy quién se encarga de…?"></textarea></div>
+<div class="form-group"><label>④ Siguiente paso concreto</label><textarea id="g4" oninput="saveData()" placeholder="Si le interesa, le muestro en quince minutos cómo…"></textarea></div>
+<div class="form-group"><label>⑤ Cierre con compromiso y fecha</label><textarea id="g5" oninput="saveData()" placeholder="Le propongo el jueves a las 10. Si no le funciona, le escribo el viernes."></textarea></div>
+
+<h3 style="font-size:0.95em;color:#1a3a6b;margin:22px 0 4px">🚀 3. Reto de la semana — 5 contactos reales</h3>
+<p class="hint" style="margin-bottom:4px">Contacten a 5 personas (conocidos, un grupo, un posible cliente). Una preventa o compromiso cuenta como cierre. Anoten solo iniciales o tipo de contacto.</p>
+<table class="contact-table"><tr><th>#</th><th>Contacto</th><th>Canal</th><th>¿Respondió?</th><th>¿Pidió precio o info?</th><th>¿Dijo sí / preventa?</th></tr>
+<tr><td>1</td><td><input type="text" id="c1_n" oninput="calcContacts()"></td><td><input type="text" id="c1_c" oninput="calcContacts()"></td><td><select id="c1_r" onchange="calcContacts()"><option value=""></option><option value="s">Sí</option><option value="n">No</option></select></td><td><select id="c1_p" onchange="calcContacts()"><option value=""></option><option value="s">Sí</option><option value="n">No</option></select></td><td><select id="c1_s" onchange="calcContacts()"><option value=""></option><option value="s">Sí</option><option value="n">No</option></select></td></tr>
+<tr><td>2</td><td><input type="text" id="c2_n" oninput="calcContacts()"></td><td><input type="text" id="c2_c" oninput="calcContacts()"></td><td><select id="c2_r" onchange="calcContacts()"><option value=""></option><option value="s">Sí</option><option value="n">No</option></select></td><td><select id="c2_p" onchange="calcContacts()"><option value=""></option><option value="s">Sí</option><option value="n">No</option></select></td><td><select id="c2_s" onchange="calcContacts()"><option value=""></option><option value="s">Sí</option><option value="n">No</option></select></td></tr>
+<tr><td>3</td><td><input type="text" id="c3_n" oninput="calcContacts()"></td><td><input type="text" id="c3_c" oninput="calcContacts()"></td><td><select id="c3_r" onchange="calcContacts()"><option value=""></option><option value="s">Sí</option><option value="n">No</option></select></td><td><select id="c3_p" onchange="calcContacts()"><option value=""></option><option value="s">Sí</option><option value="n">No</option></select></td><td><select id="c3_s" onchange="calcContacts()"><option value=""></option><option value="s">Sí</option><option value="n">No</option></select></td></tr>
+<tr><td>4</td><td><input type="text" id="c4_n" oninput="calcContacts()"></td><td><input type="text" id="c4_c" oninput="calcContacts()"></td><td><select id="c4_r" onchange="calcContacts()"><option value=""></option><option value="s">Sí</option><option value="n">No</option></select></td><td><select id="c4_p" onchange="calcContacts()"><option value=""></option><option value="s">Sí</option><option value="n">No</option></select></td><td><select id="c4_s" onchange="calcContacts()"><option value=""></option><option value="s">Sí</option><option value="n">No</option></select></td></tr>
+<tr><td>5</td><td><input type="text" id="c5_n" oninput="calcContacts()"></td><td><input type="text" id="c5_c" oninput="calcContacts()"></td><td><select id="c5_r" onchange="calcContacts()"><option value=""></option><option value="s">Sí</option><option value="n">No</option></select></td><td><select id="c5_p" onchange="calcContacts()"><option value=""></option><option value="s">Sí</option><option value="n">No</option></select></td><td><select id="c5_s" onchange="calcContacts()"><option value=""></option><option value="s">Sí</option><option value="n">No</option></select></td></tr>
+
+</table>
+<div class="contact-sum" id="contactSum">Contactos registrados: 0 de 5 · Respondieron: 0 · Pidieron precio: 0 · Dijeron sí: 0</div>
 </div>
 
 <!-- PASO PARTICIPACION: % INDIVIDUAL -->
@@ -417,24 +467,27 @@ h1,h2,h3,h4{font-family:'Raleway',sans-serif}
 <div class="step-content" data-step="5">
 <h2 class="step-title">📋 Resumen Final</h2>
 <p class="step-subtitle">Vista completa de la actividad y la tarea. Lista para exportar a PDF.</p>
-<div class="complete-banner"><div class="emoji-row">🎉</div>¡Han completado la Sesión 8! Revisen el checklist del Paso 3 antes de exportar.</div>
+<div class="complete-banner"><div class="emoji-row">🎉</div>¡Han completado la Sesión 8! Revisen el checklist del entregable antes de exportar.</div>
 <div class="resumen-section"><h4>👥 Equipo</h4>
 <div class="resumen-row"><span class="label">Equipo:</span><span class="value" id="rEquipo">—</span></div>
 <div class="resumen-row"><span class="label">Proyecto:</span><span class="value" id="rProyecto">—</span></div>
 <div class="resumen-row"><span class="label">Integrantes:</span><span class="value" id="rIntegrantes">—</span></div>
 <div class="resumen-row"><span class="label">% de participación:</span><span class="value" id="rWorkDist">—</span></div>
 </div>
-<div class="resumen-section"><h4>🎭 Actividad — cliente y canal asignados</h4>
-<div class="resumen-row"><span class="label">Cliente:</span><span class="value" id="rCliente">—</span></div>
-<div class="resumen-row"><span class="label">Canal:</span><span class="value" id="rCanal">—</span></div>
+<div class="resumen-section"><h4>🎭 Actividad — casos sorteados</h4>
+<div class="resumen-row"><span class="label">Rondas:</span><span class="value" id="rCliente">—</span></div>
+<div class="resumen-row"><span class="label">Adaptación al proyecto:</span><span class="value" id="rCanal">—</span></div>
 <div class="resumen-row"><span class="label">Resultado del cierre:</span><span class="value" id="rResultado">—</span></div>
 </div>
 <div class="resumen-section"><h4>📊 Embudo de ventas</h4>
 <div class="resumen-row"><span class="label">Conversión total:</span><span class="value" id="rConvTotal">—</span></div>
 <div class="resumen-row"><span class="label">Cuello de botella:</span><span class="value" id="rCuello">—</span></div>
 <div class="resumen-row"><span class="label">Acción próxima semana:</span><span class="value" id="rAccion">—</span></div>
+<div class="resumen-row"><span class="label">Cifras reales:</span><span class="value" id="rConf">—</span></div>
+<div class="resumen-row"><span class="label">Guion (técnica · canal):</span><span class="value" id="rGuion">—</span></div>
+<div class="resumen-row"><span class="label">Reto 5 contactos:</span><span class="value" id="rContactos">—</span></div>
 </div>
-<div class="info-banner"><h4>💡 Antes de exportar</h4><p>Verifiquen que el checklist del Paso 4 (Entregable) esté completo y que la foto del equipo se haya cargado correctamente.</p></div>
+<div class="info-banner"><h4>💡 Antes de exportar</h4><p>Verifiquen que el checklist del Entregable esté completo y que la foto del equipo se haya cargado correctamente.</p></div>
 </div>
 
 </div>
@@ -448,19 +501,15 @@ h1,h2,h3,h4{font-family:'Raleway',sans-serif}
 
 <script>
 var currentStepIdx=0;
-var steps=['0','1','2','3','4','participacion','5'];
+var steps=['0','1','2','3','4','tarea','participacion','5'];
+var draws=[];
 var timerInterval=null;
-var timerSeconds=360;
+var timerSeconds=300;
 var resultadoCierre=null;
 
-var combos=[
- {client:'Cliente escéptico y racional', channel:'Videollamada', hint:'Cuestiona todo y busca el hueco del argumento. Necesita datos, no promesas.'},
- {client:'Cliente emocional, con poco tiempo', channel:'Llamada telefónica corta', hint:'Decide rápido y por impulso. Vayan al punto y conecten con un beneficio claro.'},
- {client:'Cliente técnico que quiere datos duros', channel:'Correo escrito', hint:'Pide cifras y comparaciones. El mensaje debe ser preciso y verificable.'},
- {client:'Cliente que decide en comité', channel:'Reunión presencial', hint:'Varias personas deciden. El argumento debe convencer a más de un perfil.'},
- {client:'Cliente racional y analítico', channel:'Correo con documento adjunto', hint:'Compara opciones y pregunta por costos y garantías.'},
- {client:'Cliente institucional, con varios decisores', channel:'Reunión + propuesta escrita', hint:'Pide cotización formal y menciona a un jefe o comité.'}
-];
+var CLIENTES=['escéptico y racional (pide datos, no promesas)','emocional y con poco tiempo (decide rápido)','técnico que quiere cifras y comparaciones','que decide en comité (varias personas opinan)','conocido que "te quiere apoyar" pero no lo necesita','que ya trabaja con la competencia'];
+var CANALES=['Videollamada','Llamada telefónica corta','Correo escrito','Reunión presencial','WhatsApp o mensaje directo','Evento o stand'];
+var OBJECIONES=['«Está muy caro.»','«Ahora no es buen momento.»','«Ya tengo quien me lo hace.»','«Lo tengo que consultar con alguien más.»','«No conozco tu marca.»','«No veo para qué lo necesito.»'];
 
 function goToStepIdx(i){
   if(i<0||i>=steps.length) return;
@@ -488,21 +537,48 @@ function showStep(stepId){
   document.getElementById('progressStepNum').textContent='Paso '+(idx+1)+' de '+steps.length;
   document.getElementById('btnPrev').style.visibility=idx===0?'hidden':'visible';
   document.getElementById('btnNext').textContent=idx===steps.length-1?'📄 Exportar PDF':'Siguiente →';
-  if(stepId==='4') calcFunnel();
+  if(stepId==='4'||stepId==='tarea') calcFunnel();
   if(stepId==='5'){ populateSummary(); playSound('complete'); } else { playSound('click'); }
   window.scrollTo(0,0);
 }
 function nextStep(){ if(currentStepIdx>=steps.length-1){exportPDF();return;} showStep(steps[currentStepIdx+1]); }
 function prevStep(){ if(currentStepIdx>0) showStep(steps[currentStepIdx-1]); }
 
-function drawCombo(){
-  var c=combos[Math.floor(Math.random()*combos.length)];
-  document.getElementById('assignedClient').textContent=c.client;
-  document.getElementById('assignedChannel').textContent='Canal: '+c.channel+' — '+c.hint;
-  document.getElementById('assignedCard').style.display='block';
-  playSound('success');
+function pickNew(arr,key){
+  var used=draws.map(function(d){return d[key];});
+  var left=arr.map(function(_,i){return i;}).filter(function(i){return used.indexOf(i)<0;});
+  if(!left.length) left=arr.map(function(_,i){return i;});
+  return left[Math.floor(Math.random()*left.length)];
+}
+function drawCase(){
+  draws.push({c:pickNew(CLIENTES,'c'),k:pickNew(CANALES,'k'),o:pickNew(OBJECIONES,'o')});
+  if(draws.length>6) draws.shift();
+  renderDraws(); playSound('success'); saveData();
+}
+function drawText(d){ return 'Cliente '+CLIENTES[d.c]+' · Canal: '+CANALES[d.k]+' · Objeción: '+OBJECIONES[d.o]; }
+function renderDraws(){
+  var box=document.getElementById('roundList');
+  box.innerHTML=draws.map(function(d,i){
+    return '<div class="round-card"><span class="tag">Ronda '+(i+1)+'</span><br><b>Cliente:</b> '+CLIENTES[d.c]+'<br><b>Canal:</b> '+CANALES[d.k]+'<br><b>Objeción:</b> '+OBJECIONES[d.o]+'</div>';
+  }).join('');
+  var cur=document.getElementById('currentRound');
+  if(cur){ var d=draws[draws.length-1]; cur.innerHTML=d?('<span class="tag" style="background:#e87722;border-radius:12px;padding:2px 10px;font-size:.78em;font-weight:700">Ronda '+draws.length+'</span><br><b>Cliente:</b> '+CLIENTES[d.c]+' · <b>Canal:</b> '+CANALES[d.k]+' · <b>Objeción:</b> '+OBJECIONES[d.o]):'Primero sorteen el caso en el paso anterior.'; }
+  var btn=document.querySelector('.btn-draw'); if(btn) btn.textContent=draws.length?'🎲 Sortear siguiente ronda':'🎲 Sortear caso (cliente · canal · objeción)';
+}
+function calcContacts(){
+  var n=0,r=0,p=0,s=0;
+  for(var i=1;i<=5;i++){
+    if(document.getElementById('c'+i+'_n').value.trim()) n++;
+    if(document.getElementById('c'+i+'_r').value==='s') r++;
+    if(document.getElementById('c'+i+'_p').value==='s') p++;
+    if(document.getElementById('c'+i+'_s').value==='s') s++;
+  }
+  document.getElementById('contactSum').textContent='Contactos registrados: '+n+' de 5 · Respondieron: '+r+' · Pidieron precio: '+p+' · Dijeron sí: '+s;
   saveData();
 }
+var CIDS=[];
+for(var _i=1;_i<=5;_i++){ ['n','c','r','p','s'].forEach(function(k){ CIDS.push('c'+_i+'_'+k); }); }
+var EXTRA=['adaCliente','adaCanal','adaDolor','obsEvidencia','dx1','dx2','dx3','gTecnica','gCanal','g1','g2','g3','g4','g5','stg1_tipo','stg2_tipo','stg3_tipo','stg4_tipo','ticket_tipo'];
 
 function startTimer(){
   if(timerInterval) return;
@@ -513,7 +589,7 @@ function startTimer(){
   },1000);
 }
 function pauseTimer(){ clearInterval(timerInterval); timerInterval=null; }
-function resetTimer(){ clearInterval(timerInterval); timerInterval=null; timerSeconds=360; updateTimerDisplay(); }
+function resetTimer(){ clearInterval(timerInterval); timerInterval=null; timerSeconds=300; updateTimerDisplay(); }
 function updateTimerDisplay(){
   var m=Math.floor(timerSeconds/60); var s=timerSeconds%60;
   var disp=document.getElementById('timerDisplay');
@@ -547,7 +623,7 @@ function handlePhoto(e){
       var preview=document.getElementById('photoPreview');
       preview.src=dataUrl;
       preview.style.display='block';
-      localStorage.setItem('s8_photo',dataUrl);
+      localStorage.setItem('s8v2_photo',dataUrl);
     };
     img.src=ev.target.result;
   };
@@ -590,7 +666,7 @@ function buildFunnelSVG(stages,bottleneckIdx){
     if(anyData){
       svg+='<rect x="'+(cx-100)+'" y="'+(midY-19)+'" width="200" height="38" rx="8" fill="rgba(15,23,42,0.4)"/>';
       svg+='<text x="'+cx+'" y="'+(midY-3)+'" text-anchor="middle" font-family="Poppins,sans-serif" font-size="13" font-weight="700" fill="#ffffff">'+stages[i].label+'</text>';
-      svg+='<text x="'+cx+'" y="'+(midY+13)+'" text-anchor="middle" font-family="Poppins,sans-serif" font-size="11" fill="#fde9d8">'+stages[i].val+(i>0?' · '+pct[i].toFixed(0)+'% del total':'')+'</text>';
+      svg+='<text x="'+cx+'" y="'+(midY+13)+'" text-anchor="middle" font-family="Poppins,sans-serif" font-size="11" fill="#fde9d8">'+(stages[i].est?'~':'')+stages[i].val+(i>0?' · '+pct[i].toFixed(0)+'% del total':'')+'</text>';
     } else if(i===0){
       svg+='<text x="'+cx+'" y="'+midY+'" text-anchor="middle" font-family="Poppins,sans-serif" font-size="12" fill="#94a3b8">Ingresen datos para ver su embudo</text>';
     }
@@ -614,10 +690,10 @@ function calcFunnel(){
   var ticket=parseFloat(document.getElementById('ticketProm').value)||0;
 
   var stages=[
-    {label:'Prospectos contactados',val:s1h},
-    {label:'Leads calificados',val:s2h},
-    {label:'Propuestas / demos',val:s3h},
-    {label:'Cierres (clientes)',val:s4h}
+    {label:'Prospectos contactados',val:s1h,est:document.getElementById('stg1_tipo').value==='est'},
+    {label:'Leads calificados',val:s2h,est:document.getElementById('stg2_tipo').value==='est'},
+    {label:'Propuestas / demos',val:s3h,est:document.getElementById('stg3_tipo').value==='est'},
+    {label:'Cierres (clientes)',val:s4h,est:document.getElementById('stg4_tipo').value==='est'}
   ];
   var bottleneck=computeBottleneck(stages);
   document.getElementById('funnelWrap').innerHTML=buildFunnelSVG(stages,bottleneck.idx);
@@ -635,7 +711,9 @@ function calcFunnel(){
     bottleneckText='Ingresen datos en las etapas para detectarlo.';
   }
   document.getElementById('fBottleneck').textContent=bottleneckText;
-  document.getElementById('fAccion').textContent=document.getElementById('accionSemana').value||'Aún no la escriben.';
+  document.getElementById('fAccion').textContent=document.getElementById('dx3').value||'Aún no la escriben (paso Tarea).';
+  var nReal=stages.filter(function(s){return !s.est;}).length;
+  document.getElementById('fConfianza').textContent=nReal+' de 4 cifras son reales'+(nReal<4?' · las demás son estimadas (~). Con los 5 contactos reales de la semana pueden reemplazarlas.':'.');
   saveData();
 }
 
@@ -644,12 +722,15 @@ function populateSummary(){
   document.getElementById('rProyecto').textContent=document.getElementById('projectName').value||'—';
   document.getElementById('rIntegrantes').textContent=document.getElementById('teamMembers').value||'—';
   document.getElementById('rWorkDist').textContent=collectWD().filter(function(x){return x.name;}).map(function(x){return x.name+': '+(x.pct||'0')+'%';}).join(' · ')||'—';
-  document.getElementById('rCliente').textContent=document.getElementById('assignedClient').textContent||'—';
-  document.getElementById('rCanal').textContent=document.getElementById('assignedChannel').textContent||'—';
+  document.getElementById('rCliente').textContent=draws.length?draws.map(function(d,i){return 'R'+(i+1)+': '+drawText(d);}).join(' | '):'—';
+  document.getElementById('rCanal').textContent=document.getElementById('adaCliente').value||'—';
   document.getElementById('rResultado').textContent=resultadoCierre===true?'Sí cierra':(resultadoCierre===false?'No cierra':'—');
   document.getElementById('rConvTotal').textContent=document.getElementById('fConvTotal').textContent||'—';
   document.getElementById('rCuello').textContent=document.getElementById('fBottleneck').textContent||'Sin datos suficientes';
-  document.getElementById('rAccion').textContent=document.getElementById('accionSemana').value||'—';
+  document.getElementById('rAccion').textContent=document.getElementById('dx3').value||'—';
+  document.getElementById('rConf').textContent=document.getElementById('fConfianza').textContent||'—';
+  document.getElementById('rGuion').textContent=((document.getElementById('gTecnica').value||'—')+' · '+(document.getElementById('gCanal').value||'—'));
+  document.getElementById('rContactos').textContent=document.getElementById('contactSum').textContent.replace('Contactos registrados: ','');
 
   document.getElementById('phTeam').textContent=document.getElementById('teamName').value||'—';
   document.getElementById('phProject').textContent=document.getElementById('projectName').value||'—';
@@ -663,9 +744,8 @@ function saveData(){
     teamName:document.getElementById('teamName').value,
     teamMembers:document.getElementById('teamMembers').value,
     projectName:document.getElementById('projectName').value,
-    assignedClient:document.getElementById('assignedClient').textContent,
-    assignedChannel:document.getElementById('assignedChannel').textContent,
-    assignedVisible:document.getElementById('assignedCard').style.display==='block',
+    draws:draws,
+    extra:(function(){var o={};EXTRA.concat(CIDS).forEach(function(id){var el=document.getElementById(id);if(el)o[id]=el.value;});return o;})(),
     spinS:document.getElementById('spinS').value,
     spinP:document.getElementById('spinP').value,
     spinI:document.getElementById('spinI').value,
@@ -686,27 +766,23 @@ function saveData(){
     stg4_meta:document.getElementById('stg4_meta').value,
     ticketProm:document.getElementById('ticketProm').value,
     tiempoCiclo:document.getElementById('tiempoCiclo').value,
-    accionSemana:document.getElementById('accionSemana').value,
     workDistribution:collectWD()
   };
-  localStorage.setItem('s8_activity_data',JSON.stringify(data));
+  localStorage.setItem('s8v2_activity_data',JSON.stringify(data));
   var ind=document.getElementById('autosaveIndicator');
   ind.classList.add('show');
   setTimeout(function(){ind.classList.remove('show');},1200);
 }
 
 function loadData(){
-  var raw=localStorage.getItem('s8_activity_data');
+  var raw=localStorage.getItem('s8v2_activity_data');
   if(raw){
     var data=JSON.parse(raw);
     if(data.teamName) document.getElementById('teamName').value=data.teamName;
     if(data.teamMembers) document.getElementById('teamMembers').value=data.teamMembers;
     if(data.projectName) document.getElementById('projectName').value=data.projectName;
-    if(data.assignedVisible){
-      document.getElementById('assignedClient').textContent=data.assignedClient;
-      document.getElementById('assignedChannel').textContent=data.assignedChannel;
-      document.getElementById('assignedCard').style.display='block';
-    }
+    if(data.draws){ draws=data.draws; }
+    if(data.extra){ Object.keys(data.extra).forEach(function(id){var el=document.getElementById(id);if(el) el.value=data.extra[id];}); }
     if(data.spinS) document.getElementById('spinS').value=data.spinS;
     if(data.spinP) document.getElementById('spinP').value=data.spinP;
     if(data.spinI) document.getElementById('spinI').value=data.spinI;
@@ -727,12 +803,11 @@ function loadData(){
     if(data.stg4_meta) document.getElementById('stg4_meta').value=data.stg4_meta;
     if(data.ticketProm) document.getElementById('ticketProm').value=data.ticketProm;
     if(data.tiempoCiclo) document.getElementById('tiempoCiclo').value=data.tiempoCiclo;
-    if(data.accionSemana) document.getElementById('accionSemana').value=data.accionSemana;
     if(data.workDistribution) restoreWD(data.workDistribution);
   }
-  var photo=localStorage.getItem('s8_photo');
+  var photo=localStorage.getItem('s8v2_photo');
   if(photo){ var pv=document.getElementById('photoPreview'); pv.src=photo; pv.style.display='block'; }
-  calcFunnel();
+  renderDraws(); calcContacts(); calcFunnel();
 }
 
 /* ===== % de participación individual (wd-box) ===== */
@@ -782,8 +857,8 @@ function restoreWD(arr){
 function clearAllData(){
   if(confirm('¿Están seguros de que desean borrar todos los datos ingresados?')){
     playSound('error');
-    localStorage.removeItem('s8_activity_data');
-    localStorage.removeItem('s8_photo');
+    localStorage.removeItem('s8v2_activity_data');
+    localStorage.removeItem('s8v2_photo');
     location.reload();
   }
 }
@@ -837,7 +912,7 @@ function restorePrintTextareas(){
 window.addEventListener('beforeprint', prepPrintTextareas);
 window.addEventListener('afterprint', restorePrintTextareas);
 
-window.onload=function(){ updateSoundBtn(); loadData(); updateTimerDisplay(); };
+window.onload=function(){ updateSoundBtn(); loadData(); updateTimerDisplay(); setInterval(saveData,30000); };
 </script>
 </body>
 </html>
