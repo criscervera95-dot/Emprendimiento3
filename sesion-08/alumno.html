@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Emprendimiento · Sesión 8 · En vivo</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{--bg:#10131b;--card:#1b2030;--line:rgba(255,255,255,.14);--mut:#9aa3b8;--or:#ff6b1a;--cy:#3dd6f5;--gr:#2ee6a6;--rd:#ff5d5d;--am:#ffc233}
+body{background:var(--bg);color:#fff;font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column}
+header{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid var(--line);font-size:13px;color:var(--mut)}
+header b{color:#fff}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:#777;margin-right:6px}
+.dot.ok{background:var(--gr)}.dot.bad{background:var(--rd)}
+main{flex:1;padding:16px 14px 28px;max-width:560px;width:100%;margin:0 auto}
+h1{font-size:22px;line-height:1.2;margin-bottom:8px}
+.sub{color:var(--mut);font-size:15px;line-height:1.4;margin-bottom:14px}
+.kick{display:inline-block;background:rgba(255,107,26,.18);color:var(--or);font-weight:800;font-size:12px;letter-spacing:.08em;text-transform:uppercase;border-radius:99px;padding:5px 11px;margin-bottom:12px}
+.case{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;font-size:15px;line-height:1.4;margin-bottom:12px;color:#d6dbea}
+.q{font-size:21px;font-weight:800;line-height:1.25;margin-bottom:14px}
+.opt{display:flex;gap:12px;align-items:flex-start;width:100%;text-align:left;background:var(--card);border:2.5px solid var(--line);border-radius:16px;padding:14px;margin-bottom:10px;color:#fff;font:600 16px/1.3 inherit;cursor:pointer;min-height:60px}
+.opt .L{flex:none;width:36px;height:36px;border-radius:10px;background:#2a3147;display:grid;place-items:center;font-weight:800}
+.opt.sel{border-color:var(--cy);background:#14303a}.opt.sel .L{background:var(--cy);color:#06222a}
+.opt.ok{border-color:var(--gr);background:#0f3a2c}.opt.ok .L{background:var(--gr);color:#04261b}
+.opt.no{border-color:var(--rd);background:#3b1717}.opt.no .L{background:var(--rd);color:#fff}
+.opt:disabled{cursor:default}
+.teams{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.tm{border:3px solid var(--c,#555);background:var(--card);color:#fff;border-radius:16px;padding:16px 8px;font:800 16px/1.2 inherit;cursor:pointer;min-height:64px}
+.tm:active{transform:scale(.97)}
+.me{display:flex;align-items:center;gap:8px;background:var(--card);border:2px solid var(--c);border-radius:99px;padding:7px 14px;font-weight:800;font-size:14px}
+.me a{color:var(--mut);font-weight:600;margin-left:6px;text-decoration:underline;cursor:pointer}
+.bar{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.pts{font-weight:800;color:var(--am)}
+.bet{display:flex;gap:8px;align-items:center;margin:4px 0 14px}
+.bet span{font-weight:700;color:var(--mut);font-size:14px;margin-right:4px}
+.bet button{flex:1;border:2.5px solid var(--line);background:var(--card);color:#fff;border-radius:12px;font:800 17px/1 inherit;padding:13px 0;cursor:pointer}
+.bet button.on{border-color:var(--am);background:#3a3010;color:var(--am)}
+.sent{margin-top:6px;color:var(--gr);font-weight:700;font-size:14px;min-height:20px}
+.res{margin-top:10px;padding:13px 14px;border-radius:14px;font-weight:800;font-size:16px}
+.res.ok{background:#0f3a2c;color:var(--gr)}.res.no{background:#3b1717;color:#ff9a9a}.res.na{background:var(--card);color:var(--mut)}
+.buz{display:grid;place-items:center;width:100%;aspect-ratio:1;max-height:62vh;border:0;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ff8a4a,#e0430a);color:#fff;font:900 34px/1.1 inherit;box-shadow:0 14px 0 #8d2a05,0 24px 40px rgba(0,0,0,.5);cursor:pointer;margin:10px auto 26px;text-align:center}
+.buz:active:not(:disabled){transform:translateY(10px);box-shadow:0 4px 0 #8d2a05}
+.buz:disabled{background:#2a3147;box-shadow:0 14px 0 #1b2030;color:#7c86a0;cursor:default}
+.wait{text-align:center;padding:40px 10px;color:var(--mut)}
+.wait .big{font-size:54px;margin-bottom:10px}
+.ring{width:42px;height:42px;border:5px solid #2a3147;border-top-color:var(--or);border-radius:50%;margin:0 auto 14px;animation:sp 1s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+footer{padding:10px 14px;text-align:center;color:#6b748a;font-size:12px}
+
+input.in{width:100%;background:var(--card);border:2.5px solid var(--line);border-radius:14px;color:#fff;padding:14px;font:600 17px/1.2 inherit;margin-bottom:10px}
+input.in:focus{outline:0;border-color:var(--cy)}
+.go{width:100%;background:var(--or);color:#fff;border:0;border-radius:16px;padding:16px;font:800 18px/1 inherit;margin-top:6px;cursor:pointer}
+.go:disabled{opacity:.4}
+.cd{font-size:30px;font-weight:800;color:var(--am);text-align:center;margin:6px 0 12px}
+.cd.done{color:var(--gr)}
+.lock{color:var(--gr);font-weight:700;margin-top:8px}
+.err{color:#ff9a9a;font-size:14px;min-height:18px;margin-bottom:6px}
+</style></head><body>
+<header><span><span class="dot" id="dot"></span><span id="st">Conectando…</span></span><span id="who"></span></header>
+<main id="m"></main>
+<footer>Emprendimiento y Liderazgo de Equipos · Sesión 8 · En vivo · solo guardamos tu nombre, equipo y respuestas para la participación</footer>
+<script>
+(function(){
+'use strict';
+/* Cliente MQTT 3.1.1 mínimo sobre WebSocket (QoS 0). */
+function MQ(url,opt){
+  opt=opt||{};
+  var enc=new TextEncoder(),dec=new TextDecoder();
+  var ws=null,buf=new Uint8Array(0),pid=0,pingT=null,rcT=null,subs=[],up=false,closed=false,wait=1500;
+  var cid=opt.cid||('c'+Math.random().toString(36).slice(2,10));
+  function cat(a,b){var r=new Uint8Array(a.length+b.length);r.set(a,0);r.set(b,a.length);return r;}
+  function s2b(s){var b=enc.encode(s),r=new Uint8Array(b.length+2);r[0]=b.length>>8;r[1]=b.length&255;r.set(b,2);return r;}
+  function rl(n){var a=[];do{var d=n%128;n=Math.floor(n/128);if(n>0)d|=128;a.push(d);}while(n>0);return new Uint8Array(a);}
+  function pkt(h,body){var l=rl(body.length),r=new Uint8Array(1+l.length+body.length);r[0]=h;r.set(l,1);r.set(body,1+l.length);return r;}
+  function send(p){try{if(ws&&ws.readyState===1)ws.send(p);}catch(e){}}
+  function emit(s){if(opt.onState)opt.onState(s,api);}
+  function connect(){
+    if(closed)return;
+    var me;
+    try{me=ws=new WebSocket(url,'mqtt');}catch(e){retry();return;}
+    ws.binaryType='arraybuffer';buf=new Uint8Array(0);
+    ws.onopen=function(){send(pkt(0x10,cat(cat(s2b('MQTT'),new Uint8Array([4,2,0,30])),s2b(cid))));};
+    ws.onmessage=function(ev){buf=cat(buf,new Uint8Array(ev.data));parse();};
+    ws.onclose=function(){if(me!==ws)return;var was=up;up=false;clearInterval(pingT);if(was)emit('down');else emit('fail');retry();};
+    ws.onerror=function(){};
+  }
+  function retry(){if(closed)return;clearTimeout(rcT);rcT=setTimeout(connect,wait);wait=Math.min(wait*1.6,10000);}
+  function parse(){
+    while(buf.length>=2){
+      var i=1,m=1,len=0,b;
+      do{if(i>=buf.length)return;b=buf[i++];len+=(b&127)*m;m*=128;}while(b&128);
+      if(buf.length<i+len)return;
+      var h=buf[0],body=buf.subarray(i,i+len);buf=buf.subarray(i+len);
+      var t=h>>4;
+      if(t===2){
+        if(body[1]===0){up=true;wait=1500;subs.forEach(dosub);clearInterval(pingT);pingT=setInterval(function(){send(new Uint8Array([0xC0,0]));},15000);emit('up');}
+        else emit('refused');
+      }else if(t===3){
+        var tl=(body[0]<<8)|body[1],topic=dec.decode(body.subarray(2,2+tl)),o=2+tl;
+        if(((h>>1)&3)>0)o+=2;
+        if(opt.onMsg)opt.onMsg(topic,dec.decode(body.subarray(o)));
+      }
+    }
+  }
+  function dosub(t){pid=(pid%65535)+1;send(pkt(0x82,cat(new Uint8Array([pid>>8,pid&255]),cat(s2b(t),new Uint8Array([0])))));}
+  var api={
+    sub:function(t){if(subs.indexOf(t)<0)subs.push(t);if(up)dosub(t);},
+    pub:function(t,p,retain){if(!up)return false;send(pkt(0x30|(retain?1:0),cat(s2b(t),enc.encode(p))));return true;},
+    close:function(){closed=true;clearInterval(pingT);clearTimeout(rcT);try{ws.close();}catch(e){}},
+    isUp:function(){return up;},url:url
+  };
+  connect();return api;
+}
+
+
+var P=new URLSearchParams(location.search),ROOM=P.get('r')||'';
+var TOP='edt/ec3/s8/'+ROOM;
+var BRK=P.get('broker')?[P.get('broker')]:['wss://broker.emqx.io:8084/mqtt','wss://broker.hivemq.com:8884/mqtt','wss://test.mosquitto.org:8081'];
+var $=function(s){return document.querySelector(s);};
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+function lsGet(k){try{return localStorage.getItem(k);}catch(e){return null;}}
+function lsSet(k,v){try{localStorage.setItem(k,v);}catch(e){}}
+var dev=lsGet('s8dev')||('d'+Math.random().toString(36).slice(2,10));lsSet('s8dev',dev);
+var idn=null;try{idn=JSON.parse(lsGet('s8id')||'null');}catch(e){}
+var team=lsGet('s8team_'+ROOM);team=team===null?null:+team;
+var mine={};try{mine=JSON.parse(lsGet('s8mine_'+ROOM)||'{}')||{};}catch(e){mine={};}
+var ST=null,lastSeq=0,lastSig='',betv=1,cli=null,bi=0,gotState=false,swT=null,buzzed={},lastTs=0,recvAt=0,err='';
+function saveMine(){lsSet('s8mine_'+ROOM,JSON.stringify(mine));}
+function ready(){return idn&&idn.nm&&idn.ap&&team!==null;}
+function setStatus(){
+  var up=cli&&cli.isUp(),fresh=Date.now()-lastTs<40000;
+  $('#dot').className='dot '+(up?(fresh?'ok':''):'bad');
+  $('#st').textContent=!up?'Conectando…':(fresh?'En vivo · profe conectada':'Conectado · esperando a la profe');
+  var t=ST&&team!==null?ST.teams.filter(function(x){return x.id===team;})[0]:null;
+  $('#who').innerHTML=t&&idn?('<b>'+esc(idn.nm)+' · '+esc(t.n)+'</b>'):'';
+}
+function send(o){o.r=ROOM;o.d=dev;o.tm=team;o.nm=idn&&idn.nm;o.ap=idn&&idn.ap;return cli&&cli.pub(TOP+'/up',JSON.stringify(o),false);}
+function presence(){if(ready())send({t:'p'});}
+function connect(){
+  if(cli){try{cli.close();}catch(e){}}
+  gotState=false;
+  var url=BRK[bi%BRK.length];
+  cli=MQ(url,{cid:'a'+dev+Math.random().toString(36).slice(2,5),
+    onMsg:function(tp,tx){if(tp!==TOP+'/state')return;var o;try{o=JSON.parse(tx);}catch(e){return;}if(!o||o.r!==ROOM)return;if(o.seq<lastSeq&&o.seq>lastSeq-1000)return;lastSeq=o.seq;lastTs=o.ts||Date.now();recvAt=Date.now();gotState=true;clearTimeout(swT);ST=o;draw();setStatus();},
+    onState:function(s,api){
+      if(s==='up'){api.sub(TOP+'/state');presence();clearTimeout(swT);swT=setTimeout(function(){if(!gotState){bi++;connect();}},6000);}
+      if(s==='fail'||s==='refused'){clearTimeout(swT);swT=setTimeout(function(){bi++;connect();},2500);}
+      setStatus();
+    }});
+}
+function tname(id){var t=ST.teams.filter(function(x){return x.id===id;})[0];return t?t.n:'—';}
+function tcol(id){var t=ST.teams.filter(function(x){return x.id===id;})[0];return t?t.c:'#888';}
+function left(){if(!ST||ST.qs!=='run')return 0;return Math.max(0,ST.left-(Date.now()-recvAt)/1000);}
+
+function draw(){
+  var m=$('#m');
+  if(!ROOM){m.innerHTML='<div class="wait"><div class="big">🤔</div><h1>Falta el código de sala</h1><p class="sub">Escanea de nuevo el QR que está en la pantalla.</p></div>';return;}
+  if(!idn||!idn.nm||!idn.ap){
+    if($('#inm')&&lastSig===err)return;lastSig=err;
+    m.innerHTML='<div class="kick">Paso 1</div><h1>¿Quién eres?</h1><p class="sub">Escribe tu nombre y apellido. Es solo para tu participación en clase.</p>'
+      +'<input class="in" id="inm" placeholder="Nombre" maxlength="30" autocomplete="given-name" value="'+esc(idn&&idn.nm||'')+'"><input class="in" id="iap" placeholder="Apellido" maxlength="30" autocomplete="family-name" value="'+esc(idn&&idn.ap||'')+'"><div class="err" id="err">'+esc(err)+'</div><button class="go" data-id="1">Continuar</button>';
+    return;
+  }
+  if(!ST){m.innerHTML='<div class="wait"><div class="ring"></div><h1>Conectando con la clase…</h1><p class="sub">Si tarda, revisa tu internet. La profesora debe tener encendido el modo En vivo.</p></div>';return;}
+  if(team===null||!ST.teams.some(function(t){return t.id===team;})){
+    team=null;
+    m.innerHTML='<div class="kick">Paso 2</div><h1>¿De qué equipo eres?</h1><p class="sub">Elige tu equipo. Solo se hace una vez.</p><div class="teams">'
+      +ST.teams.map(function(t){return '<button class="tm" style="--c:'+esc(t.c)+'" data-t="'+t.id+'">'+esc(t.n)+'</button>';}).join('')+'</div>';
+    return;
+  }
+  var tn=tname(team),pts=ST.sc?ST.sc[team]:0;
+  var h='<div class="bar"><div class="me" style="--c:'+esc(tcol(team))+'">'+esc(tn)+'<a data-ch="1">cambiar</a></div><div class="pts">⭐ '+pts+' pts</div></div>';
+  if(ST.k==='v'||ST.k==='b'||ST.k==='r')h+=drawQ();
+  else if(ST.k==='z')h+=drawZ();
+  else h+='<div class="wait"><div class="big">👀</div><h1>'+esc(ST.ti)+'</h1><p class="sub">Mira la pantalla del salón. Cuando haya pregunta, aparecerá aquí.</p></div>';
+  m.innerHTML=h;
+}
+function drawQ(){
+  var sid=ST.sid,rev=!!ST.rev,L=ST.l||['A','B','C','D','E','F'],sel=mine[sid],acked=(ST.ad||[]).indexOf(dev)>-1,qs=ST.qs||'idle';
+  var h='<div class="kick">'+(ST.k==='b'?'🎯 Apuesta':(ST.k==='r'?'🏴‍☠️ Robo':'🗳️ Votación'))+'</div>';
+  if(ST.cs)h+='<div class="case">'+esc(ST.cs)+'</div>';
+  if(ST.k==='r'&&ST.rt!==team){
+    return h+'<div class="wait"><div class="big">👀</div><h1>'+esc(tname(ST.rt))+' intenta robarle puntos a '+esc(tname(ST.rv))+'</h1><p class="sub">Solo responden los integrantes del equipo que roba. Mira la pantalla.</p></div>';
+  }
+  h+='<div class="q">'+esc(ST.q)+'</div>';
+  if(!rev){
+    if(qs==='idle')h+='<div class="cd">⏳ La profe iniciará los 40 s…</div>';
+    else if(qs==='run')h+='<div class="cd" id="cd">⏱ '+Math.ceil(left())+' s</div>';
+    else h+='<div class="cd done">⏱ Tiempo cumplido</div>';
+  }
+  var canAns=!rev&&qs==='run'&&sel==null;
+  if(ST.k==='b'&&sel==null&&!rev){h+='<div class="bet"><span>Apuesta</span>'+[1,2,3].map(function(n){return '<button data-bet="'+n+'" class="'+(betv===n?'on':'')+'">×'+n+'</button>';}).join('')+'</div>';}
+  h+=ST.o.map(function(tx,i){
+    var c='opt';if(sel===i)c+=' sel';
+    if(rev&&ST.c!=null){if(i===ST.c)c+=' ok';else if(sel===i)c+=' no';}
+    return '<button class="'+c+'" data-i="'+i+'"'+(canAns?'':' disabled')+'><span class="L">'+esc(L[i])+'</span><span>'+esc(tx)+'</span></button>';
+  }).join('');
+  if(rev){
+    if(sel==null)h+='<div class="res na">Tu celular no envió respuesta.</div>';
+    else if(ST.c==null)h+='<div class="res na">Respuesta registrada. Mira la pantalla.</div>';
+    else h+=sel===ST.c?'<div class="res ok">✔ ¡Bien! Tu respuesta fue correcta.</div>':'<div class="res no">✖ Esta vez no. Mira la explicación en pantalla.</div>';
+  }else if(sel!=null){
+    h+='<div class="lock">'+(acked?'✔ Respuesta recibida (letra '+esc(L[sel])+(ST.k==='b'?', apuesta ×'+(mine[sid+'_b']||1):'')+'). Ya no se puede cambiar.':'Enviando…')+'</div>';
+  }
+  return h;
+}
+function drawZ(){
+  var h='<div class="kick">🔔 Buzzer</div>',run=ST.st==='run',locked=(ST.lk||[]).indexOf(team)>-1;
+  if(ST.st==='idle')return h+'<div class="wait"><div class="big">⏳</div><h1>Prepárense…</h1><p class="sub">Cuando la profe arranque la ronda, aparecerá el botón.</p></div>';
+  if(run&&!locked){var sent=buzzed[ST.sid+':'+(ST.lk||[]).length];h+='<p class="sub">Pista '+ST.n+' en pantalla. ¡Frena la ronda si ya sabes qué es!</p><button class="buz" data-z="1"'+(sent?' disabled':'')+'>'+(sent?'¡Enviado!':'¡YO!')+'</button>';return h;}
+  if(run&&locked)return h+'<div class="wait"><div class="big">🚫</div><h1>Tu equipo está bloqueado</h1><p class="sub">Fallaron esta ronda. Esperen la siguiente.</p></div>';
+  if(ST.st==='buzz'){var me=ST.bz===team;return h+'<div class="wait"><div class="big">'+(me?'🎤':'🔔')+'</div><h1>'+(me?'¡Frenó tu equipo!':esc(tname(ST.bz))+' frenó la ronda')+'</h1><p class="sub">'+(me?'Respondan en voz alta.':'Atentos: si fallan, se reanuda.')+'</p></div>';}
+  return h+'<div class="wait"><div class="big">🏁</div><h1>Ronda terminada</h1><p class="sub">'+(ST.w?('Punto para <b>'+esc(tname(ST.w))+'</b>'):'Nadie acertó')+'</p></div>';
+}
+$('#m').addEventListener('click',function(e){
+  var b;
+  if((b=e.target.closest('[data-id]'))){var n=($('#inm').value||'').trim(),a=($('#iap').value||'').trim();
+    if(!n||!a){err='Escribe nombre y apellido.';idn={nm:n,ap:a};draw();return;}
+    err='';idn={nm:n.slice(0,30),ap:a.slice(0,30)};lsSet('s8id',JSON.stringify(idn));draw();presence();setStatus();return;}
+  if((b=e.target.closest('[data-t]'))){team=+b.dataset.t;lsSet('s8team_'+ROOM,String(team));draw();presence();setStatus();return;}
+  if(e.target.closest('[data-ch]')){team=null;try{localStorage.removeItem('s8team_'+ROOM);}catch(x){}try{localStorage.removeItem('s8id');}catch(x){}idn=null;draw();return;}
+  if(!ST)return;
+  if((b=e.target.closest('[data-bet]'))){betv=+b.dataset.bet;draw();return;}
+  if((b=e.target.closest('[data-i]'))){
+    if(ST.rev||ST.qs!=='run'||mine[ST.sid]!=null)return;
+    var i=+b.dataset.i;mine[ST.sid]=i;mine[ST.sid+'_b']=betv;saveMine();
+    send({t:'v',sid:ST.sid,i:i,b:betv});try{navigator.vibrate&&navigator.vibrate(30);}catch(x){}draw();return;}
+  if((b=e.target.closest('[data-z]'))){buzzed[ST.sid+':'+(ST.lk||[]).length]=1;send({t:'z',sid:ST.sid});try{navigator.vibrate&&navigator.vibrate([60,40,60]);}catch(x){}draw();}
+});
+/* reenvío hasta que la profe confirme la respuesta (QoS 0) */
+setInterval(function(){
+  if(ST&&ready()&&(ST.k==='v'||ST.k==='b'||ST.k==='r')&&!ST.rev&&ST.qs==='run'&&mine[ST.sid]!=null&&(ST.ad||[]).indexOf(dev)<0){send({t:'v',sid:ST.sid,i:mine[ST.sid],b:mine[ST.sid+'_b']||1});}
+},2000);
+setInterval(function(){var c=$('#cd');if(c&&ST&&ST.qs==='run'){c.textContent='⏱ '+Math.ceil(left())+' s';}},250);
+setInterval(function(){presence();setStatus();},15000);
+draw();setStatus();
+if(ROOM)connect();
+})();
+</script></body></html>

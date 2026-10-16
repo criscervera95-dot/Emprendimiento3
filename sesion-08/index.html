@@ -237,6 +237,11 @@ kbd{background:#2a3040;border-radius:6px;padding:1px 7px;font-size:12px}
 .fun{display:flex;flex-direction:column;align-items:center;gap:10px}
 .fs{background:linear-gradient(90deg,#ff6b1a,#ff9a3d);border-radius:16px;padding:16px 10px;text-align:center;font-size:30px;color:#fff}
 .fs b{color:#fff}.fs.post{background:linear-gradient(90deg,#2a8cff,#3dd6f5);width:100%}
+.vc2{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}.vc2 .chip{font-size:18px;padding:2px 10px}
+.qcd{font-size:34px;font-weight:800;color:var(--am);background:rgba(255,194,51,.12);padding:6px 20px;border-radius:99px}.qcd.done{color:var(--mint)}
+.btn[disabled]{opacity:.4;cursor:not-allowed}
+.cover .qrbox.lv{right:0;bottom:30px}
+.qrbox.act{right:0;bottom:0;position:static;width:300px}
 </style>
 </head>
 <body>
@@ -253,13 +258,15 @@ kbd{background:#2a3040;border-radius:6px;padding:1px 7px;font-size:12px}
   <button data-b="rand" title="Equipo al azar (R)">🎲 Al azar</button>
   <button data-b="timer" title="Temporizador (T)">⏱</button>
   <button data-b="notes" title="Notas de la profesora (N)">📝 Guía</button>
-    <button data-b="fs" title="Pantalla completa (F)">⛶</button>
+  <button data-b="live" title="En vivo con celulares (L)">📡 En vivo</button>
+  <button data-b="fs" title="Pantalla completa (F)">⛶</button>
 </div>
 
 <div class="panel" id="score"></div>
 <div class="panel" id="modal"></div>
 <div class="panel" id="goto"></div>
 <div class="panel" id="notes"></div>
+<div class="panel" id="live"></div>
 <div class="panel" id="timer"><span class="tt" id="tt">00:00</span><button data-t="toggle">⏯</button><button data-t="reset">↺</button><button data-t="add60">+1 min</button><button data-t="sub60">−1 min</button><button data-t="hide">✕</button></div>
 <div class="panel" id="rand"><div class="box"><div class="st">Equipo elegido al azar</div><div class="big" id="rbig">…</div><div class="row" style="justify-content:center"><button class="btn" id="ragain">🎲 Otra vez</button><button class="btn alt" id="rclose">Cerrar</button></div></div></div>
 
@@ -267,14 +274,14 @@ kbd{background:#2a3040;border-radius:6px;padding:1px 7px;font-size:12px}
 (function(){
 'use strict';
 /* ================= Estado ================= */
-const KEY='s8_ventas_presentacion_v1';
+const KEY='s8_ventas_presentacion_v2';
 const COLORS=['#ff6b1a','#3dd6f5','#ffc233','#ff4f8b','#2ee6a6','#a78bfa','#ff5d5d','#60a5fa','#f59e0b','#34d399','#e879f9','#94a3b8'];
 function defTeams(n){const a=[];for(let i=1;i<=n;i++)a.push({id:i,name:'Equipo '+i,c:(i-1)%COLORS.length});return a;}
-function fresh(){return {teams:defTeams(8),idx:0,votes:{},bets:{},rev:{},rvn:{},log:[],stars:{},clue:{},pairs:null,steal:{t:null,v:null,n:1,q:null,res:null,show:false,used:[]},nid:100,seq:0,setup:false};}
+function fresh(){return {teams:defTeams(8),idx:0,votes:{},bets:{},rev:{},rvn:{},log:[],stars:{},clue:{},pairs:null,steal:{t:null,v:null,n:1,q:null,res:null,show:false,used:[],sid:null},nid:100,seq:0,setup:false,dv:{},people:{},asked:{},qmeta:{},stealN:0,qt:{}};}
 let S;
 try{S=JSON.parse(localStorage.getItem(KEY)||'null');}catch(e){S=null;}
 if(!S||!S.teams){S=fresh();}
-S.bets=S.bets||{};S.steal=S.steal||{t:null,v:null,n:1};S.steal.used=S.steal.used||[];S.clue=S.clue||{};S.stars=S.stars||{};
+S.bets=S.bets||{};S.dv=S.dv||{};S.qt=S.qt||{};S.people=S.people||{};S.asked=S.asked||{};S.qmeta=S.qmeta||{};S.stealN=S.stealN||0;S.steal=S.steal||{t:null,v:null,n:1};S.steal.used=S.steal.used||[];S.clue=S.clue||{};S.stars=S.stars||{};
 Object.keys(S.clue).forEach(function(k){const c=S.clue[k];if(!c||c.st===undefined||c.st==='run'||c.st==='buzz'){delete S.clue[k];}});
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
 const $=s=>document.querySelector(s);
@@ -283,7 +290,7 @@ const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',
 const team=id=>S.teams.find(t=>t.id==id);
 const col=t=>COLORS[t.c%COLORS.length];
 const pts=id=>S.log.filter(l=>l.team==id).reduce((a,l)=>a+l.d,0);
-function addLog(teamId,d,why,sid){S.log.push({id:++S.seq,team:teamId,d:d,why:why,sid:sid||''});}
+function addLog(teamId,d,why,sid,p){const e={id:++S.seq,team:teamId,d:d,why:why,sid:sid||''};if(p)e.p=p;S.log.push(e);}
 function chip(t,act,sid){
   return '<button class="chip" style="--c:'+col(t)+'" '+(act?'data-act="'+act+'" ':'')+'data-team="'+t.id+'"'+(sid?' data-sid="'+sid+'"':'')+'><i></i>'+esc(t.name)+'</button>';
 }
@@ -336,29 +343,76 @@ function banner(round,sub){
   return '<div class="gbanner"><span class="gb1">🎮 ARENA DE VENTAS</span><b>'+round+'</b><span class="gb2">'+sub+'</span></div>';
 }
 
+/* ---------- Helpers de modo en vivo / respuestas por persona ---------- */
+function liveOn(){return typeof LV!=='undefined'&&LV.on;}
+function dvOf(sid){return S.dv[sid]||{};}
+function members(sid,tid){const d=dvOf(sid);return Object.keys(d).filter(k=>d[k].tm==tid).map(k=>Object.assign({dev:k},d[k])).sort((a,b)=>a.ts-b.ts);}
+function connected(tid){const n=Date.now();return Object.keys(LV.pres).filter(k=>LV.pres[k].tm==tid&&n-LV.pres[k].ts<45000).length;}
+function useLive(sid){return liveOn()||Object.keys(dvOf(sid)).length>0;}
+function progChips(sid){
+  const tot=Object.keys(dvOf(sid)).length;
+  return '<div class="tray"><span class="lbl">📲 Respondieron ('+tot+'):</span>'+S.teams.map(function(t){
+    const a=members(sid,t.id).length,c=Math.max(connected(t.id),a);
+    return '<span class="chip" style="--c:'+col(t)+'"><i></i>'+esc(t.name)+' '+((a>=c&&c>0)?'✔ ':'')+a+'/'+c+'</span>';}).join('')+'</div>';
+}
+function distChips(sid,i,manualVotes){
+  let h='';
+  S.teams.forEach(function(t){
+    const ms=members(sid,t.id);
+    if(ms.length){const n=ms.filter(m=>m.i===i).length;if(n)h+='<span class="chip" style="--c:'+col(t)+'"><i></i>'+esc(t.name)+' ×'+n+'</span>';}
+    else if(manualVotes&&manualVotes[t.id]===i)h+=chipStatic(t);
+  });
+  return h;
+}
+function countOpt(sid,i,manualVotes){
+  let n=0;S.teams.forEach(function(t){const ms=members(sid,t.id);if(ms.length)n+=ms.filter(m=>m.i===i).length;else if(manualVotes&&manualVotes[t.id]===i)n++;});return n;
+}
+
+/* ---------- Tiempo de respuesta: 40 s antes de revelar ---------- */
+const QSEC=40;
+function qStatus(sid){const t=S.qt[sid];if(!t)return {st:'idle',left:QSEC};const left=Math.max(0,(t.end-Date.now())/1000);return {st:(left>0&&!t.done)?'run':'done',left:left};}
+function qCtl(sid,rev){
+  if(rev)return '';const s=qStatus(sid);
+  if(s.st==='idle')return '<button class="btn" data-act="qStart" data-sid="'+sid+'">▶ Iniciar '+QSEC+' s</button>';
+  if(s.st==='run')return '<span class="qcd" id="qcd">⏱ '+Math.ceil(s.left)+' s</span><button class="btn alt" style="font-size:20px;padding:8px 16px" data-act="qSkip" data-sid="'+sid+'">⏭ Cerrar ya</button>';
+  return '<span class="qcd done">⏱ Tiempo cumplido</span>';
+}
+function qTick(){
+  const s=SL[S.idx];if(!s)return;const sid=(s.vote||s.bet)?s.id:((s.id==='robo'&&S.steal.sid)?S.steal.sid:null);if(!sid)return;
+  const t=S.qt[sid];if(!t||t.done)return;const left=(t.end-Date.now())/1000;
+  if(left<=0){t.done=true;sfx('no');render();return;}
+  const e=document.getElementById('qcd');if(e)e.textContent='⏱ '+Math.ceil(left)+' s';
+}
+setInterval(qTick,250);
+
 /* ---------- Votación simple (contenido) ---------- */
 function voteSlide(o){
   return {id:o.id,blk:o.blk,t:o.t,title:o.title||o.q,notes:o.notes||'',
   html:function(s){
-    const v=S.votes[s.id]||{},rev=!!S.rev[s.id],tot=Math.max(1,S.teams.length);
+    const v=S.votes[s.id]||{},rev=!!S.rev[s.id],live=useLive(s.id);
+    let tot=0;const cnts=o.opts.map((_,i)=>{const n=countOpt(s.id,i,live&&!liveOn()?v:(live?v:v));tot+=n;return n;});tot=Math.max(1,tot);
     const opts=o.opts.map(function(tx,i){
-      const here=S.teams.filter(t=>v[t.id]===i);
       let cls='';if(rev&&o.correct!=null)cls=(o.correct===i)?' ok':' no';
-      return '<div class="opt'+cls+'"><span class="L">'+(o.labels?o.labels[i]:'ABCD'[i])+'</span><span class="tx">'+tx+'</span><span class="vc">'+here.map(t=>chip(t,rev?'':'cyc',s.id)).join('')+'</span><span class="cnt">'+here.length+'</span><span class="bar" style="width:'+(100*here.length/tot)+'%"></span></div>';
+      let vc='';
+      if(live){vc=rev?distChips(s.id,i,v):'';}
+      else{vc=S.teams.filter(t=>v[t.id]===i).map(t=>chip(t,rev?'':'cyc',s.id)).join('');}
+      const showN=(!live||rev);
+      return '<div class="opt'+cls+'"><span class="L">'+(o.labels?o.labels[i]:'ABCD'[i])+'</span><span class="tx">'+tx+'</span><span class="vc">'+vc+'</span><span class="cnt">'+(showN?cnts[i]:'')+'</span><span class="bar" style="width:'+(showN?100*cnts[i]/tot:0)+'%"></span></div>';
     }).join('');
     const none=S.teams.filter(t=>v[t.id]==null);
     return (o.case?'<div class="case">'+o.case+'</div>':'')+'<div class="q'+(o.small?' s':'')+'">'+o.q+'</div>'
       +'<div class="opts">'+opts+'</div>'
-      +'<div class="tray"><span class="lbl">'+(none.length?'Sin respuesta · toca para asignar:':'¡Todos respondieron!')+'</span>'+none.map(t=>chip(t,rev?'':'cyc',s.id)).join('')+'</div>'
-      +'<div class="row" style="margin-top:10px"><button class="btn'+(rev?' alt':'')+'" data-act="reveal" data-sid="'+s.id+'">'+(rev?'Ocultar respuesta':'✔ Revelar y puntuar')+'</button>'
-      +'<span class="hint">Cada equipo decide en 20 s. Toca el equipo para asignarle su letra. '+(o.pts?('Acierto +'+o.pts+'.'):'')+'</span></div>'
+      +(live&&!rev?progChips(s.id)
+        :(live?'':'<div class="tray"><span class="lbl">'+(none.length?'Sin respuesta · toca para asignar:':'¡Todos respondieron!')+'</span>'+none.map(t=>chip(t,rev?'':'cyc',s.id)).join('')+'</div>'))
+      +'<div class="row" style="margin-top:10px">'+qCtl(s.id,rev)+'<button class="btn'+(rev?' alt':'')+'" data-act="reveal" data-sid="'+s.id+'"'+((!rev&&qStatus(s.id).st!=='done')?' disabled':'')+'>'+(rev?'Ocultar respuesta':'✔ Revelar y puntuar')+'</button>'
+      +'<span class="hint">'+(live?'Cada alumno responde una vez desde su celular. ':'Cada equipo decide en 40 s. Toca el equipo para asignarle su letra. ')+(o.pts?('Acierto +'+o.pts+' por integrante.'):'')+'</span></div>'
       +(rev&&o.explain?'<div class="expl">'+o.explain+'</div>':'')+(o.extra||'');
   },
   vote:o};
 }
 
 /* ---------- Ronda de pistas con buzzer (juego) ---------- */
-function cs(id){return S.clue[id]||(S.clue[id]={st:'idle',n:1,el:0,t0:0,buzz:null,locked:[],w:null});}
+function cs(id){return S.clue[id]||(S.clue[id]={st:'idle',n:1,el:0,t0:0,buzz:null,locked:[],w:null,bd:null});}
 function clueSlide(o){
   return {id:o.id,blk:o.blk,t:o.t,title:o.title,notes:o.notes||'',game:true,
   html:function(s){
@@ -369,9 +423,9 @@ function clueSlide(o){
       h+='<div class="clue'+(shown?'':' lock')+'"><span class="pt">'+P[i]+' pts</span><span>'+(shown?o.clues[i]:'🔒 Pista '+(i+1)+' · aún oculta')+'</span></div>';
     }
     h+='<div class="cbar"><i id="cbf" style="width:'+Math.min(100,(c.st==='run'?(Date.now()-c.t0)/150:(c.el||0)/.15))+'%"></i></div>';
-    if(c.st==='idle'){h+='<div class="row" style="margin:14px 0"><button class="btn big" data-act="cStart" data-sid="'+s.id+'">▶ ¡Arrancar ronda!</button><span class="sm">Los equipos esperan listos…</span></div>';}
+    if(c.st==='idle'){h+='<div class="row" style="margin:14px 0"><button class="btn big" data-act="cStart" data-sid="'+s.id+'">▶ ¡Arrancar ronda!</button><span class="sm">'+(liveOn()?'Los celulares ya muestran el botón ¡YO!':'Los equipos esperan listos…')+'</span></div>';}
     else if(c.st==='run'){h+='<div class="tray"><span class="lbl">🔔 BUZZER:</span>'+S.teams.map(t=>(c.locked.indexOf(t.id)>-1)?'<span class="chip locked" style="--c:#555">🚫 '+esc(t.name)+'</span>':chip(t,'cBuzz',s.id)).join('')+'</div>';}
-    else if(c.st==='buzz'){const t=team(c.buzz);h+='<div class="buzzed">🔔 ¡'+(t?chipStatic(t):'')+' frenó la ronda!</div><div class="row"><button class="btn mint" data-act="cOk" data-sid="'+s.id+'">✔ Correcto (+'+P[c.n-1]+')</button><button class="btn red" data-act="cNo" data-sid="'+s.id+'">✖ Incorrecto (−1 y bloqueado)</button></div>';}
+    else if(c.st==='buzz'){const t=team(c.buzz),pp=c.bd&&S.people[c.bd];h+='<div class="buzzed">🔔 ¡'+(t?chipStatic(t):'')+' frenó la ronda!'+(pp?' <span class="sm">'+esc(pp.nombre)+'</span>':'')+'</div><div class="row"><button class="btn mint" data-act="cOk" data-sid="'+s.id+'">✔ Correcto (+'+P[c.n-1]+')</button><button class="btn red" data-act="cNo" data-sid="'+s.id+'">✖ Incorrecto (−1 y bloqueado)</button></div>';}
     else{h+='<div class="answer pop-in">✔ '+o.answer+'</div><div class="row">'+(c.w?('<span class="sm">¡Punto para</span>'+chipStatic(team(c.w)||{name:'—',c:0})):'<span class="sm">Nadie acertó</span>')+'<button class="btn alt" data-act="cReset" data-sid="'+s.id+'">↺ Repetir ronda</button></div>';}
     return h+strip();
   },clue:o};
@@ -389,24 +443,28 @@ setInterval(tickClue,250);
 function betSlide(o){
   return {id:o.id,blk:o.blk,t:o.t,title:o.title||o.q,notes:o.notes||'',game:true,bet:o,
   html:function(s){
-    const v=S.votes[s.id]||{},bt=S.bets[s.id]||{},rev=!!S.rev[s.id];
+    const v=S.votes[s.id]||{},bt=S.bets[s.id]||{},rev=!!S.rev[s.id],live=useLive(s.id);
     let h=banner(o.round,'Apuesta 1–3 pts: aciertas y ganas lo apostado, fallas y lo pierdes');
     h+='<div class="gtitle">'+o.q+'</div>';
-    h+='<div class="obox">'+o.opts.map((tx,i)=>'<div class="ob'+(rev?(o.correct===i?' ok':' no'):'')+'"><b>'+('ABCD'[i])+'</b> '+tx+'</div>').join('')+'</div>';
-    const half=Math.ceil(S.teams.length/2);
-    const tbl=function(arr){return '<div class="bt">'+arr.map(function(t){
-      const sel=v[t.id],b=bt[t.id]||1;
-      return '<div class="br">'+chipStatic(t)+o.opts.map(function(_,i){
-        let cls='cell';if(sel===i)cls+=' sel';if(rev&&o.correct===i)cls+=' ok';if(rev&&sel===i&&o.correct!==i)cls+=' bad';
-        return '<button class="'+cls+'" '+(rev?'':'data-act="bcell" ')+'data-sid="'+s.id+'" data-team="'+t.id+'" data-i="'+i+'">'+'ABCD'[i]+'</button>';
-      }).join('')+'<button class="bb" '+(rev?'':'data-act="bbet" ')+'data-sid="'+s.id+'" data-team="'+t.id+'">×'+b+'</button></div>';}).join('')+'</div>';};
-    h+='<div class="grid g2" style="gap:30px;margin-top:10px">'+tbl(S.teams.slice(0,half))+tbl(S.teams.slice(half))+'</div>';
-    h+='<div class="row" style="margin-top:12px"><button class="btn'+(rev?' alt':' big')+'" data-act="bReveal" data-sid="'+s.id+'">'+(rev?'Ocultar respuesta':'🎯 ¡Revelar!')+'</button><span class="hint">Toca la letra de cada equipo · toca ×n para cambiar su apuesta.</span></div>';
+    h+='<div class="obox">'+o.opts.map((tx,i)=>'<div class="ob'+(rev?(o.correct===i?' ok':' no'):'')+'"><b>'+('ABCD'[i])+'</b> '+tx+(rev&&live?'<div class="vc2">'+distChips(s.id,i,v)+'</div>':'')+'</div>').join('')+'</div>';
+    if(live){h+=progChips(s.id);}
+    else{
+      const half=Math.ceil(S.teams.length/2);
+      const tbl=function(arr){return '<div class="bt">'+arr.map(function(t){
+        const sel=v[t.id],b=bt[t.id]||1;
+        return '<div class="br">'+chipStatic(t)+o.opts.map(function(_,i){
+          let cls='cell';if(sel===i)cls+=' sel';if(rev&&o.correct===i)cls+=' ok';if(rev&&sel===i&&o.correct!==i)cls+=' bad';
+          return '<button class="'+cls+'" '+(rev?'':'data-act="bcell" ')+'data-sid="'+s.id+'" data-team="'+t.id+'" data-i="'+i+'">'+'ABCD'[i]+'</button>';
+        }).join('')+'<button class="bb" '+(rev?'':'data-act="bbet" ')+'data-sid="'+s.id+'" data-team="'+t.id+'">×'+b+'</button></div>';}).join('')+'</div>';};
+      h+='<div class="grid g2" style="gap:30px;margin-top:10px">'+tbl(S.teams.slice(0,half))+tbl(S.teams.slice(half))+'</div>';
+    }
+    h+='<div class="row" style="margin-top:12px">'+qCtl(s.id,rev)+'<button class="btn'+(rev?' alt':' big')+'" data-act="bReveal" data-sid="'+s.id+'"'+((!rev&&qStatus(s.id).st!=='done')?' disabled':'')+'>'+(rev?'Ocultar respuesta':'🎯 ¡Revelar!')+'</button><span class="hint">'+(live?'Cada integrante elige letra y apuesta ×1–×3 en su celular (una sola vez).':'Toca la letra de cada equipo · toca ×n para cambiar su apuesta.')+'</span></div>';
     if(rev&&o.explain)h+='<div class="expl">'+o.explain+'</div>';
     return h+strip();
   }};
 }
 
+/* ================= Contenido ================= */
 /* ================= Contenido ================= */
 function cardT(ic,name,html){return '<div class="card"><span class="ic">'+ic+'</span><h3>'+name+'</h3>'+html+'</div>';}
 const PERF=[
@@ -416,18 +474,18 @@ const PERF=[
  {c:'Institucional, varios decisores',s:'Pide cotización formal y menciona a un jefe o a un comité.',t:'Consultiva + SPIN',k:'Reunión más propuesta escrita'}];
 const CANALES=['Correo con documento adjunto','Redes sociales (mensaje corto)','Llamada uno a uno','Reunión + propuesta escrita'];
 
-add({id:'cover',blk:'Portada',t:'0–1',title:'Portada',
-notes:'<b>0–1 min.</b> Pide que se junten por equipo. Con <b>👥 Equipos</b> (tecla E) nombra, agrega o quita equipos (40 alumnos ≈ 8 equipos de 5). Reglas del día: se suman puntos por acertar, el repaso final es la Arena de ventas con apuestas y robo. La parte expositiva dura ~20 min; el resto es trabajo de equipo sobre el entregable.',
-html:function(){return '<div class="cover"><div class="blob">🎯</div>'
+add({id:'cover',blk:'Portada',t:'0–2',title:'Portada',
+notes:'<b>0–2 min.</b> Pide que se junten por equipo. Con <b>👥 Equipos</b> (tecla E) nombra, agrega o quita equipos (40 alumnos ≈ 8 equipos de 5). Enciende 📡 En vivo (tecla L) y proyecta el QR: cada alumno escribe nombre y apellido y elige su equipo. Reglas del día: se suman puntos por acertar, el repaso final es la Arena de ventas con apuestas y robo. La parte expositiva dura ~20 min; el resto es trabajo de equipo sobre el entregable.',
+html:function(){return '<div class="cover"><div class="blob">🎯</div><div class="qrbox lv">'+QRLIVE+'<b>🎮 Únete</b><span>Responde desde tu celular</span></div>'
 +'<div class="eyebrow">Emprendimiento y Liderazgo de Equipos · Unidad 2 · Sesión 8</div><h1 style="font-size:100px;max-width:1300px">Proceso y técnicas de <span>venta</span></h1>'
 +'<p class="sub">Del embudo a la venta consultiva, SPIN y AIDA</p>'
 +'<p class="tag" style="margin-bottom:22px">Vender es un proceso, no una casualidad</p>'
 +'<div class="rules"><div>🤝 Trabajo <b>en equipo</b></div><div>🧭 Sales con <b>embudo</b> y <b>guion</b></div><div>🏟️ Cierre: <b>Arena</b></div></div>'
-+'<div class="row" style="max-width:1400px">'+S.teams.map(chipStatic).join('')+'</div>'
-+'<div class="row" style="margin-top:26px"><button class="btn" data-act="teams">👥 Armar equipos</button><span class="sm">Reúnanse con su equipo · 1 min para nombrarse</span></div></div>';}});
++'<div class="row" style="max-width:1260px">'+S.teams.map(chipStatic).join('')+'</div>'
++'<div class="row" style="margin-top:26px"><button class="btn" data-act="teams">👥 Armar equipos</button><button class="btn alt" data-act="live">📡 Modo en vivo</button><span class="sm">Reúnanse con su equipo · 1 min para nombrarse</span></div></div>';}});
 
-add({id:'recap',blk:'Recap',t:'1–2',title:'¿Qué vimos la sesión pasada?',
-notes:'<b>1–2 min.</b> Conecta con la sesión 7: valor percibido y comunicación con el cliente (atención, crisis, objeciones). Puente: hasta aquí la <b>actitud</b> frente al cliente; hoy la <b>estructura</b> completa del proceso de venta. Fuente: Descriptiva S8 §1.',
+add({id:'recap',blk:'Recap',t:'2–4',title:'¿Qué vimos la sesión pasada?',
+notes:'<b>2–4 min.</b> Conecta con la sesión 7: valor percibido y comunicación con el cliente (atención, crisis, objeciones). Puente: hasta aquí la <b>actitud</b> frente al cliente; hoy la <b>estructura</b> completa del proceso de venta. Fuente: Descriptiva S8 §1.',
 html:function(){return '<h2>¿Qué vimos la <em>sesión pasada</em>?</h2><div class="grid g3" style="margin-top:20px">'
 +cardT('💎','Valor percibido','<p>Cómo generar valor y <b>comunicarlo</b> al cliente.</p>')
 +cardT('🤝','Atención al cliente','<p>La actitud correcta frente a quien nos compra.</p>')
@@ -435,24 +493,24 @@ html:function(){return '<h2>¿Qué vimos la <em>sesión pasada</em>?</h2><div cl
 +'<div class="callout or" style="font-size:42px">Hoy pasamos de <b>tener un proyecto</b> a <b>saber venderlo</b>: aplicamos el proceso de venta completo.</div>'
 +'<p class="sm" style="margin-top:22px">Diseñarán el embudo de ventas de su proyecto y practicarán prospección y cierre con role-play.</p>';}});
 
-add({id:'obj',blk:'Objetivo',t:'2–3',title:'Objetivo de la clase',
-notes:'<b>2–3 min.</b> Lee el objetivo y la ruta del día. Producto de hoy: embudo con metas por etapa + guion de prospección (se trabajan en clase, se pasan en limpio para la entrega). Fuente: Descriptiva S8 §2.',
+add({id:'obj',blk:'Objetivo',t:'4–5',title:'Objetivo de la clase',
+notes:'<b>4–5 min.</b> Lee el objetivo y la ruta del día. Producto de hoy: embudo con metas por etapa + guion de prospección (se trabajan en clase, se pasan en limpio para la entrega). Fuente: Descriptiva S8 §2.',
 html:function(){return '<h2>🎯 <em>Objetivo</em> de la clase</h2><div class="grid" style="grid-template-columns:1.1fr .9fr;gap:28px;margin-top:6px">'
 +'<div><div class="card" style="font-size:36px;line-height:1.3">Que <b>apliques las etapas del proceso de venta</b>, <b>elijas la técnica adecuada</b> para tu cliente y <b>diseñes el embudo</b> de tu proyecto con metas por etapa y un <b>guion de prospección</b>.</div>'
 +'<div class="callout mint" style="font-size:32px">Hoy te llevas: <b>embudo con números</b> + <b>guion probado en voz alta</b>.</div></div>'
 +'<div class="tl">'+['01|Proceso, no casualidad','02|La técnica correcta','03|Números que diagnostican'].map(function(x){const a=x.split('|');return '<div class="st" style="grid-template-columns:90px 1fr"><span class="num" style="margin:0">'+a[0]+'</span><p style="font-size:34px"><b>'+a[1]+'</b></p></div>';}).join('')+'</div></div>'
 +'<p class="sm" style="margin-top:22px">Ruta: Etapas → Técnicas → Embudo → Role-play SPIN → Cierre → Guion</p>';}});
 
-add({id:'detona',blk:'Activación',t:'3–5',title:'¿Por qué meses vs. minutos?',
-notes:'<b>3–5 min.</b> Pregunta detonadora: “Una venta entre empresas puede tardar meses; una compra en redes se decide en minutos. ¿Por qué?” Deja que propongan (varias personas deciden, presupuestos, riesgo, compra emocional) y anota en el pizarrón. Vuelve a sus respuestas al presentar las técnicas. Cifras: preséntalas como <b>órdenes de magnitud</b> (la fuente original no está citada).',
+add({id:'detona',blk:'Activación',t:'5–8',title:'¿Por qué meses vs. minutos?',
+notes:'<b>5–8 min.</b> Pregunta detonadora: “Una venta entre empresas puede tardar meses; una compra en redes se decide en minutos. ¿Por qué?” Deja que propongan (varias personas deciden, presupuestos, riesgo, compra emocional) y anota en el pizarrón. Vuelve a sus respuestas al presentar las técnicas. Cifras: preséntalas como <b>órdenes de magnitud</b> (la fuente original no está citada).',
 html:function(){return '<h2>⏳ ¿Por qué <em>meses</em> en una venta y <em>minutos</em> en otra?</h2><div class="grid g2" style="margin-top:6px">'
 +'<div class="card" style="border-color:var(--cy)"><span class="tag2" style="background:var(--cy);color:#06222b">B2B · venta a empresas</span><p style="font-size:58px;font-weight:800;margin:8px 0">≈ 10 meses</p><p>Varias personas deciden, hay presupuestos que aprobar y el riesgo es alto. Suele ganar <b>quien responde primero</b>.</p></div>'
 +'<div class="card" style="border-color:var(--or)"><span class="tag2">B2C · compra en línea</span><p style="font-size:58px;font-weight:800;margin:8px 0">2–3 días</p><p>Decisión individual y más emocional: <b>75 %</b> se decide en las primeras 24 h. En redes, a veces <b>minutos</b>.</p></div></div>'
 +'<div class="callout or" style="font-size:38px">💭 ¿Qué explica la diferencia? → No hay <b>una sola forma correcta de vender</b>: hay una forma correcta <b>para cada situación</b>.</div>'
 +'<div class="row" style="margin-top:14px"><button class="btn" style="font-size:24px;padding:10px 22px" data-act="rand">🎲 Equipo al azar</button><span class="hint">Cifras como orden de magnitud (tendencias B2B/B2C 2026; fuente por confirmar).</span></div>';}});
 
-add({id:'proceso',blk:'Contenido',t:'5–9',title:'Proceso de venta y sus 5 etapas',
-notes:'<b>5–9 min.</b> Un proceso de venta es la secuencia estructurada de pasos desde identificar al cliente hasta cerrar y mantener la relación; permite predecir, medir y mejorar. Recorre las 5 etapas con el error típico de cada una. Cierra pidiendo que cada equipo anote en cuál cree que su proyecto está más débil (lo usan en la Actividad 1). Fuente: Descriptiva §5.1–5.2.',
+add({id:'proceso',blk:'Contenido',t:'8–13',title:'Proceso de venta y sus 5 etapas',
+notes:'<b>8–13 min.</b> Un proceso de venta es la secuencia estructurada de pasos desde identificar al cliente hasta cerrar y mantener la relación; permite predecir, medir y mejorar. Recorre las 5 etapas con el error típico de cada una. Cierra pidiendo que cada equipo anote en cuál cree que su proyecto está más débil (lo usan en la Actividad 1). Fuente: Descriptiva §5.1–5.2.',
 html:function(){return '<h2>🧭 ¿Qué es un <em>proceso de venta</em>?</h2>'
 +'<p style="font-size:32px;max-width:1700px;line-height:1.25">Una <b>secuencia de pasos</b> desde identificar a un cliente hasta cerrar y mantener la relación. No son conversaciones sueltas: es un camino con etapas que permite <b class="hl">predecir, medir y mejorar</b>.</p>'
 +'<table class="tb"><tr><th style="width:360px">Etapa</th><th>En qué consiste</th><th style="width:560px">⚠ Error típico</th></tr>'
@@ -463,16 +521,16 @@ html:function(){return '<h2>🧭 ¿Qué es un <em>proceso de venta</em>?</h2>'
  ['5 · Postventa','Retener y generar referidos: volver a vender cuesta mucho menos que un cliente nuevo.','Desaparecer después de cobrar']].map(function(r){return '<tr><td><b>'+r[0]+'</b></td><td>'+r[1]+'</td><td class="warn">'+r[2]+'</td></tr>';}).join('')+'</table>'
 +'<div class="callout or" style="margin-top:6px;font-size:30px">✍️ Marquen en equipo: <b>¿en qué etapa está más débil su proyecto?</b></div>';}});
 
-add({id:'consultiva',blk:'Contenido',t:'9–11',title:'Venta consultiva',
-notes:'<b>9–11 min.</b> El vendedor es asesor, no despachador: diagnostica primero, propone después. Diferencia clave: en la venta tradicional se habla primero del producto; en la consultiva se pregunta primero y se recomienda después. Funciona en ventas complejas y de ciclo largo (B2B); peor en compras rápidas. Origen: Mack Hanan (1970). Vuelve a las respuestas de la pregunta detonadora.',
+add({id:'consultiva',blk:'Contenido',t:'13–16',title:'Venta consultiva',
+notes:'<b>13–16 min.</b> El vendedor es asesor, no despachador: diagnostica primero, propone después. Diferencia clave: en la venta tradicional se habla primero del producto; en la consultiva se pregunta primero y se recomienda después. Funciona en ventas complejas y de ciclo largo (B2B); peor en compras rápidas. Origen: Mack Hanan (1970). Vuelve a las respuestas de la pregunta detonadora.',
 html:function(){return '<h2>🧑‍⚕️ <em>Venta consultiva</em>: el vendedor como asesor</h2><div class="grid g3" style="margin-top:6px">'
 +cardT('🔎','Diagnostica primero','<p>Entiende necesidades, problemas y objetivos reales del cliente y <b>solo después</b> propone.</p><p class="sm" style="margin-top:10px">Tradicional: habla primero del producto.<br><b>Consultiva: pregunta primero, recomienda después.</b></p>')
 +cardT('✅','Características','<p>• <b>Escucha más</b> de lo que habla<br>• Resuelve un <b>problema</b>, no coloca un producto<br>• Relación de <b>largo plazo</b><br>• Propuesta <b>personalizada</b></p>')
 +cardT('🎯','¿Cuándo funciona?','<p><b style="color:var(--mint)">Mejor:</b> ventas complejas, ciclo largo y alto valor (típico B2B).</p><p style="margin-top:12px"><b style="color:var(--pk)">Peor:</b> compras rápidas y de bajo involucramiento.</p>')+'</div>'
 +'<p class="sm" style="margin-top:20px">Método formalizado por Mack Hanan (1970).</p>';}});
 
-add({id:'spin',blk:'Contenido',t:'11–12',title:'SPIN Selling: 4 preguntas',
-notes:'<b>11–12 min.</b> SPIN (Neil Rackham, análisis de +35,000 llamadas): cuatro tipos de pregunta, siempre en este orden, para que el cliente mismo articule por qué necesita una solución. Funciona mejor en ventas consultivas, complejas, B2B.',
+add({id:'spin',blk:'Contenido',t:'16–19',title:'SPIN Selling: 4 preguntas',
+notes:'<b>16–19 min.</b> SPIN (Neil Rackham, análisis de +35,000 llamadas): cuatro tipos de pregunta, siempre en este orden, para que el cliente mismo articule por qué necesita una solución. Funciona mejor en ventas consultivas, complejas, B2B.',
 html:function(){return '<h2>❓ <em>SPIN Selling</em>: 4 preguntas, siempre en orden</h2><div class="grid g4" style="margin-top:6px">'
 +[['S','Situación','Entender el contexto: qué tiene, cómo opera.','¿Cómo manejan actualmente este proceso?'],
   ['P','Problema','Explorar dificultades y puntos de dolor.','¿Qué dificultades han tenido con eso?'],
@@ -481,8 +539,8 @@ html:function(){return '<h2>❓ <em>SPIN Selling</em>: 4 preguntas, siempre en o
 +'<div class="callout or" style="font-size:32px">⚠ Ninguna de las cuatro menciona el producto. <b>No presentas nada</b> hasta que el cliente dijo en voz alta que tiene un problema y que resolverlo le importa.</div>'
 +'<p class="sm" style="margin-top:14px">Neil Rackham · 35,000+ llamadas de venta analizadas</p>';}});
 
-add({id:'spin2',blk:'Contenido',t:'12–13',title:'SPIN en acción: proyecto de reciclaje',
-notes:'<b>12–13 min.</b> Lee las cuatro preguntas con voz de vendedor y pide que identifiquen cuál es cuál. Observa: ninguna menciona el producto y el cliente llega solo a la conclusión. En el role-play, si escuchas “nuestra app hace…” antes de la cuarta pregunta, detén el ejercicio y que empiecen de nuevo.',
+add({id:'spin2',blk:'Contenido',t:'19–21',title:'SPIN en acción: proyecto de reciclaje',
+notes:'<b>19–21 min.</b> Lee las cuatro preguntas con voz de vendedor y pide que identifiquen cuál es cuál. Observa: ninguna menciona el producto y el cliente llega solo a la conclusión. En el role-play, si escuchas “nuestra app hace…” antes de la cuarta pregunta, detén el ejercicio y que empiecen de nuevo.',
 html:function(){return '<h2>♻️ SPIN <em>en acción</em>: proyecto de reciclaje</h2><div class="tl" style="margin-top:6px">'
 +[['S','¿Cómo manejan actualmente la separación de sus residuos reciclables en casa?'],
   ['P','¿Qué dificultades han tenido para encontrar dónde llevarlos?'],
@@ -490,28 +548,43 @@ html:function(){return '<h2>♻️ SPIN <em>en acción</em>: proyecto de recicla
   ['N','¿Qué significaría para ustedes no tener que preocuparse nunca más por eso?']].map(function(x){return '<div class="st" style="grid-template-columns:90px 1fr"><span class="num" style="margin:0">'+x[0]+'</span><p style="font-size:38px">“'+x[1]+'”</p></div>';}).join('')+'</div>'
 +'<div class="callout mint" style="font-size:34px">✅ Ninguna menciona el producto: el cliente <b>llega solo</b> a la conclusión de que necesita una solución.</div>';}});
 
-add({id:'aida',blk:'Contenido',t:'13–14',title:'AIDA',
-notes:'<b>13–14 min.</b> AIDA organiza un mensaje para llevar a la persona del primer contacto a la acción. Es el mismo esqueleto del pitch de la Sesión 4. Diferencia con SPIN: SPIN estructura una conversación con preguntas; AIDA estructura la forma de presentar un mensaje. Ideal en ventas cortas, bajo involucramiento y marketing de contenidos.',
+
+SL.push(voteSlide({id:'spin-v',blk:'Contenido',t:'21–22',title:'Votación: tipo de pregunta SPIN',
+ q:'«¿Cómo afecta eso a sus tiempos de entrega o a sus ventas?» ¿Qué tipo de pregunta SPIN es?',small:true,
+ opts:['Situación','Problema','Implicación','Necesidad de solución'],correct:2,pts:1,
+ explain:'<b>Implicación</b>: amplifica las consecuencias del problema si no se resuelve.',
+ notes:'<b>21–22 min.</b> Pulsa <b>Iniciar 40 s</b>; cada alumno vota desde su celular (una vez) y al terminar se habilita Revelar. +1 por acierto. Si hay duda, regresa a la diapositiva de SPIN.'}));
+add({id:'aida',blk:'Contenido',t:'22–24',title:'AIDA',
+notes:'<b>22–24 min.</b> AIDA organiza un mensaje para llevar a la persona del primer contacto a la acción. Es el mismo esqueleto del pitch de la Sesión 4. Diferencia con SPIN: SPIN estructura una conversación con preguntas; AIDA estructura la forma de presentar un mensaje. Ideal en ventas cortas, bajo involucramiento y marketing de contenidos.',
 html:function(){return '<h2>📣 <em>AIDA</em>: del primer contacto a la acción</h2><div class="grid g4" style="margin-top:6px">'
 +[['A','Atención','Captura los primeros segundos: hook, dato o pregunta.'],['I','Interés','Curiosidad con algo relevante para esa persona.'],['D','Deseo','Conecta el producto con un beneficio que sí quiere.'],['A','Acción','Cierra con un llamado a la acción claro y concreto.']].map(function(x){return '<div class="card"><span class="num">'+x[0]+'</span><h3>'+x[1]+'</h3><p style="font-size:29px">'+x[2]+'</p></div>';}).join('')+'</div>'
 +'<div class="grid g2" style="margin-top:22px"><div class="callout mint" style="margin:0;font-size:30px"><b>Funciona mejor:</b> ventas cortas, bajo involucramiento y marketing de contenidos.</div>'
 +'<div class="callout" style="margin:0;font-size:30px"><b>vs. SPIN:</b> SPIN estructura una <b>conversación</b>; AIDA estructura un <b>mensaje</b> (el pitch de la S4, con otro nombre).</div></div>';}});
 
-add({id:'adapta',blk:'Contenido',t:'14–15',title:'Adaptación: cliente × técnica × canal',
-notes:'<b>14–15 min.</b> Regla: la técnica y el canal dependen del cliente. Rápido: ¿vende a otra empresa con ciclo largo? consultiva/SPIN. ¿Consumidor final, decisión rápida? AIDA. ¿Escéptico o técnico? SPIN en llamada uno a uno. ¿Institucional con cotización? Consultiva para diagnosticar + propuesta escrita. Esta tabla se usa en la Actividad 2 y en el role-play.',
+add({id:'adapta',blk:'Contenido',t:'24–27',title:'Adaptación: cliente × técnica × canal',
+notes:'<b>24–27 min.</b> Regla: la técnica y el canal dependen del cliente. Rápido: ¿vende a otra empresa con ciclo largo? consultiva/SPIN. ¿Consumidor final, decisión rápida? AIDA. ¿Escéptico o técnico? SPIN en llamada uno a uno. ¿Institucional con cotización? Consultiva para diagnosticar + propuesta escrita. Esta tabla se usa en la Actividad 2 y en el role-play.',
 html:function(){return '<h2>🧩 <em>A la medida</em>: cliente → técnica → canal</h2>'
 +'<table class="tb"><tr><th style="width:380px">Tipo de cliente</th><th>Cómo lo reconoces</th><th style="width:300px">Técnica</th><th style="width:420px">Canal</th></tr>'
 +PERF.map(function(r){return '<tr><td><b>'+r.c+'</b></td><td>'+r.s+'</td><td class="hl"><b>'+r.t+'</b></td><td>'+r.k+'</td></tr>';}).join('')+'</table>'
 +'<div class="callout or" style="font-size:32px">Regla rápida: <b>B2B, ciclo largo, varios decisores → consultiva/SPIN</b> · <b>consumidor final, decisión rápida → AIDA</b>.</div>';}});
 
-SL.push(voteSlide({id:'adapta-v',blk:'Contenido',t:'15–16',title:'Votación: comité y cotización',
+SL.push(voteSlide({id:'adapta-v',blk:'Contenido',t:'27–28',title:'Votación: comité y cotización',
  q:'Un cliente pide cotización formal y menciona que debe consultarlo con su comité. ¿Qué haces?',small:true,
  opts:['AIDA con un mensaje corto por redes sociales','Consultiva para diagnosticar + propuesta escrita para el comité','Cierre directo en la primera llamada','SPIN solo por mensaje de WhatsApp'],correct:1,pts:1,
  explain:'Cliente <b>institucional</b>: consultiva para diagnosticar y <b>propuesta escrita</b> para el comité (reunión + propuesta).',
- notes:'<b>15–16 min.</b> Cada equipo vota (20 s) y se revela. +1 por acierto. Comprueba que distinguen cliente institucional de emocional.'}));
+ notes:'<b>27–28 min.</b> Pulsa <b>Iniciar 40 s</b>; cada alumno vota desde su celular y al terminar se habilita Revelar. +1 por acierto por integrante. Comprueba que distinguen cliente institucional de emocional.'}));
 
-add({id:'embudo',blk:'Contenido',t:'16–18',title:'El embudo de ventas',
-notes:'<b>16–18 min.</b> El embudo es la representación numérica del camino del cliente. Se llama embudo porque en cada etapa se pierde gente. Las etapas son las mismas del proceso. No es un dibujo bonito: es una herramienta de diagnóstico. Lee el contraste “nos va mal” vs “el problema está en el cierre”.',
+add({id:'cierre-v',blk:'Contenido',t:'28–30',title:'Cerrar y postventa',
+notes:'<b>28–30 min.</b> Cerrar es pedir la venta; ninguna técnica consiste en esperar a que el cliente la pida. Señales de que está listo: pregunta por precio, plazos o garantía sin que se lo ofrezcas; habla en “nosotros”; pide detalles de entrega (la más clara). Postventa: tres acciones que sí se pueden hacer esta semana. Fuente: Descriptiva §5.8. Se practica en el role-play.',
+html:function(){return '<h2>🤝 <em>Cerrar</em> la venta y cuidar la <em>postventa</em></h2>'
++'<div class="grid" style="grid-template-columns:1.3fr .7fr;gap:24px;margin-top:0"><div>'
++'<table class="tb" style="margin-top:-6px"><tr><th style="width:250px">Técnica de cierre</th><th>Ejemplo</th></tr>'
++[['Directo','«¿Lo dejamos apartado para el viernes?»'],['Por alternativa','«¿Lo prefieres de medio litro o de litro?»'],['Por resumen','«Quedamos en que te ahorra dos horas y elimina el error: ¿empezamos el lunes?»'],['Condicional','«Si te consigo la entrega el jueves, ¿cerramos hoy?»']].map(function(r){return '<tr><td><b>'+r[0]+'</b></td><td style="font-size:27px">'+r[1]+'</td></tr>';}).join('')+'</table>'
++'<div class="callout or" style="font-size:30px;margin-top:6px">Cerrar es <b>pedir la venta</b>: ninguna técnica consiste en esperar a que el cliente la pida.</div></div>'
++'<div><div class="card" style="padding:20px 24px"><h3>🚦 Señales de “listo”</h3><p style="font-size:26px">Pregunta por precio, plazos o garantía · habla en “nosotros” · pide detalles de entrega.</p></div>'
++'<div class="card" style="padding:20px 24px;margin-top:14px"><h3>💌 Postventa esta semana</h3><p style="font-size:26px">1. Confirmación en 24 h<br>2. Pregunta de satisfacción a los 7 días<br>3. Petición de referido (después del “sí”)</p></div></div></div>';}});
+add({id:'embudo',blk:'Contenido',t:'30–32',title:'El embudo de ventas',
+notes:'<b>30–32 min.</b> El embudo es la representación numérica del camino del cliente. Se llama embudo porque en cada etapa se pierde gente. Las etapas son las mismas del proceso. No es un dibujo bonito: es una herramienta de diagnóstico. Lee el contraste “nos va mal” vs “el problema está en el cierre”.',
 html:function(){return '<h2>🔻 El <em>embudo</em> de ventas</h2><div class="grid" style="grid-template-columns:1fr 1fr;gap:34px;margin-top:6px"><div class="fun">'
 +[['Prospectos contactados','100%'],['Leads calificados','↓'],['Propuestas o demos','↓'],['Cierres (clientes)','↓']].map(function(x,i){return '<div class="fs" style="width:'+(100-i*17)+'%;opacity:'+(1-i*.12)+'"><b>'+x[0]+'</b></div>';}).join('')
 +'<div class="fs post"><b>+ Postventa y referidos</b></div></div>'
@@ -519,16 +592,16 @@ html:function(){return '<h2>🔻 El <em>embudo</em> de ventas</h2><div class="gr
 +'<div class="card" style="margin-top:16px;border-color:var(--pk)"><h3>Sin números</h3><p style="font-size:30px">“No nos están comprando.”</p></div>'
 +'<div class="card" style="margin-top:14px;border-color:var(--mint)"><h3>Con números</h3><p style="font-size:30px">“De 10 contactados, 4 escuchan, 2 piden precio y ninguna cierra: <b>el problema está en el cierre</b>, no en la promoción.”</p></div></div></div>';}});
 
-add({id:'metricas',blk:'Contenido',t:'18–19',title:'Las 3 métricas del embudo',
-notes:'<b>18–19 min.</b> Tres métricas: conversión por etapa (etapa siguiente ÷ etapa anterior × 100), ticket promedio (ingreso total ÷ clientes cerrados) y tiempo de ciclo (días entre primer contacto y cierre, promediados). Sin medirlas se vende a ciegas.',
+add({id:'metricas',blk:'Contenido',t:'32–33',title:'Las 3 métricas del embudo',
+notes:'<b>32–33 min.</b> Tres métricas: conversión por etapa (etapa siguiente ÷ etapa anterior × 100), ticket promedio (ingreso total ÷ clientes cerrados) y tiempo de ciclo (días entre primer contacto y cierre, promediados). Sin medirlas se vende a ciegas.',
 html:function(){return '<h2>📏 <em>Mide</em>: 3 métricas básicas</h2><div class="grid g3" style="margin-top:10px">'
 +cardT('📉','Conversión por etapa','<p>Qué % avanza de una etapa a la siguiente.</p><div class="formula">etapa siguiente ÷ etapa anterior × 100</div>')
 +cardT('💵','Ticket promedio','<p>Cuánto genera en promedio cada cliente que cierra.</p><div class="formula">ingreso total ÷ clientes cerrados</div>')
 +cardT('⏱️','Tiempo de ciclo','<p>Cuánto tarda un prospecto en volverse cliente.</p><div class="formula">días entre 1.er contacto y cierre (promedio)</div>')+'</div>'
 +'<div class="callout or">Sin medirlos, estás <b>vendiendo a ciegas</b>.</div>';}});
 
-add({id:'ejemplo',blk:'Contenido',t:'19–20',title:'Ejemplo resuelto: diagnóstico',
-notes:'<b>19–20 min.</b> Proyecta antes de la Actividad 1. Dos lecturas: en <b>volumen</b>, la mayor fuga es prospectos→leads (60 personas) = problema de prospección/perfil; en <b>porcentaje</b>, la conversión más baja es el cierre (25 %) = oferta, precio o técnica de cierre. El cuello de botella es el cierre porque llegar a la propuesta ya costó trabajo. Pregunta final: “si solo mejoran una etapa la próxima semana, ¿cuál?” Subir cierre de 25 % a 40 % = 3 clientes más sin contactar a nadie nuevo.',
+add({id:'ejemplo',blk:'Contenido',t:'33–35',title:'Ejemplo resuelto: diagnóstico',
+notes:'<b>33–35 min.</b> Proyecta antes de la Actividad 1. Dos lecturas: en <b>volumen</b>, la mayor fuga es prospectos→leads (60 personas) = problema de prospección/perfil; en <b>porcentaje</b>, la conversión más baja es el cierre (25 %) = oferta, precio o técnica de cierre. El cuello de botella es el cierre porque llegar a la propuesta ya costó trabajo. Pregunta final: “si solo mejoran una etapa la próxima semana, ¿cuál?” Subir cierre de 25 % a 40 % = 3 clientes más sin contactar a nadie nuevo.',
 html:function(){return '<h2>🔬 Ejemplo: <em>diagnostica</em> este embudo</h2><div class="grid" style="grid-template-columns:1.05fr .95fr;gap:30px">'
 +'<div><table class="tb"><tr><th>Etapa</th><th>Cantidad</th><th>Conversión</th><th>Se pierden</th></tr>'
 +[['Prospectos contactados','100','—','—'],['Leads calificados','40','40 %','60'],['Propuestas o demos','20','50 %','20'],['Cierres (clientes)','5','<b class="hl">25 %</b>','15']].map(function(r){return '<tr><td><b>'+r[0]+'</b></td><td>'+r[1]+'</td><td>'+r[2]+'</td><td>'+r[3]+'</td></tr>';}).join('')+'</table>'
@@ -537,77 +610,32 @@ html:function(){return '<h2>🔬 Ejemplo: <em>diagnostica</em> este embudo</h2><
 +'<div class="card" style="border-color:var(--or);margin-top:16px;padding:22px 28px"><h3>📊 En porcentaje</h3><p style="font-size:28px">Conversión más baja: <b>cierre, 25 %</b>. Apunta a oferta, precio o técnica de cierre → <b class="hl">cuello de botella</b>.</p></div></div></div>'
 +'<div class="callout mint" style="font-size:30px">💡 Si solo mejoran <b>una</b> etapa: subir el cierre de 25 % a 40 % da <b>3 clientes más</b> sin contactar a nadie nuevo.</div>';}});
 
-add({id:'a1',blk:'Actividad 1',t:'20–30',title:'Actividad 1: diagnóstico del embudo',
-notes:'<b>20–30 min (10).</b> Reparte la Plantilla del embudo (Anexo A). Circula y revisa que los números sean plausibles (no cifras redondas sin origen). Mid-check a los 5 min: ¿ya calcularon las tres conversiones?',
-html:function(){return '<h2>📊 <em>Actividad 1</em> · Diagnóstico del embudo <span class="hint" style="font-size:30px">· 10 min</span></h2>'
-+'<div class="grid g3" style="margin-top:6px">'
-+cardT('1️⃣','Llenen la plantilla','<p>Con <b>números estimados</b> de su propio proyecto (Plantilla Embudo de Ventas).</p>')
-+cardT('2️⃣','Calculen','<p>La conversión de cada etapa: <b>siguiente ÷ anterior × 100</b>.</p>')
-+cardT('3️⃣','Nombren el cuello','<p>Cuál es su <b>cuello de botella</b> y por qué es ese y no otro.</p>')+'</div>'
-+'<div class="callout mint">📦 Producto: embudo con <b>4 cifras, 3 porcentajes</b> y un cuello de botella identificado.</div>'
-+'<div class="row" style="margin-top:16px"><button class="btn" data-act="timer" data-sec="600">▶ 10:00</button><button class="btn alt" data-act="timer" data-sec="0">⏹</button></div>';}});
-
-add({id:'a2',blk:'Actividad 2',t:'30–36',title:'Actividad 2: técnica por cliente y canal',
-notes:'<b>30–36 min (6).</b> Cada equipo ubica a su cliente real en uno de los 4 perfiles y completa la frase con una señal observable (no una corazonada). Revisa 2–3 frases en voz alta.',
-html:function(){return '<h2>🧭 <em>Actividad 2</em> · Técnica por cliente y canal <span class="hint" style="font-size:30px">· 6 min</span></h2>'
-+'<div class="grid g2" style="margin-top:6px"><div class="card"><span class="num">1</span><h3>Ubiquen a su cliente</h3><p>En uno de los <b>4 perfiles</b>: racional, emocional, escéptico o institucional.</p></div>'
-+'<div class="card"><span class="num">2</span><h3>Completen la frase</h3><p>Escríbanla en equipo (una sola).</p></div></div>'
-+'<div class="callout or" style="font-size:42px;line-height:1.3">“Vamos a usar <b>[técnica]</b> por <b>[canal]</b> porque nuestro cliente <b>[señal observable]</b>.”</div>'
-+'<div class="callout mint">📦 Producto: técnica elegida <b>con justificación escrita</b>, no con una corazonada.</div>'
-+'<div class="row" style="margin-top:16px"><button class="btn" data-act="timer" data-sec="360">▶ 6:00</button><button class="btn alt" data-act="timer" data-sec="0">⏹</button></div>';}});
-
-add({id:'a3',blk:'Actividad 3',t:'36–56',title:'Actividad 3: role-play de prospección SPIN',
-notes:'<b>36–56 min (20).</b> Tríos: vende / cliente / observa (tarjeta del Anexo C). Usan su propio proyecto. Con <b>🎲 Cliente y canal al azar</b> asigna un combo a cada trío. Ronda de 5 min por vendedor; rotan para que al menos 2 pasen por vendedor; debrief de 2 min. Si escuchas “nuestra app hace…” antes de la cuarta pregunta, detén y reinicia. Observa: ¿usa las 4 preguntas en orden? ¿el mensaje cambia según cliente y canal? ¿el cliente responde realista?',
-html:function(){const cc=S.cc;return '<h2>🎭 <em>Actividad 3</em> · Role-play SPIN <span class="hint" style="font-size:30px">· 20 min</span></h2>'
-+'<div class="grid g3" style="margin-top:0;gap:18px">'
-+'<div class="card" style="padding:22px 26px"><h3>👥 Tríos</h3><p style="font-size:28px">🗣️ <b>Vende</b> · 🙋 <b>Cliente</b> · 👀 <b>Observa</b> (tarjeta Anexo C). Usan <b>su proyecto</b> como producto.</p></div>'
-+'<div class="card" style="padding:22px 26px"><h3>❓ 5 minutos</h3><p style="font-size:28px">El vendedor usa las <b>4 preguntas SPIN en orden</b>, sin mencionar el producto antes de la cuarta.</p></div>'
-+'<div class="card" style="padding:22px 26px"><h3>🔁 Rotan y debrief</h3><p style="font-size:28px">Al menos <b>2 integrantes</b> son vendedor. Debrief 2 min: ¿qué tuvieron que cambiar del discurso original?</p></div></div>'
-+'<div class="grid g2" style="margin-top:18px;gap:18px"><div class="card" style="padding:22px 26px;text-align:center"><div class="row" style="justify-content:center"><button class="btn" data-act="cc">🎲 Cliente y canal al azar</button></div>'
-+'<p style="font-size:34px;margin-top:12px;min-height:90px">'+(cc?('<b class="hl">'+cc[0]+'</b><br>por <b>'+cc[1]+'</b>'):'<span class="mut">Pulsa el dado para asignar</span>')+'</p></div>'
-+'<div class="card" style="padding:22px 26px"><h3>⏱ Cronómetro</h3><div class="row"><button class="btn" data-act="timer" data-sec="300">▶ 5:00 por turno</button><button class="btn alt" data-act="timer" data-sec="120">▶ 2:00 debrief</button></div>'
-+'<p class="sm" style="margin-top:10px">📦 Producto: 4 preguntas SPIN escritas y probadas en voz alta.</p></div></div>';}});
-
-add({id:'a4',blk:'Actividad 4',t:'56–66',title:'Actividad 4: cierre y postventa',
-notes:'<b>56–66 min (10).</b> Cada equipo elige una técnica de cierre y escribe su frase; el compañero que fue “cliente” responde con una objeción y el vendedor cierra otra vez. Luego definen una acción de postventa con fecha (qué manda, a quién, cuándo). Señales de cierre: pregunta por precio/plazos/garantía sin que lo ofrezcas; habla en primera persona del plural; pide detalles de entrega (la más clara).',
-html:function(){return '<h2>🤝 <em>Actividad 4</em> · Cierre y postventa <span class="hint" style="font-size:30px">· 10 min</span></h2>'
-+'<div class="grid" style="grid-template-columns:1.25fr .75fr;gap:24px;margin-top:0"><div>'
-+'<table class="tb" style="margin-top:-6px"><tr><th style="width:250px">Técnica de cierre</th><th>Ejemplo</th></tr>'
-+[['Directo','«¿Lo dejamos apartado para el viernes?»'],['Por alternativa','«¿Lo prefieres de medio litro o de litro?»'],['Por resumen','«Quedamos en que te ahorra dos horas y elimina el error: ¿empezamos el lunes?»'],['Condicional','«Si te consigo la entrega el jueves, ¿cerramos hoy?»']].map(function(r){return '<tr><td><b>'+r[0]+'</b></td><td style="font-size:26px">'+r[1]+'</td></tr>';}).join('')+'</table>'
-+'<div class="callout or" style="font-size:28px;margin-top:4px"><b>Ustedes:</b> ① eligen una técnica y redactan su frase · ② el “cliente” pone una objeción y cierran otra vez · ③ definen <b>una acción de postventa con fecha</b>.</div></div>'
-+'<div><div class="card" style="padding:20px 24px"><h3>🚦 Señales de “listo”</h3><p style="font-size:26px">Pregunta por precio, plazos o garantía · habla en “nosotros” · pide detalles de entrega.</p></div>'
-+'<div class="card" style="padding:20px 24px;margin-top:14px"><h3>💌 Postventa esta semana</h3><p style="font-size:26px">1. Confirmación en 24 h<br>2. Pregunta de satisfacción a los 7 días<br>3. Petición de referido (después del “sí”)</p></div>'
-+'<div class="row" style="margin-top:14px"><button class="btn" data-act="timer" data-sec="600">▶ 10:00</button></div></div></div>';}});
-
-add({id:'a5',blk:'Actividad 5',t:'66–75',title:'Actividad 5: guion de prospección',
-notes:'<b>66–75 min (9).</b> Escriben las cinco partes en la plantilla (Anexo B) y lo leen en voz alta cronometrando: apertura + motivo no deben pasar de 30 segundos. Observa si el guion abre con el <b>dolor del cliente</b> o con la descripción del producto (si la primera frase describe la app, el guion está mal).',
-html:function(){return '<h2>📝 <em>Actividad 5</em> · Guion de prospección <span class="hint" style="font-size:30px">· 9 min</span></h2>'
-+'<div class="grid" style="grid-template-columns:1fr 1fr;gap:26px;margin-top:0"><div class="tl" style="gap:12px">'
-+[['1','Apertura con nombre y contexto','10 s · quién eres, de dónde y por qué a esa persona'],['2','Motivo del contacto','El <b>dolor del cliente</b>, no el producto'],['3','Pregunta de calificación','Una sola: revela interés y capacidad de compra'],['4','Siguiente paso concreto','Demo de 15 min, prueba o cita con fecha'],['5','Cierre con compromiso y fecha','Nunca “cualquier cosa me avisas”']].map(function(x){return '<div class="st" style="grid-template-columns:70px 1fr;padding:12px 22px"><span class="num" style="margin:0;width:54px;height:54px;font-size:28px">'+x[0]+'</span><p style="font-size:27px;line-height:1.2"><b>'+x[1]+'</b><br><span class="mut" style="font-size:23px">'+x[2]+'</span></p></div>';}).join('')+'</div>'
-+'<div class="card" style="padding:22px 28px"><h3 style="font-size:30px">🔎 Ejemplo resuelto</h3><p style="font-size:24px;line-height:1.3">«Buenas tardes, licenciada Ramírez. Soy Daniela, estudiante de la Anáhuac Mayab; trabajo con consultorios independientes. <b>Varios consultorios nos dicen que pierden 2–3 citas por semana</b> por pacientes que no llegan y nadie confirmó. <b>¿Quién confirma hoy las citas del día siguiente?</b> Si le interesa, le muestro en 15 minutos cómo automatizarlo; <b>le propongo el jueves a las 10</b>. Si no le funciona, <b>le escribo el viernes</b> para otra fecha.»</p></div></div>'
-+'<div class="row" style="margin-top:14px"><button class="btn" data-act="timer" data-sec="540">▶ 9:00</button><span class="sm">📦 Producto: guion completo, apertura + motivo ≤ 30 s, listo para entregar.</span></div>';}});
-
-/* ---------- Arena de ventas ---------- */
-SL.push(betSlide({id:'g-bet1',blk:'Arena',t:'75–76',round:'ARENA · RONDA 1 · APUESTA',q:'¿Cuál es el <em>orden correcto</em> de las cuatro letras de SPIN?',
- opts:['Necesidad, Implicación, Problema, Situación','Situación, Problema, Implicación, Necesidad de solución','Problema, Situación, Necesidad, Implicación'],correct:1,
- explain:'<b>S</b>ituación → <b>P</b>roblema → <b>I</b>mplicación → <b>N</b>ecesidad de solución.',
- notes:'<b>75–76 min.</b> Presenta la Arena (2 rondas de apuesta y robo final). Cada equipo elige letra y apuesta ×1–×3. Acierto: +apuesta. Fallo: −apuesta (el equipo no baja de 0).'}));
-SL.push(betSlide({id:'g-bet2',blk:'Arena',t:'76–77',round:'ARENA · RONDA 2 · MITO O REALIDAD',q:'“AIDA es la técnica ideal para <em>cualquier</em> venta, incluso las complejas B2B de ciclo largo.”',
- opts:['MITO','REALIDAD'],correct:0,
- explain:'<b>Mito.</b> AIDA brilla en ventas cortas y de bajo involucramiento; en ventas complejas se usa consultiva o SPIN.',notes:'<b>76–77 min.</b> Duelo rápido con apuesta.'}));
 
 const STEAL_Q=[
  {q:'¿Cuál es el orden correcto de las cinco etapas del proceso de venta?',o:['Cierre, prospección, seguimiento, leads, postventa','Prospección, generación y calificación de leads, seguimiento, cierre, postventa','Leads, cierre, prospección, postventa, seguimiento'],c:1},
- {q:'AIDA funciona mejor en…',o:['Ventas complejas B2B de ciclo largo','Ventas cortas, de bajo involucramiento o marketing de contenidos','Solo en llamadas uno a uno'],c:1},
- {q:'Las tres métricas básicas del embudo son…',o:['Precio, costo y margen','Conversión por etapa, ticket promedio y tiempo de ciclo','Leads, clientes e ingresos totales'],c:1},
- {q:'¿Cuál es la etapa más subestimada del proceso de venta?',o:['El seguimiento','La prospección','El cierre'],c:0},
  {q:'Cliente emocional y rápido, que decide por impulso. ¿Qué combinación conviene?',o:['Consultiva + correo con adjunto','AIDA + redes sociales','SPIN + reunión formal'],c:1},
  {q:'«¿Lo prefieres de medio litro o de litro?» es un cierre…',o:['Directo','Por alternativa','Condicional'],c:1},
  {q:'En el ejemplo resuelto, ¿dónde estaba el cuello de botella?',o:['En la prospección (60 personas perdidas)','En el cierre (25 % de conversión)','En el ticket promedio'],c:1},
- {q:'En el guion de prospección, la segunda parte (motivo del contacto) debe hablar de…',o:['El producto y sus funciones','El dolor del cliente','El precio'],c:1}];
+ {q:'En el guion de prospección, el motivo del contacto debe hablar de…',o:['El producto y sus funciones','El dolor del cliente','El precio'],c:1},
+ {q:'La conversión por etapa se calcula…',o:['Ingreso total ÷ clientes cerrados','Etapa siguiente ÷ etapa anterior × 100','Días entre primer contacto y cierre'],c:1},
+ {q:'En la venta consultiva, el vendedor…',o:['Habla primero de su producto','Pregunta primero y recomienda después','Ofrece lo mismo a todos'],c:1},
+ {q:'Cliente escéptico o técnico. ¿Qué técnica y canal conviene?',o:['AIDA por redes sociales','SPIN en llamada o reunión uno a uno','Consultiva por correo con adjunto'],c:1}];
+SL.push(clueSlide({id:'g-clue',blk:'Arena',t:'35–37',round:'ARENA · RONDA 1 · BUZZER',title:'¿Qué es? 🕵️',
+ clues:['Se llama así porque en cada etapa se pierde gente.','Tiene etapas: prospectos, leads calificados, propuestas y cierres.','Con números, sirve para diagnosticar dónde está el cuello de botella.'],answer:'El embudo de ventas',
+ notes:'<b>35–37 min.</b> Presenta la Arena: buzzer (3/2/1 pts), 3 rondas de apuesta (×1–×3, incluye mito o realidad), robo final y podio. Pulsa “Arrancar”; las pistas salen solas cada 5 s. Gana el primer celular que toque ¡YO!; tú decides si es correcto.'}));
+SL.push(betSlide({id:'g-bet1',blk:'Arena',t:'37–38',round:'ARENA · RONDA 2 · APUESTA',q:'¿Cuál es el <em>orden correcto</em> de las cuatro letras de SPIN?',
+ opts:['Necesidad, Implicación, Problema, Situación','Situación, Problema, Implicación, Necesidad de solución','Problema, Situación, Necesidad, Implicación'],correct:1,
+ explain:'<b>S</b>ituación → <b>P</b>roblema → <b>I</b>mplicación → <b>N</b>ecesidad de solución.',
+ notes:'<b>37–38 min.</b> Pulsa <b>Iniciar 40 s</b>: los alumnos tienen 40 s para responder y solo después se habilita Revelar. Cada integrante elige letra y apuesta ×1–×3 en su celular (una sola vez). Acierto: +apuesta. Fallo: −apuesta (el equipo no baja de 0). Los puntos se suman por quienes aciertan.'}));
+SL.push(betSlide({id:'g-bet2',blk:'Arena',t:'38–39',round:'ARENA · RONDA 3 · MITO O REALIDAD',q:'“AIDA es la técnica ideal para <em>cualquier</em> venta, incluso las complejas B2B de ciclo largo.”',
+ opts:['MITO','REALIDAD'],correct:0,
+ explain:'<b>Mito.</b> AIDA brilla en ventas cortas y de bajo involucramiento; en ventas complejas se usa consultiva o SPIN.',notes:'<b>38–39 min.</b> Duelo rápido con apuesta.'}));
+SL.push(betSlide({id:'g-bet3',blk:'Arena',t:'39–40',round:'ARENA · RONDA 4 · APUESTA',q:'Las tres métricas básicas del embudo son…',
+ opts:['Precio, costo y margen','Conversión por etapa, ticket promedio y tiempo de ciclo','Leads, clientes e ingresos totales'],correct:1,
+ explain:'<b>Conversión por etapa</b>, <b>ticket promedio</b> y <b>tiempo de ciclo</b>.',notes:'<b>39–40 min.</b> Última apuesta antes del robo.'}));
 
-add({id:'robo',blk:'Arena',t:'77–78',title:'Final: robo de puntos',game:true,
-notes:'<b>77–78 min.</b> Elige quién roba, a quién y cuántos puntos (1–3). “Lanzar pregunta”: solo responde el equipo que roba (una respuesta consensuada; si no se ponen de acuerdo, falla). “Revelar” y marca ✔/✖. Acierta → <b>roba</b> esos puntos al otro equipo; falla → se los <b>paga</b>. Puedes invertir el resultado. Repite mientras alcance el tiempo (banco de 8 preguntas); cualquier equipo puede robar o ser robado. Si falta tiempo: una sola ronda de robo.',
+add({id:'robo',blk:'Arena',t:'40–42',title:'Final: robo de puntos',game:true,
+notes:'<b>40–42 min.</b> Elige quién roba, a quién y cuántos puntos (1–3). “Lanzar pregunta” → <b>Iniciar 40 s</b>: solo responden (una vez) los integrantes del equipo que roba desde su celular; la respuesta del equipo es la letra más votada (empate = falla). “Revelar respuesta” resuelve solo; sin celulares marca ✔/✖ a mano. Acierta → <b>roba</b> esos puntos al otro equipo; falla → se los <b>paga</b>. Puedes invertir el resultado. Repite mientras alcance el tiempo (banco de 8 preguntas); cualquier equipo puede robar o ser robado.',
 html:function(){
   const st=S.steal,thief=st.t?team(st.t):null,victim=st.v?team(st.v):null,q=(st.q!=null)?STEAL_Q[st.q]:null;
   let h=banner('FINAL · ROBO','Tú decides quién roba, a quién y cuánto');
@@ -617,39 +645,50 @@ html:function(){
   h+='<div class="card" style="padding:20px 26px">';
   if(!q){h+='<p style="font-size:36px;margin-bottom:14px">'+(thief?chipStatic(thief):'<span class="mut">…</span>')+' ➜ '+(victim?chipStatic(victim):'<span class="mut">…</span>')+' · <b>'+st.n+' pt'+(st.n==1?'':'s')+'</b></p><button class="btn big" data-act="stealAsk" '+((thief&&victim)?'':'disabled')+'>❓ Lanzar pregunta</button>';}
   else{
-    h+='<p style="font-size:30px;margin-bottom:8px">'+(thief?chipStatic(thief):'')+' ➜ '+(victim?chipStatic(victim):'')+' · <b>'+st.n+' pt'+(st.n==1?'':'s')+'</b> · responde solo el equipo que roba</p>'
+    const ms=members(st.sid,st.t),cn=Math.max(connected(st.t),ms.length);
+    h+='<p style="font-size:30px;margin-bottom:8px">'+(thief?chipStatic(thief):'')+' ➜ '+(victim?chipStatic(victim):'')+' · <b>'+st.n+' pt'+(st.n==1?'':'s')+'</b> · responde solo el equipo que roba'+(liveOn()?' · 📲 <b>'+ms.length+'/'+cn+'</b>':'')+'</p>'
       +'<div style="font-size:36px;font-weight:800;line-height:1.15;margin-bottom:10px">'+q.q+'</div>'
-      +q.o.map((tx,i)=>'<div class="ob'+(st.show?(q.c===i?' ok':' no'):'')+'" style="margin-bottom:6px"><b>'+'ABC'[i]+'</b> '+tx+'</div>').join('')
-      +'<div class="row" style="margin-top:10px">'
+      +q.o.map((tx,i)=>'<div class="ob'+(st.show?(q.c===i?' ok':' no'):'')+'" style="margin-bottom:6px"><b>'+'ABC'[i]+'</b> '+tx+(st.show&&ms.length?'<span class="sm"> · ×'+ms.filter(m=>m.i===i).length+'</span>':'')+'</div>').join('')
+      +'<div class="row" style="margin-top:10px">'+qCtl(st.sid,!!st.res)
       +(st.res?('<span class="sm">Resultado: <b>'+(st.res==='ok'?'✔ roba':'✖ paga')+'</b></span><button class="btn alt" data-act="stealFlip">🔄 Invertir</button><button class="btn" data-act="stealNew">➕ Nuevo robo</button>')
-        :('<button class="btn alt" data-act="stealShow">👁 Revelar respuesta</button><button class="btn mint" data-act="stealOk">✔ Acertó (roba)</button><button class="btn red" data-act="stealNo">✖ Falló (paga)</button>'))
+        :('<button class="btn alt" data-act="stealShow"'+(qStatus(st.sid).st!=='done'?' disabled':'')+'>👁 Revelar respuesta</button><button class="btn mint" data-act="stealOk"'+(qStatus(st.sid).st!=='done'?' disabled':'')+'>✔ Acertó (roba)</button><button class="btn red" data-act="stealNo"'+(qStatus(st.sid).st!=='done'?' disabled':'')+'>✖ Falló (paga)</button>'))
       +'</div>';
   }
   h+='</div></div>';
   if(st.last)h+='<div class="steal pop-in" style="margin-top:10px;font-size:30px;padding:10px 24px">🏴‍☠️ '+st.last+'</div>';
   return h+strip();}});
 
-add({id:'podio',blk:'Arena',t:'78–79',title:'Podio del día',
-notes:'<b>78–79 min.</b> Celebra al podio. Los puntos son para jugar: el aprendizaje es el premio real. Siguiente: tarea y fechas.',
+add({id:'podio',blk:'Arena',t:'42–43',title:'Podio del día',
+notes:'<b>42–43 min.</b> Celebra al podio. Los puntos son para jugar: el aprendizaje es el premio real. <b>Descarga el Excel de participación ahora</b> (antes de reiniciar la clase o borrar datos del navegador, y desde esta computadora).',
 html:function(){
   const r=S.teams.map(t=>({t:t,p:pts(t.id)})).sort((a,b)=>b.p-a.p);
   const order=[r[1],r[0],r[2]].filter(Boolean);
   let conf='';for(let i=0;i<24;i++){conf+='<span class="confetti" style="left:'+(Math.random()*1800|0)+'px;animation-delay:'+(Math.random()*5).toFixed(2)+'s">'+['🎉','⭐','✨','🎯'][i%4]+'</span>';}
   return conf+'<h2 style="text-align:center">🏆 <em>Podio</em> del día</h2><div class="pod">'+order.map(function(x){
-    const idx=r.indexOf(x);const hh=idx==0?430:(idx==1?300:240);
+    const idx=r.indexOf(x);const hh=idx==0?400:(idx==1?290:230);
     return '<div class="col"><div class="nm" style="color:'+col(x.t)+'">'+esc(x.t.name)+'</div><div class="pt">'+x.p+' pts</div><div class="blk" style="height:'+hh+'px;background:linear-gradient(180deg,'+col(x.t)+',#1b1f29)">'+(idx==0?'🥇':idx==1?'🥈':'🥉')+'</div></div>';}).join('')+'</div>'
-    +'<div class="row" style="justify-content:center;margin-top:20px">'+r.slice(3).map(x=>chipStatic(x.t)+'<span class="sm" style="margin:0 12px 0 -6px">'+x.p+'</span>').join('')+'</div>';}});
+    +'<div class="row" style="justify-content:center;margin-top:16px">'+r.slice(3).map(x=>chipStatic(x.t)+'<span class="sm" style="margin:0 12px 0 -6px">'+x.p+'</span>').join('')+'</div>'
+    +'<div class="row" style="justify-content:center;margin-top:14px"><button class="btn" data-act="xlsx">📥 Descargar Excel de participación</button></div>';}});
 
-add({id:'tarea',blk:'Tarea',t:'79–80',title:'Tarea y fechas',
-notes:'<b>79–80 min.</b> Entregable (Brightspace, 11 de octubre según la descriptiva): (1) embudo con <b>metas por etapa</b> (no solo el número de hoy: la meta al cierre del semestre + conversión implícita); (2) guion de prospección con las 5 partes (formato Anexo B); (3) diagnóstico en tres líneas. Próxima sesión (Semana 10): Ventas y Atención al Cliente, coincide con UChallenge XVII (14–15 oct): <b>traer el guion impreso</b>.',
-html:function(){return '<h2>📚 <em>Tarea</em> y fechas</h2><div class="grid g3" style="margin-top:6px">'
+add({id:'taller',blk:'Actividad de equipo',t:'43–45',title:'Actividad de equipo: role-play SPIN y embudo',
+notes:'<b>43–45 min.</b> Termina la presentación. Cada equipo abre la actividad en <b>un solo navegador</b> (QR o enlace), se identifica y trabaja: role-play SPIN en tríos con rotación, análisis del observador y embudo del proyecto. Se guarda sola cada 30 s; al final cada equipo genera su PDF (Ctrl+P / Cmd+P). Tú circulas y observas: ¿usan las 4 preguntas en orden?, ¿el mensaje cambia según cliente y canal?, ¿el “cliente” responde realista?, ¿el embudo tiene números plausibles? Los tiempos son una propuesta para 30 min (45–75): el cierre de cada parte lo marcas con el cronómetro. Regresa a la presentación en el min 75 para la tarea y el cierre.',
+html:function(){return '<h2>🎭 <em>Actividad de equipo</em> · min 45–75</h2><div class="grid" style="grid-template-columns:1.5fr .5fr;gap:26px;margin-top:0"><div>'
++'<table class="tb" style="margin-top:-6px"><tr><th style="width:170px">Minuto</th><th>Qué hacen</th></tr>'
++[['45–47','Identifican a su equipo y se reparten roles (🗣️ vende · 🙋 cliente · 👀 observa)'],['47–62','<b>Role-play SPIN</b>: 5 min por vendedor, 4 preguntas en orden, sin mencionar el producto antes de la cuarta. Rotan.'],['62–67','<b>Análisis del observador</b> y debrief: ¿qué cambiaron del discurso original?'],['67–75','<b>Embudo del proyecto</b>: cuatro cifras, tres conversiones, cuello de botella y acción']].map(function(r){return '<tr><td class="hl"><b>'+r[0]+'</b></td><td style="font-size:27px">'+r[1]+'</td></tr>';}).join('')+'</table>'
++'<div class="row" style="margin-top:6px"><button class="btn" data-act="cc">🎲 Cliente y canal al azar</button><button class="btn" data-act="timer" data-sec="300">▶ 5:00 por turno</button><button class="btn alt" data-act="timer" data-sec="1800">▶ 30:00 actividad</button></div>'
++'<p style="font-size:34px;margin-top:10px;min-height:48px">'+(S.cc?('<b class="hl">'+S.cc[0]+'</b> por <b>'+S.cc[1]+'</b>'):'<span class="mut">Pulsa el dado para asignar cliente y canal</span>')+'</p></div>'
++'<div class="qrbox act" style="position:static;width:360px;margin-top:6px">'+QRACT+'<b>📝 Actividad</b><span>Un navegador por equipo · se guarda sola · PDF con Ctrl/Cmd+P</span></div></div>';}});
+
+add({id:'tarea',blk:'Tarea',t:'75–78',title:'Tarea y entregable',
+notes:'<b>75–78 min.</b> Entregable (Brightspace, 11 de octubre según la descriptiva): (1) embudo con <b>metas por etapa</b> (no solo el estimado de hoy: la meta al cierre del semestre y la conversión que implica); (2) guion de prospección con las 5 partes (plantilla del Anexo B); (3) diagnóstico en tres líneas. Ejemplo de guion resuelto: «Buenas tardes, licenciada Ramírez. Soy Daniela, estudiante de la Anáhuac Mayab; trabajo con consultorios independientes como el suyo. Le escribo porque varios consultorios nos han dicho que pierden entre dos y tres citas por semana por pacientes que no llegan y que nadie confirmó. ¿En su consultorio hoy quién se encarga de confirmar las citas del día siguiente? Si le interesa, le muestro en quince minutos cómo automatizarlo; le propongo el jueves a las 10. Si el jueves no le funciona, le escribo el viernes.» Apertura + motivo ≤ 30 s. Próxima sesión (Semana 10): Ventas y Atención al Cliente (UChallenge XVII): <b>traer el guion impreso</b>.',
+html:function(){return '<h2>📚 <em>Tarea</em> y entregable</h2><div class="grid g3" style="margin-top:6px">'
 +cardT('📊','1 · Embudo con metas','<p>Estimado de hoy <b>+ la meta por etapa</b> al cierre del semestre y la conversión que implica.</p>')
-+cardT('📝','2 · Guion de prospección','<p>Las <b>5 partes</b>, en el formato del Anexo B.</p>')
++cardT('📝','2 · Guion de prospección','<p style="font-size:27px">① Apertura con nombre y contexto (10 s)<br>② Motivo: el <b>dolor del cliente</b><br>③ Una pregunta de calificación<br>④ Siguiente paso concreto<br>⑤ Cierre con compromiso y <b>fecha</b></p>')
 +cardT('🔎','3 · Diagnóstico en 3 líneas','<p>Tu <b>cuello de botella</b>, con qué número lo sabes y qué acción tomas la próxima semana.</p>')+'</div>'
 +'<div class="grid g2" style="margin-top:6px"><div class="callout or" style="margin:0">📅 Entrega por <b>Brightspace</b>: 11 de octubre.</div><div class="callout mint" style="margin:0">🖨️ Próxima sesión: <b>trae tu guion impreso</b> (Ventas y Atención al Cliente · UChallenge XVII).</div></div>';}});
 
-add({id:'cierre',blk:'Cierre',t:'80',title:'¿Qué me llevo hoy?',
-notes:'<b>Cierre.</b> Tres aprendizajes. Cada estudiante escribe “Hoy me llevo…”; pide a 2 personas al azar que lo lean.',
+add({id:'cierre',blk:'Cierre',t:'78–80',title:'¿Qué me llevo hoy?',
+notes:'<b>78–80 min.</b> Tres aprendizajes. Cada estudiante escribe “Hoy me llevo…”; pide a 2 personas al azar que lo lean. Recuerda: descargar el Excel antes de reiniciar la clase.',
 html:function(){return '<h2>🎒 ¿Qué me <em>llevo hoy</em>?</h2><div class="grid g3" style="margin-top:10px">'
 +cardT('🧭','Vender es un proceso','<p>Etapas medibles. <b>El seguimiento</b> es la más subestimada y la <b>postventa</b> es la vía más barata al siguiente cliente.</p>')
 +cardT('🎯','La técnica según el cliente','<p><b>Consultiva y SPIN</b> para ventas complejas; <b>AIDA</b> para ventas cortas. Y cerrar es <b>pedir la venta</b>.</p>')
@@ -657,31 +696,23 @@ html:function(){return '<h2>🎒 ¿Qué me <em>llevo hoy</em>?</h2><div class="g
 +'<div class="callout or">✏️ Escribe tu frase: <b>“Hoy me llevo…”</b> <button class="btn" style="font-size:22px;padding:8px 20px;margin-left:14px" data-act="rand">🎲 Equipo al azar</button></div>';}});
 
 /* ================= Render ================= */
-function ensurePairs(){
-  const ids=S.teams.map(t=>t.id);
-  let ok=S.pairs&&S.pairs.flat().length===ids.length&&S.pairs.flat().every(i=>ids.indexOf(i)>-1);
-  if(!ok){makePairs();}
-}
-function makePairs(){
-  const ids=shuffle(S.teams.map(t=>t.id)),p=[];
-  for(let i=0;i<ids.length;i+=2)p.push(ids.slice(i,i+2));
-  if(p.length>1&&p[p.length-1].length===1){const l=p.pop();p[p.length-1].push(l[0]);}
-  S.pairs=p;
-}
 function applyRv(){
   const s=SL[S.idx],n=S.rvn[s.id]||0;
   sl.querySelectorAll('.rv').forEach((el,i)=>{if(i<n)el.classList.add('on');});
 }
+function markAsked(s){if(!liveOn())return;if(s.vote||s.bet||s.clue)S.asked[s.id]=1;}
 function render(){
   const s=SL[S.idx];
   cv.classList.toggle('game',!!s.game);
   sl.innerHTML='<div class="top"><span class="kick">'+s.blk+'</span><span class="tm">⏱ min '+s.t+'</span></div>'+s.html(s);
   applyRv();
+  markAsked(s);
   $('#ct').textContent=(S.idx+1)+' / '+SL.length;
   $('#prog').style.width=((S.idx+1)/SL.length*100)+'%';
   if($('#notes').style.display==='block')showNotes();
   if($('#score').style.display==='block')renderScore();
   save();
+  liveSync();
 }
 function go(i){S.idx=Math.max(0,Math.min(SL.length-1,i));render();}
 function next(){
@@ -692,6 +723,35 @@ function next(){
 function prev(){go(S.idx-1);}
 
 /* ================= Acciones de diapositiva ================= */
+function revealVote(sid){
+  const sd=SL.find(x=>x.id===sid),o=sd.vote,v=S.votes[sid]||{};let any=false;
+  S.teams.forEach(function(t){
+    const ms=members(sid,t.id);
+    if(ms.length){ms.forEach(function(m){
+      const ok=(o.correct!=null&&m.i===o.correct);S.dv[sid][m.dev].ok=(o.correct!=null)?ok:null;
+      const p=o.ptsByOpt?o.ptsByOpt[m.i]:(ok?o.pts:0);if(p){addLog(t.id,p,'vote',sid,m.dev);any=true;}});}
+    else{const i=v[t.id];if(i===undefined)return;
+      const p=o.ptsByOpt?o.ptsByOpt[i]:(i===o.correct?o.pts:0);if(p){addLog(t.id,p,'vote',sid);any=true;}}
+  });
+  if(o.correct!=null){sfx(any?'ok':'no');if(any)burst();}
+}
+function revealBet(sid){
+  const o=SL.find(x=>x.id===sid).bet,v=S.votes[sid]||{},bt=S.bets[sid]||{};let any=false;
+  S.teams.forEach(function(t){
+    const ms=members(sid,t.id);
+    if(ms.length){
+      ms.forEach(function(m){const ok=m.i===o.correct;S.dv[sid][m.dev].ok=ok;if(ok){addLog(t.id,m.b||1,'bet',sid,m.dev);any=true;}});
+      ms.forEach(function(m){if(m.i!==o.correct){const loss=Math.min(m.b||1,Math.max(0,pts(t.id)));if(loss>0)addLog(t.id,-loss,'bet',sid,m.dev);}});
+    }else{const i=v[t.id];if(i===undefined)return;const bb=bt[t.id]||1;
+      if(i===o.correct){addLog(t.id,bb,'bet',sid);any=true;}
+      else{const loss=Math.min(bb,Math.max(0,pts(t.id)));if(loss>0)addLog(t.id,-loss,'bet',sid);}}
+  });
+  sfx(any?'ok':'no');if(any)burst();
+}
+function unreveal(sid,why){
+  delete S.rev[sid];S.log=S.log.filter(l=>!(l.sid===sid&&l.why===why));
+  Object.keys(S.dv[sid]||{}).forEach(k=>{S.dv[sid][k].ok=null;});
+}
 const ACT={
   cyc:function(b){
     const sid=b.dataset.sid,id=+b.dataset.team;if(S.rev[sid])return;
@@ -701,41 +761,47 @@ const ACT={
     if(nx<0)delete v[id];else v[id]=nx;
     render();
   },
-  reveal:function(b){
-    const sid=b.dataset.sid,sd=SL.find(x=>x.id===sid),o=sd.vote,v=S.votes[sid]||{};
-    if(!S.rev[sid]){
-      S.rev[sid]=true;
-      S.teams.forEach(function(t){
-        const i=v[t.id];if(i===undefined)return;
-        const p=o.ptsByOpt?o.ptsByOpt[i]:(i===o.correct?o.pts:0);
-        if(p)addLog(t.id,p,'vote',sid);
-      });
-      if(o.correct!=null){const any=S.teams.some(t=>v[t.id]===o.correct);sfx(any?'ok':'no');if(any)burst();}
-    }else{
-      delete S.rev[sid];S.log=S.log.filter(l=>!(l.sid===sid&&l.why==='vote'));
-    }
-    render();
-  },
+  reveal:function(b){const sid=b.dataset.sid;if(!S.rev[sid]){S.rev[sid]=true;revealVote(sid);}else unreveal(sid,'vote');render();},
   flip:function(b){b.classList.toggle('f');},
   teams:function(){openTeams();},
   rand:function(){randTeam();},
   timer:function(b){const s=+b.dataset.sec;if(!s){stopTimer();return;}startTimer(s);},
-  pairs:function(){makePairs();render();},
-  clueNext:function(b){const c=S.clue[b.dataset.sid];if(c.n<3)c.n++;render();},
-  clueNone:function(b){const c=S.clue[b.dataset.sid];c.w=0;render();},
-  clueTeam:function(b){const sid=b.dataset.sid,c=S.clue[sid];if(c.w!==null)return;const id=+b.dataset.team;c.w=id;addLog(id,[3,2,1][c.n-1],'pista',sid);render();},
-  clueReset:function(b){const sid=b.dataset.sid;S.log=S.log.filter(l=>!(l.sid===sid&&l.why==='pista'));S.clue[sid]={n:1,w:null};render();},
+  xlsx:function(){downloadXlsx();},
+  qStart:function(b){const sid=b.dataset.sid;S.qt[sid]={end:Date.now()+QSEC*1000,done:false};sfx('start');render();},
+  qSkip:function(b){const t=S.qt[b.dataset.sid];if(t){t.done=true;t.end=Date.now();}render();},
+  live:function(){toggleLive();},
+  cStart:function(b){const c=cs(b.dataset.sid);Object.assign(c,{st:'run',n:1,el:0,t0:Date.now(),buzz:null,bd:null,locked:[],w:null});sfx('start');render();},
+  cBuzz:function(b){const c=cs(b.dataset.sid);if(c.st!=='run')return;const id=+b.dataset.team;if(c.locked.indexOf(id)>-1)return;c.el=(Date.now()-c.t0)/1000;c.st='buzz';c.buzz=id;c.bd=b.dataset.dev||null;
+    if(c.bd){(S.dv[b.dataset.sid]||(S.dv[b.dataset.sid]={}))[c.bd]={tm:id,i:null,k:'z',ts:Date.now(),ok:null,b:null};}
+    sfx('buzz');render();},
+  cOk:function(b){const sid=b.dataset.sid,c=cs(sid),id=c.buzz;addLog(id,[3,2,1][c.n-1],'pista',sid,c.bd);if(c.bd&&S.dv[sid]&&S.dv[sid][c.bd])S.dv[sid][c.bd].ok=true;c.w=id;c.st='done';sfx('ok');burst();render();},
+  cNo:function(b){const sid=b.dataset.sid,c=cs(sid),id=c.buzz;if(pts(id)>0)addLog(id,-1,'pista',sid,c.bd);if(c.bd&&S.dv[sid]&&S.dv[sid][c.bd])S.dv[sid][c.bd].ok=false;c.locked.push(id);c.buzz=null;c.bd=null;c.st='run';c.t0=Date.now()-c.el*1000;sfx('no');render();},
+  cReset:function(b){const sid=b.dataset.sid;S.log=S.log.filter(l=>!(l.sid===sid&&l.why==='pista'));delete S.clue[sid];delete S.dv[sid];render();},
+  bcell:function(b){const sid=b.dataset.sid,id=+b.dataset.team,i=+b.dataset.i;const v=S.votes[sid]||(S.votes[sid]={});if(v[id]===i)delete v[id];else v[id]=i;render();},
+  bbet:function(b){const sid=b.dataset.sid,id=+b.dataset.team;const bt=S.bets[sid]||(S.bets[sid]={});bt[id]=((bt[id]||1)%3)+1;render();},
+  bReveal:function(b){const sid=b.dataset.sid;if(!S.rev[sid]){S.rev[sid]=true;revealBet(sid);}else unreveal(sid,'bet');render();},
   pickT:function(b){S.steal.t=+b.dataset.team;if(S.steal.v==S.steal.t)S.steal.v=null;render();},
   pickV:function(b){S.steal.v=+b.dataset.team;render();},
   amt:function(b){S.steal.n=+b.dataset.n;render();},
   cc:function(){S.cc=[PERF[Math.floor(Math.random()*PERF.length)].c,CANALES[Math.floor(Math.random()*CANALES.length)]];sfx('tick');render();},
   stealAsk:function(){const st=S.steal;if(!st.t||!st.v)return;let pool=STEAL_Q.map((_,i)=>i).filter(i=>st.used.indexOf(i)<0);if(!pool.length){st.used=[];pool=STEAL_Q.map((_,i)=>i);}
-    st.q=pool[Math.floor(Math.random()*pool.length)];st.used.push(st.q);st.res=null;st.show=false;st.last='';render();},
-  stealShow:function(){S.steal.show=true;render();},
+    st.q=pool[Math.floor(Math.random()*pool.length)];st.used.push(st.q);st.res=null;st.show=false;st.last='';
+    st.sid='robo#'+(++S.stealN);delete S.qt[st.sid];S.dv[st.sid]={};S.qmeta[st.sid]={title:'Robo: '+STEAL_Q[st.q].q,kind:'Robo'};if(liveOn())S.asked[st.sid]=1;render();},
+  stealShow:function(){
+    const st=S.steal,q=STEAL_Q[st.q];st.show=true;
+    const ms=members(st.sid,st.t);
+    if(ms.length){
+      ms.forEach(m=>{S.dv[st.sid][m.dev].ok=(m.i===q.c);});
+      const cnt={};ms.forEach(m=>{cnt[m.i]=(cnt[m.i]||0)+1;});
+      const mx=Math.max.apply(null,Object.values(cnt)),top=Object.keys(cnt).filter(k=>cnt[k]===mx);
+      const win=(top.length===1)?+top[0]:-1;
+      if(!st.res)stealApply(win===q.c?'ok':'no');else render();
+    }else render();
+  },
   stealOk:function(){stealApply('ok');},
   stealNo:function(){stealApply('no');},
   stealFlip:function(){const st=S.steal;S.log=S.log.filter(l=>!(l.why==='robo'&&l.id>st.mark));stealApply(st.res==='ok'?'no':'ok');},
-  stealNew:function(){const st=S.steal;S.steal={t:null,v:null,n:1,q:null,res:null,show:false,used:st.used,last:st.last};render();}
+  stealNew:function(){const st=S.steal;S.steal={t:null,v:null,n:1,q:null,res:null,show:false,used:st.used,last:st.last,sid:null};render();}
 };
 function stealApply(r){
   const st=S.steal;if(!st.t||!st.v||st.q==null)return;
@@ -746,28 +812,243 @@ function stealApply(r){
     st.last=esc(a.name)+' falló y le pagó <b>'+k+'</b> pt'+(k==1?'':'s')+' a '+esc(v.name);sfx('no');}
   st.res=r;st.show=true;render();
 }
-let rolling=false;
-Object.assign(ACT,{
-  cStart:function(b){const c=cs(b.dataset.sid);Object.assign(c,{st:'run',n:1,el:0,t0:Date.now(),buzz:null,locked:[],w:null});sfx('start');render();},
-  cBuzz:function(b){const c=cs(b.dataset.sid);if(c.st!=='run')return;const id=+b.dataset.team;if(c.locked.indexOf(id)>-1)return;c.el=(Date.now()-c.t0)/1000;c.st='buzz';c.buzz=id;sfx('buzz');render();},
-  cOk:function(b){const sid=b.dataset.sid,c=cs(sid),id=c.buzz;addLog(id,[3,2,1][c.n-1],'pista',sid);c.w=id;c.st='done';sfx('ok');burst();render();},
-  cNo:function(b){const sid=b.dataset.sid,c=cs(sid),id=c.buzz;if(pts(id)>0)addLog(id,-1,'pista',sid);c.locked.push(id);c.buzz=null;c.st='run';c.t0=Date.now()-c.el*1000;sfx('no');render();},
-  cReset:function(b){const sid=b.dataset.sid;S.log=S.log.filter(l=>!(l.sid===sid&&l.why==='pista'));delete S.clue[sid];render();},
-  bcell:function(b){const sid=b.dataset.sid,id=+b.dataset.team,i=+b.dataset.i;const v=S.votes[sid]||(S.votes[sid]={});if(v[id]===i)delete v[id];else v[id]=i;render();},
-  bbet:function(b){const sid=b.dataset.sid,id=+b.dataset.team;const bt=S.bets[sid]||(S.bets[sid]={});bt[id]=((bt[id]||1)%3)+1;render();},
-  bReveal:function(b){
-    const sid=b.dataset.sid,o=SL.find(x=>x.id===sid).bet,v=S.votes[sid]||{},bt=S.bets[sid]||{};
-    if(!S.rev[sid]){
-      S.rev[sid]=true;let any=false;
-      S.teams.forEach(function(t){const i=v[t.id];if(i===undefined)return;const bb=bt[t.id]||1;
-        if(i===o.correct){addLog(t.id,bb,'bet',sid);any=true;}
-        else{const loss=Math.min(bb,Math.max(0,pts(t.id)));if(loss>0)addLog(t.id,-loss,'bet',sid);}});
-      sfx(any?'ok':'no');if(any)burst();
-    }else{delete S.rev[sid];S.log=S.log.filter(l=>!(l.sid===sid&&l.why==='bet'));}
-    render();
-  }
-});
 sl.addEventListener('click',function(e){const b=e.target.closest('[data-act]');if(!b)return;const f=ACT[b.dataset.act];if(f)f(b,e);});
+
+function MQ(url,opt){
+  opt=opt||{};
+  var enc=new TextEncoder(),dec=new TextDecoder();
+  var ws=null,buf=new Uint8Array(0),pid=0,pingT=null,rcT=null,subs=[],up=false,closed=false,wait=1500;
+  var cid=opt.cid||('c'+Math.random().toString(36).slice(2,10));
+  function cat(a,b){var r=new Uint8Array(a.length+b.length);r.set(a,0);r.set(b,a.length);return r;}
+  function s2b(s){var b=enc.encode(s),r=new Uint8Array(b.length+2);r[0]=b.length>>8;r[1]=b.length&255;r.set(b,2);return r;}
+  function rl(n){var a=[];do{var d=n%128;n=Math.floor(n/128);if(n>0)d|=128;a.push(d);}while(n>0);return new Uint8Array(a);}
+  function pkt(h,body){var l=rl(body.length),r=new Uint8Array(1+l.length+body.length);r[0]=h;r.set(l,1);r.set(body,1+l.length);return r;}
+  function send(p){try{if(ws&&ws.readyState===1)ws.send(p);}catch(e){}}
+  function emit(s){if(opt.onState)opt.onState(s,api);}
+  function connect(){
+    if(closed)return;
+    var me;
+    try{me=ws=new WebSocket(url,'mqtt');}catch(e){retry();return;}
+    ws.binaryType='arraybuffer';buf=new Uint8Array(0);
+    ws.onopen=function(){send(pkt(0x10,cat(cat(s2b('MQTT'),new Uint8Array([4,2,0,30])),s2b(cid))));};
+    ws.onmessage=function(ev){buf=cat(buf,new Uint8Array(ev.data));parse();};
+    ws.onclose=function(){if(me!==ws)return;var was=up;up=false;clearInterval(pingT);if(was)emit('down');else emit('fail');retry();};
+    ws.onerror=function(){};
+  }
+  function retry(){if(closed)return;clearTimeout(rcT);rcT=setTimeout(connect,wait);wait=Math.min(wait*1.6,10000);}
+  function parse(){
+    while(buf.length>=2){
+      var i=1,m=1,len=0,b;
+      do{if(i>=buf.length)return;b=buf[i++];len+=(b&127)*m;m*=128;}while(b&128);
+      if(buf.length<i+len)return;
+      var h=buf[0],body=buf.subarray(i,i+len);buf=buf.subarray(i+len);
+      var t=h>>4;
+      if(t===2){
+        if(body[1]===0){up=true;wait=1500;subs.forEach(dosub);clearInterval(pingT);pingT=setInterval(function(){send(new Uint8Array([0xC0,0]));},15000);emit('up');}
+        else emit('refused');
+      }else if(t===3){
+        var tl=(body[0]<<8)|body[1],topic=dec.decode(body.subarray(2,2+tl)),o=2+tl;
+        if(((h>>1)&3)>0)o+=2;
+        if(opt.onMsg)opt.onMsg(topic,dec.decode(body.subarray(o)));
+      }
+    }
+  }
+  function dosub(t){pid=(pid%65535)+1;send(pkt(0x82,cat(new Uint8Array([pid>>8,pid&255]),cat(s2b(t),new Uint8Array([0])))));}
+  var api={
+    sub:function(t){if(subs.indexOf(t)<0)subs.push(t);if(up)dosub(t);},
+    pub:function(t,p,retain){if(!up)return false;send(pkt(0x30|(retain?1:0),cat(s2b(t),enc.encode(p))));return true;},
+    close:function(){closed=true;clearInterval(pingT);clearTimeout(rcT);try{ws.close();}catch(e){}},
+    isUp:function(){return up;},url:url
+  };
+  connect();return api;
+}
+
+const QRLIVE=`<svg class="segno" viewBox="0 0 41 41" xmlns="http://www.w3.org/2000/svg" class="segno"><path fill="#fff" d="M0 0h41v41h-41z"/><path class="qrline" stroke="#111" d="M2 2.5h7m1 0h2m2 0h1m1 0h8m1 0h1m6 0h7m-37 1h1m5 0h1m1 0h5m1 0h1m1 0h2m4 0h2m1 0h1m4 0h1m5 0h1m-37 1h1m1 0h3m1 0h1m2 0h1m2 0h3m3 0h3m1 0h4m1 0h1m2 0h1m1 0h3m1 0h1m-37 1h1m1 0h3m1 0h1m1 0h1m3 0h1m1 0h1m2 0h1m1 0h1m3 0h1m1 0h2m1 0h1m1 0h1m1 0h3m1 0h1m-37 1h1m1 0h3m1 0h1m3 0h1m4 0h3m1 0h1m1 0h1m2 0h5m1 0h1m1 0h3m1 0h1m-37 1h1m5 0h1m8 0h1m3 0h1m1 0h1m2 0h3m1 0h1m1 0h1m5 0h1m-37 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-29 1h1m1 0h1m1 0h1m4 0h3m2 0h1m1 0h1m2 0h1m-28 1h1m1 0h2m1 0h3m1 0h1m3 0h6m1 0h4m4 0h1m1 0h1m2 0h1m1 0h2m-37 1h4m1 0h1m1 0h1m1 0h2m2 0h1m1 0h1m1 0h3m3 0h1m2 0h1m1 0h1m5 0h2m-36 1h2m3 0h3m1 0h1m2 0h3m3 0h1m1 0h5m3 0h2m1 0h1m1 0h1m-33 1h2m1 0h1m3 0h3m1 0h3m3 0h1m3 0h1m1 0h4m1 0h3m1 0h2m-33 1h1m1 0h6m1 0h1m1 0h1m1 0h1m1 0h2m3 0h5m1 0h3m1 0h5m-37 1h4m1 0h1m1 0h1m3 0h1m2 0h4m1 0h3m2 0h1m2 0h2m1 0h4m1 0h2m-37 1h1m3 0h1m1 0h3m1 0h1m6 0h1m1 0h1m1 0h1m3 0h1m3 0h2m1 0h1m1 0h2m-35 1h1m2 0h1m3 0h3m1 0h1m1 0h3m1 0h2m1 0h1m5 0h3m1 0h2m2 0h2m-36 1h2m1 0h1m1 0h1m4 0h3m7 0h3m1 0h2m4 0h1m1 0h4m-37 1h3m4 0h3m1 0h1m1 0h1m1 0h1m1 0h2m1 0h1m1 0h6m1 0h3m3 0h2m-33 1h1m1 0h1m1 0h2m3 0h1m1 0h1m1 0h1m2 0h1m1 0h1m2 0h1m1 0h2m1 0h3m2 0h2m-35 1h1m2 0h1m2 0h2m3 0h1m1 0h5m2 0h3m1 0h1m2 0h3m1 0h1m1 0h1m-36 1h3m2 0h3m2 0h1m1 0h1m1 0h1m1 0h1m1 0h1m2 0h1m4 0h4m1 0h2m3 0h1m-37 1h2m5 0h1m2 0h1m3 0h1m1 0h1m1 0h3m2 0h1m1 0h1m2 0h1m4 0h1m-34 1h1m2 0h2m1 0h3m1 0h2m1 0h1m3 0h2m4 0h2m1 0h1m1 0h2m1 0h1m-32 1h4m3 0h1m5 0h4m1 0h3m1 0h1m1 0h2m1 0h4m1 0h3m-35 1h1m4 0h4m6 0h1m1 0h1m2 0h1m1 0h2m1 0h1m1 0h1m1 0h2m1 0h1m1 0h3m-36 1h2m1 0h1m5 0h8m1 0h4m1 0h1m1 0h8m1 0h2m-36 1h4m1 0h3m1 0h2m4 0h1m1 0h2m2 0h1m2 0h1m4 0h2m1 0h3m-36 1h1m1 0h4m2 0h3m2 0h1m1 0h2m3 0h3m3 0h1m2 0h3m4 0h1m-32 1h2m2 0h2m1 0h1m3 0h1m1 0h2m1 0h2m2 0h2m1 0h5m1 0h1m-27 1h1m2 0h1m2 0h2m4 0h1m2 0h1m2 0h1m1 0h1m3 0h1m1 0h1m1 0h1m-37 1h7m1 0h1m2 0h1m2 0h2m5 0h2m2 0h2m1 0h1m1 0h1m1 0h1m1 0h3m-37 1h1m5 0h1m1 0h2m2 0h3m2 0h1m2 0h1m2 0h2m2 0h2m3 0h1m2 0h2m-37 1h1m1 0h3m1 0h1m2 0h1m1 0h1m1 0h2m2 0h1m3 0h1m4 0h1m1 0h6m1 0h2m-37 1h1m1 0h3m1 0h1m1 0h1m2 0h1m2 0h1m2 0h1m1 0h3m1 0h1m1 0h1m2 0h3m1 0h1m1 0h3m-37 1h1m1 0h3m1 0h1m1 0h3m2 0h2m1 0h3m3 0h3m1 0h1m3 0h1m1 0h1m1 0h1m-35 1h1m5 0h1m5 0h2m2 0h1m1 0h3m1 0h1m2 0h3m1 0h1m1 0h4m-35 1h7m1 0h1m1 0h4m1 0h3m1 0h1m2 0h1m2 0h1m3 0h2m1 0h1m1 0h3"/></svg>`;
+const QRACT=`<svg class="segno" viewBox="0 0 41 41" xmlns="http://www.w3.org/2000/svg" class="segno"><path fill="#fff" d="M0 0h41v41h-41z"/><path class="qrline" stroke="#111" d="M2 2.5h7m1 0h2m1 0h2m1 0h1m1 0h3m2 0h1m1 0h1m6 0h7m-37 1h1m5 0h1m1 0h3m1 0h2m2 0h2m2 0h1m1 0h2m1 0h1m4 0h1m5 0h1m-37 1h1m1 0h3m1 0h1m5 0h1m2 0h1m2 0h3m1 0h4m1 0h1m2 0h1m1 0h3m1 0h1m-37 1h1m1 0h3m1 0h1m1 0h1m1 0h1m1 0h1m1 0h4m1 0h1m5 0h2m1 0h1m1 0h1m1 0h3m1 0h1m-37 1h1m1 0h3m1 0h1m3 0h1m3 0h1m2 0h1m1 0h1m1 0h1m2 0h5m1 0h1m1 0h3m1 0h1m-37 1h1m5 0h1m3 0h2m4 0h1m2 0h1m2 0h1m1 0h3m1 0h1m1 0h1m5 0h1m-37 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-29 1h1m2 0h1m4 0h2m1 0h1m2 0h1m1 0h1m2 0h1m-28 1h1m1 0h2m1 0h3m1 0h1m1 0h2m1 0h3m4 0h1m1 0h2m3 0h1m1 0h1m2 0h1m1 0h2m-37 1h1m1 0h2m5 0h5m1 0h6m2 0h1m2 0h1m1 0h1m5 0h2m-36 1h2m1 0h1m1 0h4m2 0h1m1 0h1m1 0h1m2 0h1m2 0h4m3 0h2m1 0h1m1 0h1m-33 1h2m1 0h1m2 0h5m2 0h2m2 0h3m1 0h1m2 0h3m1 0h3m1 0h2m-35 1h1m1 0h1m2 0h2m1 0h5m1 0h1m2 0h3m2 0h5m1 0h3m1 0h5m-37 1h2m3 0h1m1 0h1m4 0h1m2 0h2m2 0h2m3 0h1m2 0h2m1 0h4m1 0h2m-34 1h2m1 0h2m3 0h2m1 0h1m2 0h3m5 0h1m3 0h2m1 0h1m1 0h2m-32 1h1m4 0h2m1 0h1m1 0h6m1 0h1m5 0h3m1 0h2m2 0h2m-37 1h1m3 0h1m1 0h1m1 0h1m7 0h3m1 0h4m1 0h2m4 0h1m1 0h4m-36 1h1m5 0h1m1 0h2m1 0h1m1 0h1m1 0h2m2 0h1m1 0h6m1 0h3m3 0h2m-34 1h1m2 0h3m1 0h1m1 0h1m2 0h3m4 0h1m1 0h2m1 0h2m1 0h3m2 0h2m-37 1h2m2 0h2m1 0h2m1 0h3m1 0h1m2 0h2m3 0h3m1 0h1m2 0h3m1 0h1m1 0h1m-33 1h1m1 0h4m1 0h3m1 0h1m1 0h1m1 0h2m1 0h1m4 0h4m1 0h2m3 0h1m-37 1h1m1 0h1m4 0h1m1 0h4m1 0h1m1 0h1m1 0h4m1 0h1m1 0h1m2 0h1m4 0h1m-34 1h1m1 0h3m1 0h1m1 0h1m1 0h1m2 0h1m3 0h1m5 0h2m1 0h1m1 0h2m1 0h1m-31 1h1m2 0h1m3 0h2m4 0h3m1 0h3m3 0h2m1 0h4m1 0h3m-35 1h3m2 0h4m1 0h1m1 0h1m2 0h1m2 0h1m1 0h1m1 0h2m1 0h1m1 0h1m1 0h2m1 0h1m1 0h3m-34 1h3m1 0h1m3 0h3m2 0h4m1 0h1m2 0h1m1 0h8m1 0h2m-36 1h1m1 0h5m1 0h2m1 0h5m1 0h2m2 0h1m1 0h2m4 0h2m1 0h3m-36 1h1m4 0h1m2 0h1m1 0h2m4 0h1m4 0h4m1 0h1m2 0h3m4 0h1m-35 1h2m2 0h4m1 0h1m3 0h2m1 0h2m1 0h3m1 0h2m1 0h5m1 0h1m1 0h1m-29 1h1m1 0h1m3 0h2m1 0h1m2 0h1m2 0h1m2 0h1m1 0h1m3 0h1m1 0h1m1 0h1m-37 1h7m1 0h3m3 0h2m1 0h1m3 0h2m2 0h2m1 0h1m1 0h1m1 0h1m1 0h3m-37 1h1m5 0h1m1 0h1m1 0h1m9 0h1m2 0h2m2 0h2m3 0h1m2 0h2m-37 1h1m1 0h3m1 0h1m3 0h1m3 0h1m3 0h1m2 0h2m3 0h1m1 0h6m1 0h2m-37 1h1m1 0h3m1 0h1m1 0h3m1 0h2m1 0h1m1 0h5m1 0h1m1 0h1m2 0h3m1 0h1m1 0h1m1 0h1m-37 1h1m1 0h3m1 0h1m1 0h2m1 0h1m1 0h2m1 0h3m1 0h1m1 0h3m1 0h1m3 0h1m1 0h1m1 0h1m-35 1h1m5 0h1m3 0h1m3 0h1m1 0h1m1 0h1m1 0h1m1 0h1m2 0h3m1 0h1m1 0h4m-35 1h7m1 0h1m2 0h7m1 0h1m2 0h1m2 0h1m3 0h2m1 0h1m1 0h3"/></svg>`;
+
+/* ================= EN VIVO (celulares de los alumnos) ================= */
+const ROOM='ab5d14fd',TOP='edt/ec3/s8/'+ROOM,BASE='https://criscervera95-dot.github.io/Emprendimiento3/sesion-08/',ALUMNO=BASE+'alumno.html?r='+ROOM,ACTIVIDAD=BASE+'actividad.html';
+const QP=new URLSearchParams(location.search);
+const BROKERS=QP.get('broker')?[QP.get('broker')]:['wss://broker.emqx.io:8084/mqtt','wss://broker.hivemq.com:8884/mqtt','wss://test.mosquitto.org:8081'];
+const LV={on:false,cl:[],pres:{},seq:0,last:'',hb:null,deb:null};
+function plain(h){const d=document.createElement('div');d.innerHTML=String(h||'').replace(/<br\s*\/?>/gi,' ');return d.textContent.replace(/\s+/g,' ').trim();}
+function liveState(){
+  const s=SL[S.idx],o={r:ROOM,sid:s.id,k:'i',ti:plain(s.title),teams:S.teams.map(t=>({id:t.id,n:t.name,c:col(t)})),sc:{},ad:[]};
+  S.teams.forEach(t=>{o.sc[t.id]=pts(t.id);});
+  const q=s.vote||s.bet;
+  if(q){
+    o.k=s.bet?'b':'v';o.q=plain(q.q);o.cs=plain(q.case||'');o.o=q.opts.map(plain);o.l=q.labels||null;
+    o.rev=!!S.rev[s.id];if(o.rev&&q.correct!=null)o.c=q.correct;o.ad=Object.keys(dvOf(s.id));o.qs=qStatus(s.id).st;o.left=Math.round(qStatus(s.id).left);
+  }else if(s.clue){
+    const c=S.clue[s.id]||{st:'idle',n:1,locked:[]};
+    o.k='z';o.st=c.st;o.n=c.n||1;o.lk=c.locked||[];o.bz=c.buzz||null;o.w=c.w==null?null:c.w;o.ad=c.bd?[c.bd]:[];
+  }else if(s.id==='robo'&&S.steal.q!=null){
+    const st=S.steal,q=STEAL_Q[st.q];
+    o.k='r';o.sid=st.sid;o.q=q.q;o.o=q.o;o.rt=st.t;o.rv=st.v;o.rev=!!st.show;if(st.show)o.c=q.c;o.ad=Object.keys(dvOf(st.sid));o.qs=qStatus(st.sid).st;o.left=Math.round(qStatus(st.sid).left);
+  }
+  return o;
+}
+function livePub(force){
+  if(!LV.on)return;
+  const o=liveState(),sig=JSON.stringify(o);
+  if(!force&&sig===LV.last)return;
+  LV.last=sig;o.seq=++LV.seq;o.ts=Date.now();
+  const m=JSON.stringify(o);LV.cl.forEach(c=>c.pub(TOP+'/state',m,true));
+}
+function liveSync(){if(LV.on)livePub(false);liveBtn();}
+function liveCount(){const n=Date.now();let tot=0;const per={};Object.keys(LV.pres).forEach(d=>{const p=LV.pres[d];if(n-p.ts<45000){tot++;per[p.tm]=(per[p.tm]||0)+1;}});return {tot:tot,per:per};}
+function liveBtn(){const b=document.querySelector('[data-b="live"]');if(!b)return;
+  if(!LV.on){b.textContent='📡 En vivo';b.classList.remove('liveon');return;}
+  const up=LV.cl.filter(c=>c.isUp()).length;b.textContent='📡 '+liveCount().tot+(up?'':' ⚠️');b.classList.add('liveon');}
+function slid(){return SL[S.idx];}
+function onUp(txt){
+  let m;try{m=JSON.parse(txt);}catch(e){return;}
+  if(!m||m.r!==ROOM||!m.d||typeof m.d!=='string'||m.d.length>24)return;
+  const nm=String(m.nm||'').trim().slice(0,30),ap=String(m.ap||'').trim().slice(0,30);
+  if(m.tm!=null&&team(m.tm)&&nm&&ap){
+    LV.pres[m.d]={tm:m.tm,ts:Date.now()};
+    const pp=S.people[m.d];
+    if(!pp)S.people[m.d]={nombre:nm,apellido:ap,tm:m.tm,first:Date.now()};
+    else{pp.nombre=nm;pp.apellido=ap;pp.tm=m.tm;}
+  }else return;
+  if(m.t==='p'){liveBtn();if($('#live').style.display==='block')liveDraw();clearTimeout(LV.sv);LV.sv=setTimeout(save,1500);return;}
+  const s=slid();if(!s)return;
+  if(m.t==='v'){
+    const q=s.vote||s.bet;let sid,n;
+    if(q){sid=s.id;if(S.rev[sid]||qStatus(sid).st!=='run')return;n=q.opts.length;}
+    else if(s.id==='robo'&&S.steal.q!=null&&m.sid===S.steal.sid){
+      sid=S.steal.sid;if(S.steal.show||m.tm!==S.steal.t||qStatus(sid).st!=='run')return;n=STEAL_Q[S.steal.q].o.length;
+    }else return;
+    if(m.sid!==sid)return;
+    if(!(m.i>=0&&m.i<n))return;
+    const d=S.dv[sid]||(S.dv[sid]={});
+    if(d[m.d]){livePub(true);return;}                       /* una sola respuesta por dispositivo: gana la primera */
+    d[m.d]={tm:m.tm,i:m.i|0,b:s.bet?Math.min(3,Math.max(1,m.b|0||1)):null,ts:Date.now(),k:s.bet?'b':(q?'v':'r'),ok:null};
+    if(q&&liveOn())S.asked[sid]=1;
+    save();clearTimeout(LV.deb);LV.deb=setTimeout(function(){render();livePub(true);},150);
+  }else if(m.t==='z'&&s.clue){
+    const c=cs(s.id);if(c.st!=='run'||c.locked.indexOf(+m.tm)>-1)return;
+    ACT.cBuzz({dataset:{sid:s.id,team:+m.tm,dev:m.d}});
+  }
+}
+function liveStart(){
+  if(LV.on)return;LV.on=true;S.live=true;save();
+  BROKERS.forEach(function(u){
+    const c=MQ(u,{cid:'h'+Math.random().toString(36).slice(2,9),
+      onMsg:function(tp,tx){if(tp===TOP+'/up')onUp(tx);},
+      onState:function(st,api){if(st==='up'){api.sub(TOP+'/up');LV.last='';livePub(true);}liveBtn();if($('#live').style.display==='block')liveDraw();}});
+    LV.cl.push(c);
+  });
+  LV.hb=setInterval(function(){livePub(true);liveBtn();},15000);
+  liveBtn();render();
+}
+function liveStop(){LV.on=false;S.live=false;save();LV.cl.forEach(c=>c.close());LV.cl=[];clearInterval(LV.hb);liveBtn();render();}
+function liveDraw(){
+  const up=LV.cl.filter(c=>c.isUp()).length,cn=liveCount(),np=Object.keys(S.people).length;
+  let h='<div class="lvwrap"><div class="lvqr">'+QRLIVE+'</div><div class="lvinfo"><h4>📡 Únete en vivo</h4>'
+   +'<p class="lvbig">Escanea el QR<br>con tu celular</p>'
+   +'<p class="lvurl">'+esc(ALUMNO)+'</p>'
+   +'<p class="lvst">'+(LV.on?('Conexión: <b>'+up+'/'+LV.cl.length+'</b> servidores · <b>'+cn.tot+'</b> celulares conectados · <b>'+np+'</b> personas registradas'):'Apagado')+'</p>';
+  if(LV.on){h+='<div class="lvteams">'+S.teams.map(t=>'<span class="chip" style="--c:'+col(t)+'"><i></i>'+esc(t.name)+' · '+(cn.per[t.id]||0)+'</span>').join('')+'</div>';}
+  h+='<div class="row" style="margin-top:14px">'+(LV.on?'<button class="btn alt" data-lv="stop">Apagar modo en vivo</button>':'<button class="btn big" data-lv="start">▶ Encender modo en vivo</button>')+'<button class="btn" data-lv="xlsx">📥 Descargar Excel</button><button class="btn alt" data-lv="close">Cerrar</button></div>'
+   +'<p class="lvhelp">Cada alumno escribe nombre y apellido y elige su equipo. Responde una sola vez por pregunta; la pantalla del salón no muestra qué eligió cada equipo hasta que pulses Revelar. Los puntos se suman por cada integrante que acierta. <b>Descarga el Excel antes de “Reiniciar clase” o de borrar datos del navegador, y desde esta misma computadora.</b></p></div></div>';
+  $('#live').innerHTML=h;
+}
+$('#live').addEventListener('click',function(e){const b=e.target.closest('[data-lv]');if(!b)return;const k=b.dataset.lv;
+  if(k==='start')liveStart();else if(k==='stop')liveStop();else if(k==='xlsx'){downloadXlsx();return;}else if(k==='close'){$('#live').style.display='none';return;}
+  liveDraw();});
+function toggleLive(){const el=$('#live');if(el.style.display==='block'){el.style.display='none';}else{liveDraw();el.style.display='block';}}
+setInterval(function(){if(LV.on){liveBtn();if($('#live').style.display==='block')liveDraw();}},5000);
+
+/* ================= Excel de participación (XLSX mínimo, sin librerías) ================= */
+const CRCT=(function(){const t=[];for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0;}return t;})();
+function crc32(u){let c=0xFFFFFFFF;for(let i=0;i<u.length;i++)c=CRCT[(c^u[i])&255]^(c>>>8);return (c^0xFFFFFFFF)>>>0;}
+function zipStore(files){
+  const enc=new TextEncoder(),parts=[],cen=[];let off=0;
+  files.forEach(function(f){
+    const n=enc.encode(f.n),d=enc.encode(f.d),crc=crc32(d);
+    const lh=new DataView(new ArrayBuffer(30));
+    lh.setUint32(0,0x04034b50,true);lh.setUint16(4,20,true);lh.setUint16(6,0x0800,true);lh.setUint16(8,0,true);lh.setUint16(10,0,true);lh.setUint16(12,0x5821,true);
+    lh.setUint32(14,crc,true);lh.setUint32(18,d.length,true);lh.setUint32(22,d.length,true);lh.setUint16(26,n.length,true);lh.setUint16(28,0,true);
+    parts.push(new Uint8Array(lh.buffer),n,d);
+    const ch=new DataView(new ArrayBuffer(46));
+    ch.setUint32(0,0x02014b50,true);ch.setUint16(4,20,true);ch.setUint16(6,20,true);ch.setUint16(8,0x0800,true);ch.setUint16(10,0,true);ch.setUint16(12,0,true);ch.setUint16(14,0x5821,true);
+    ch.setUint32(16,crc,true);ch.setUint32(20,d.length,true);ch.setUint32(24,d.length,true);ch.setUint16(28,n.length,true);ch.setUint32(42,off,true);
+    cen.push(new Uint8Array(ch.buffer),n);
+    off+=30+n.length+d.length;
+  });
+  let cs=0;cen.forEach(a=>{cs+=a.length;});
+  const en=new DataView(new ArrayBuffer(22));en.setUint32(0,0x06054b50,true);en.setUint16(8,files.length,true);en.setUint16(10,files.length,true);en.setUint32(12,cs,true);en.setUint32(16,off,true);
+  const all=parts.concat(cen,[new Uint8Array(en.buffer)]);let tot=0;all.forEach(a=>{tot+=a.length;});
+  const out=new Uint8Array(tot);let p=0;all.forEach(a=>{out.set(a,p);p+=a.length;});return out;
+}
+function xe(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])).replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g,'');}
+function colL(n){let s='';n++;while(n>0){const m=(n-1)%26;s=String.fromCharCode(65+m)+s;n=Math.floor((n-1)/26);}return s;}
+function sheetXml(rows,widths){
+  let x='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><cols>'+widths.map((w,i)=>'<col min="'+(i+1)+'" max="'+(i+1)+'" width="'+w+'" customWidth="1"/>').join('')+'</cols><sheetData>';
+  rows.forEach(function(r,ri){
+    x+='<row r="'+(ri+1)+'">';
+    r.forEach(function(v,ci){
+      const ref=colL(ci)+(ri+1),st=ri===0?' s="1"':'';
+      if(typeof v==='number'&&isFinite(v))x+='<c r="'+ref+'"'+st+'><v>'+v+'</v></c>';
+      else x+='<c r="'+ref+'" t="inlineStr"'+st+'><is><t xml:space="preserve">'+xe(v==null?'':v)+'</t></is></c>';
+    });
+    x+='</row>';
+  });
+  return x+'</sheetData></worksheet>';
+}
+function qTitle(sid){const s=SL.find(x=>x.id===sid);if(s)return plain(s.title);const m=S.qmeta[sid];return m?plain(m.title):sid;}
+function qKind(sid){const s=SL.find(x=>x.id===sid);if(s){if(s.bet)return 'Apuesta';if(s.clue)return 'Buzzer';if(s.vote)return 'Votación';return 'Otro';}return (S.qmeta[sid]&&S.qmeta[sid].kind)||'Robo';}
+function buildSheets(){
+  const asked=Object.keys(S.asked).length;
+  const devs=Object.keys(S.people);
+  const pname=id=>{const t=team(id);return t?t.name:'—';};
+  const stat={};devs.forEach(d=>{stat[d]={r:0,a:0,p:0};});
+  const detail=[['Diapositiva / pregunta','Tipo','Nombre','Apellido','Equipo','Letra elegida','Correcta','Apuesta','Puntos']];
+  Object.keys(S.dv).forEach(function(sid){
+    const d=S.dv[sid],o=((SL.find(x=>x.id===sid)||{}).vote||(SL.find(x=>x.id===sid)||{}).bet);
+    Object.keys(d).forEach(function(dev){
+      const e=d[dev],pp=S.people[dev]||{nombre:'(sin registro)',apellido:'',tm:e.tm};
+      const pt=S.log.filter(l=>l.p===dev&&l.sid===sid).reduce((a,l)=>a+l.d,0);
+      if(!stat[dev])stat[dev]={r:0,a:0,p:0};
+      stat[dev].r++;if(e.ok===true)stat[dev].a++;stat[dev].p+=pt;
+      detail.push([qTitle(sid),qKind(sid),pp.nombre,pp.apellido,pname(e.tm),e.i==null?'—':'ABCDEF'[e.i],e.ok===true?'Sí':(e.ok===false?'No':'—'),e.b||'',pt]);
+    });
+  });
+  const per=[['Nombre','Apellido','Equipo','Preguntas respondidas','Aciertos','Puntos aportados al equipo','% de participación']];
+  devs.sort((a,b)=>{const A=S.people[a],B=S.people[b];return (pname(A.tm)).localeCompare(pname(B.tm))||A.apellido.localeCompare(B.apellido);}).forEach(function(dev){
+    const p=S.people[dev],s=stat[dev]||{r:0,a:0,p:0};
+    per.push([p.nombre,p.apellido,pname(p.tm),s.r,s.a,s.p,asked?Math.round(1000*s.r/asked)/10:0]);
+  });
+  const ranking=S.teams.map(t=>({t:t,p:pts(t.id)})).sort((a,b)=>b.p-a.p);
+  const eq=[['Equipo','Integrantes conectados','Respuestas','Aciertos','Puntos finales','Posición']];
+  ranking.forEach(function(x,i){
+    let resp=0,ac=0;Object.keys(S.dv).forEach(sid=>Object.keys(S.dv[sid]).forEach(dev=>{const e=S.dv[sid][dev];if(e.tm==x.t.id){resp++;if(e.ok===true)ac++;}}));
+    eq.push([x.t.name,devs.filter(d=>S.people[d].tm==x.t.id).length,resp,ac,x.p,i+1]);
+  });
+  return [{n:'Por persona',r:per,w:[18,20,16,22,12,26,20]},{n:'Por equipo',r:eq,w:[18,24,14,12,16,12]},{n:'Detalle',r:detail,w:[46,12,18,20,16,14,12,10,10]}];
+}
+function xlsxBytes(){
+  const sh=buildSheets(),ns='http://schemas.openxmlformats.org/';
+  const files=[
+   {n:'[Content_Types].xml',d:'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>'+sh.map((s,i)=>'<Override PartName="/xl/worksheets/sheet'+(i+1)+'.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>').join('')+'</Types>'},
+   {n:'_rels/.rels',d:'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="'+ns+'officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>'},
+   {n:'xl/workbook.xml',d:'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="'+ns+'officeDocument/2006/relationships"><sheets>'+sh.map((s,i)=>'<sheet name="'+xe(s.n)+'" sheetId="'+(i+1)+'" r:id="rId'+(i+1)+'"/>').join('')+'</sheets></workbook>'},
+   {n:'xl/_rels/workbook.xml.rels',d:'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'+sh.map((s,i)=>'<Relationship Id="rId'+(i+1)+'" Type="'+ns+'officeDocument/2006/relationships/worksheet" Target="worksheets/sheet'+(i+1)+'.xml"/>').join('')+'<Relationship Id="rId'+(sh.length+1)+'" Type="'+ns+'officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>'},
+   {n:'xl/styles.xml',d:'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><fonts count="2"><font><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><name val="Calibri"/></font></fonts><fills count="2"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill></fills><borders count="1"><border><left/><right/><top/><bottom/><diagonal/></border></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="2"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/><xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0" applyFont="1"/></cellXfs></styleSheet>'}
+  ];
+  sh.forEach((s,i)=>files.push({n:'xl/worksheets/sheet'+(i+1)+'.xml',d:sheetXml(s.r,s.w)}));
+  return zipStore(files);
+}
+function downloadXlsx(){
+  try{
+    const b=new Blob([xlsxBytes()],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+    const a=document.createElement('a');a.href=URL.createObjectURL(b);
+    a.download='Sesion8_participacion_'+new Date().toISOString().slice(0,10)+'.xlsx';
+    document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},1500);
+  }catch(e){alert('No se pudo generar el Excel: '+e.message);}
+}
+window.__xlsx=xlsxBytes;
 
 /* ================= Marcador ================= */
 function renderScore(){
@@ -798,7 +1079,7 @@ function openTeams(){
     h+='<div class="tr"><span class="dot" style="background:'+col(t)+'"></span><input value="'+esc(t.name)+'" data-tn="'+t.id+'" maxlength="28"><button class="mini" data-td="'+t.id+'" title="Quitar equipo">✕</button></div>';
   });
   h+='<div class="row" style="margin-top:12px"><button class="mini" data-tadd="1" style="font-size:15px;padding:8px 14px">＋ Agregar equipo</button><button class="mini" data-tpre="8" style="font-size:15px;padding:8px 14px">8 equipos</button><button class="mini" data-tpre="10" style="font-size:15px;padding:8px 14px">10 equipos</button><button class="mini" data-treset="1" style="font-size:15px;padding:8px 14px;background:#5a2030">'+(resetArm?'¿Seguro? Borra puntos y votos':'↺ Reiniciar clase')+'</button></div>'
-   +'<div class="help">Los nombres, puntos y votos se guardan solo en esta computadora. Cierra con <kbd>Esc</kbd>.</div><div class="row" style="margin-top:12px"><button class="btn" id="tclose" style="font-size:18px;padding:10px 22px">Listo</button></div>';
+   +'<div class="help">Los nombres, puntos y respuestas se guardan solo en esta computadora. <b>Antes de “Reiniciar clase” descarga el Excel</b> (📡 En vivo → 📥). Cierra con <kbd>Esc</kbd>.</div><div class="row" style="margin-top:12px"><button class="btn" id="tclose" style="font-size:18px;padding:10px 22px">Listo</button></div>';
   m.innerHTML=h;m.style.display='block';
 }
 $('#modal').addEventListener('input',function(e){
@@ -851,7 +1132,7 @@ $('#rclose').addEventListener('click',function(){clearInterval(rIv);$('#rand').s
 
 /* ================= Ir a / Notas ================= */
 function openGoto(){
-  let h='<h4>☰ Ir a… ('+SL.length+' diapositivas · 80 min)</h4><div class="gg">';
+  let h='<h4>☰ Ir a… ('+SL.length+' diapositivas · presentación ≤45 min)</h4><div class="gg">';
   SL.forEach(function(s,i){h+='<button data-g="'+i+'" class="'+(i===S.idx?'cur':'')+'"><small>'+(i+1)+' · '+s.blk+' · min '+s.t+'</small>'+esc(s.title.replace(/<[^>]+>/g,''))+'</button>';});
   h+='</div>';$('#goto').innerHTML=h;$('#goto').style.display='block';
 }
@@ -865,11 +1146,11 @@ $('#bar').addEventListener('click',function(e){
   if(k==='prev')prev();else if(k==='next')next();else if(k==='goto')openGoto();
   else if(k==='score')toggle('#score',renderScoreShow);else if(k==='teams')openTeams();else if(k==='rand')randTeam();
   else if(k==='timer'){const t=$('#timer');if(t.style.display==='flex'){stopTimer();}else{t.style.display='flex';drawT();}}
-  else if(k==='notes')toggle('#notes',showNotes);else if(k==='fs')fs();
+  else if(k==='notes')toggle('#notes',showNotes);else if(k==='live')toggleLive();else if(k==='fs')fs();
 });
 function renderScoreShow(){renderScore();$('#score').style.display='block';}
 function fs(){try{if(document.fullscreenElement)document.exitFullscreen();else document.documentElement.requestFullscreen();}catch(e){}}
-function closeAll(){['#score','#modal','#goto','#notes'].forEach(s=>$(s).style.display='none');$('#rand').style.display='none';clearInterval(rIv);if(S.teams)resetArm=false;}
+function closeAll(){['#score','#modal','#goto','#notes','#live'].forEach(s=>$(s).style.display='none');$('#rand').style.display='none';clearInterval(rIv);if(S.teams)resetArm=false;}
 document.addEventListener('keydown',function(e){
   if(e.target.tagName==='INPUT')return;
   const k=e.key;
@@ -882,6 +1163,7 @@ document.addEventListener('keydown',function(e){
   else if(k==='g'||k==='G')openGoto();
   else if(k==='r'||k==='R')randTeam();
   else if(k==='t'||k==='T'){const t=$('#timer');if(t.style.display==='flex')stopTimer();else{t.style.display='flex';drawT();}}
+  else if(k==='l'||k==='L')toggleLive();
   else if(k==='f'||k==='F')fs();
   else if(k==='Escape'){if($('#modal').style.display==='block'){closeTeams();}closeAll();}
 });
@@ -892,6 +1174,7 @@ function fit(){const sc=Math.min(innerWidth/1920,innerHeight/1080);cv.style.tran
 window.addEventListener('resize',fit);fit();
 if(S.idx>=SL.length)S.idx=0;
 render();
+if(S.live)liveStart();
 if(!S.setup){openTeams();}
 window.__S8=function(){return {S:S,SL:SL};};
 })();
