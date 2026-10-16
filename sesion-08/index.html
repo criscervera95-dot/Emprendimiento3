@@ -1,0 +1,900 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sesión 8 · Proceso y técnicas de venta — Presentación de clase</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#12141a; --bg2:#1b1f29; --card:#222733; --card2:#2b3140; --ink:#f6f7fb; --mut:#a9b0c3;
+  --or:#ff6b1a; --am:#ffc233; --mint:#2ee6a6; --pk:#ff4f8b; --cy:#3dd6f5; --vi:#a78bfa; --red:#ff5d5d;
+  --font:'Poppins','Segoe UI',system-ui,-apple-system,Arial,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#06070a;color:var(--ink);font-family:var(--font);overflow:hidden}
+button{font-family:inherit;cursor:pointer;border:0;color:inherit}
+#stage{position:fixed;inset:0;overflow:hidden}
+#cv{position:absolute;left:50%;top:50%;width:1920px;height:1080px;transform-origin:center center;overflow:hidden;
+  background:radial-gradient(1200px 700px at 85% -10%,#2a1f3a 0%,transparent 60%),radial-gradient(900px 600px at -5% 105%,#3a2414 0%,transparent 60%),var(--bg);
+  border-radius:6px}
+#cv::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.05) 1.5px,transparent 1.5px);background-size:38px 38px;pointer-events:none}
+#sl{position:absolute;inset:0;padding:64px 96px 70px}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+.kick{font-weight:700;font-size:26px;letter-spacing:.14em;text-transform:uppercase;color:var(--or)}
+.tm{font-size:24px;color:var(--mut);background:rgba(255,255,255,.06);padding:6px 18px;border-radius:99px}
+h1{font-size:150px;line-height:1;font-weight:800;letter-spacing:-.03em}
+h2{font-size:70px;line-height:1.08;font-weight:800;letter-spacing:-.02em;margin-bottom:26px}
+h2 em,h1 span{font-style:normal;color:var(--or)}
+h3{font-size:38px;font-weight:700;margin-bottom:10px}
+p,li{font-size:38px;line-height:1.35;color:#dfe3ef}
+.sm{font-size:28px;color:var(--mut)}
+.mut{color:var(--mut)}
+b,strong{color:#fff}
+.hl{color:var(--am)}
+.grid{display:grid;gap:28px}
+.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}.g5{grid-template-columns:repeat(5,1fr)}
+.card{background:var(--card);border-radius:28px;padding:34px 36px;border:2px solid rgba(255,255,255,.06);position:relative}
+.card .ic{font-size:70px;line-height:1;margin-bottom:14px;display:block}
+.card p{font-size:32px}
+.card h3{font-size:36px}
+.num{display:inline-grid;place-items:center;width:64px;height:64px;border-radius:50%;background:var(--or);color:#fff;font-weight:800;font-size:34px;margin-bottom:14px}
+.btn{background:var(--or);color:#fff;font-weight:700;font-size:28px;padding:16px 30px;border-radius:99px;box-shadow:0 8px 24px rgba(255,107,26,.35);transition:.15s}
+.btn:hover{transform:translateY(-2px)}
+.btn.alt{background:var(--card2);box-shadow:none}
+.btn.mint{background:var(--mint);color:#06281c;box-shadow:0 8px 24px rgba(46,230,166,.3)}
+.btn[disabled]{opacity:.4;cursor:not-allowed}
+.row{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.callout{background:linear-gradient(90deg,rgba(255,194,51,.16),rgba(255,194,51,.04));border-left:8px solid var(--am);border-radius:18px;padding:22px 30px;font-size:34px;margin-top:26px}
+.callout.or{background:linear-gradient(90deg,rgba(255,107,26,.2),rgba(255,107,26,.04));border-color:var(--or)}
+.callout.mint{background:linear-gradient(90deg,rgba(46,230,166,.18),rgba(46,230,166,.04));border-color:var(--mint)}
+.rv{opacity:0;transform:translateY(22px);transition:.4s;pointer-events:none}
+.rv.on{opacity:1;transform:none;pointer-events:auto}
+/* chips */
+.chip{--c:#fff;display:inline-flex;align-items:center;gap:8px;background:color-mix(in srgb,var(--c) 22%,#1a1d26);border:3px solid var(--c);color:#fff;font-weight:700;font-size:25px;padding:6px 18px;border-radius:99px;white-space:nowrap;line-height:1.2}
+button.chip:hover{filter:brightness(1.25)}
+.chip i{width:14px;height:14px;border-radius:50%;background:var(--c);display:inline-block}
+/* cover */
+.cover{height:100%;display:flex;flex-direction:column;justify-content:center;position:relative}
+.cover .eyebrow{font-size:30px;font-weight:700;letter-spacing:.16em;color:var(--am);text-transform:uppercase;margin-bottom:12px}
+.cover .sub{font-size:52px;font-weight:700;margin-top:18px;color:#fff}
+.cover .tag{font-size:36px;color:var(--mut);margin:10px 0 36px}
+.cover .rules{display:flex;gap:18px;margin-bottom:30px}
+.cover .rules div{background:var(--card);border-radius:20px;padding:16px 24px;font-size:27px;border:2px solid rgba(255,255,255,.07)}
+.blob{position:absolute;right:-40px;top:40px;font-size:340px;opacity:.9;filter:drop-shadow(0 30px 60px rgba(255,107,26,.35));transform:rotate(-10deg)}
+.blob2{position:absolute;right:120px;bottom:110px;font-size:150px;transform:rotate(14deg)}
+/* vote */
+.opts{display:grid;gap:12px;margin-top:4px}
+.opt{display:grid;grid-template-columns:70px 1fr auto 56px;align-items:center;gap:20px;background:var(--card);border:3px solid rgba(255,255,255,.07);border-radius:22px;padding:8px 26px;min-height:84px;position:relative;overflow:hidden}
+.opt .L{font-size:40px;font-weight:800;color:var(--am)}
+.opt .tx{font-size:32px;line-height:1.15}
+.opt .vc{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end;max-width:760px}
+.opt .cnt{font-size:36px;font-weight:800;text-align:right;color:var(--mut)}
+.opt .bar{position:absolute;left:0;bottom:0;height:7px;background:var(--cy);transition:.4s}
+.opt.ok{border-color:var(--mint);background:rgba(46,230,166,.13)}
+.opt.ok .L{color:var(--mint)}
+.opt.no{opacity:.45}
+.tray{margin-top:14px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;min-height:56px}
+.tray .lbl{font-size:24px;color:var(--mut);margin-right:6px}
+.hint{font-size:22px;color:var(--mut)}
+.expl{margin-top:14px;font-size:30px;background:rgba(46,230,166,.12);border-left:8px solid var(--mint);padding:18px 26px;border-radius:16px}
+.q{font-size:50px;line-height:1.12;font-weight:800;margin-bottom:16px}
+.q.s{font-size:46px}
+.case{font-size:34px;background:var(--card2);border-radius:20px;padding:14px 28px;margin-bottom:14px;border:2px dashed rgba(255,255,255,.18)}
+/* flip */
+.flip{perspective:1200px;height:520px;cursor:pointer}
+.flip .in{position:relative;width:100%;height:100%;transition:transform .6s;transform-style:preserve-3d}
+.flip.f .in{transform:rotateY(180deg)}
+.flip .fa,.flip .fb{position:absolute;inset:0;backface-visibility:hidden;border-radius:28px;padding:34px;display:flex;flex-direction:column;justify-content:center;border:2px solid rgba(255,255,255,.08)}
+.flip .fa{background:var(--card);align-items:center;text-align:center}
+.flip .fa .ic{font-size:120px;margin-bottom:16px}
+.flip .fa h3{font-size:44px}
+.flip .fa small{font-size:24px;color:var(--mut);margin-top:12px}
+.flip .fb{background:linear-gradient(160deg,#2f2147,#222733);transform:rotateY(180deg)}
+.flip .fb p{font-size:28px;margin-bottom:12px}
+.flip .fb b{color:var(--am)}
+/* steps ladder */
+.stairs{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;align-items:end;height:620px}
+.stair{background:var(--card);border-radius:28px;padding:30px;border:2px solid rgba(255,255,255,.07);display:flex;flex-direction:column;justify-content:flex-start}
+.stair:nth-child(1){height:60%;border-top:10px solid var(--mint)}
+.stair:nth-child(2){height:80%;border-top:10px solid var(--am)}
+.stair:nth-child(3){height:100%;border-top:10px solid var(--pk)}
+.stair h3{font-size:44px}.stair p{font-size:29px}
+.tag2{display:inline-block;background:var(--or);color:#fff;font-weight:700;font-size:24px;border-radius:99px;padding:4px 16px;margin-bottom:10px}
+/* timeline */
+.tl{display:flex;flex-direction:column;gap:16px}
+.tl .st{display:grid;grid-template-columns:150px 1fr;gap:24px;align-items:center;background:var(--card);border-radius:22px;padding:16px 26px;border:2px solid rgba(255,255,255,.06)}
+.tl .st .yr{font-size:34px;font-weight:800;color:var(--or)}
+.tl .st p{font-size:31px}
+/* quadrants */
+.quad{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.quad .card{min-height:250px}
+.quad h3{font-size:44px}
+.quad .card p{font-size:29px}
+/* clues */
+.clue{background:var(--card);border-radius:22px;padding:20px 30px;font-size:38px;margin-bottom:14px;display:flex;gap:20px;align-items:center;border:2px solid rgba(255,255,255,.07)}
+.clue .pt{font-weight:800;color:var(--am);font-size:30px;min-width:100px}
+.answer{font-size:72px;font-weight:800;color:var(--mint);margin:16px 0}
+/* podium */
+.pod{display:flex;gap:30px;align-items:flex-end;justify-content:center;height:560px}
+.pod .col{width:420px;text-align:center}
+.pod .blk{border-radius:26px 26px 0 0;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:22px;font-size:90px;font-weight:800}
+.pod .nm{font-size:40px;font-weight:700;margin-bottom:10px}
+.pod .pt{font-size:36px;color:var(--am);font-weight:700;margin-bottom:8px}
+.confetti{position:absolute;top:-60px;font-size:44px;animation:fall 5s linear infinite;pointer-events:none}
+@keyframes fall{to{transform:translateY(1200px) rotate(360deg)}}
+/* floating UI */
+#bar{position:fixed;left:50%;bottom:10px;transform:translateX(-50%);display:flex;gap:6px;align-items:center;background:rgba(14,16,22,.92);border:1px solid rgba(255,255,255,.14);padding:6px 10px;border-radius:99px;z-index:50;opacity:.55;transition:.2s;backdrop-filter:blur(6px)}
+#bar:hover{opacity:1}
+#bar button{background:transparent;font-size:15px;font-weight:600;padding:8px 12px;border-radius:99px;color:#e9ecf6;white-space:nowrap}
+#bar button:hover{background:rgba(255,255,255,.12)}
+#bar .ct{font-size:15px;color:#aab;padding:0 8px;min-width:64px;text-align:center}
+#prog{position:fixed;left:0;top:0;height:4px;background:var(--or);z-index:60;transition:.3s}
+.panel{position:fixed;z-index:70;background:#171a23;border:1px solid rgba(255,255,255,.16);border-radius:20px;color:#fff;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+#score{top:14px;right:14px;width:430px;max-height:calc(100vh - 90px);overflow:auto;padding:18px;display:none}
+#score h4,#modal h4,#goto h4{font-size:20px;margin-bottom:10px}
+.sr{display:grid;grid-template-columns:30px 1fr auto;gap:8px;align-items:center;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.08);font-size:15px}
+.sr .pts{font-weight:800;font-size:22px;color:var(--am);min-width:40px;text-align:right}
+.sr .adj{grid-column:2/4;display:flex;gap:5px;flex-wrap:wrap}
+.sr .adj button,.mini{background:#2a3040;font-size:13px;font-weight:700;padding:4px 9px;border-radius:8px}
+.sr .adj button:hover,.mini:hover{background:#3b4358}
+.log{font-size:12px;color:#9aa;margin-top:10px;line-height:1.5}
+#modal{top:50%;left:50%;transform:translate(-50%,-50%);width:640px;max-height:84vh;overflow:auto;padding:24px;display:none}
+.tr{display:grid;grid-template-columns:24px 1fr 34px;gap:10px;align-items:center;margin-bottom:8px}
+.tr input{background:#0f1118;border:1px solid #3a4152;border-radius:10px;color:#fff;padding:8px 12px;font:600 16px var(--font);width:100%}
+.tr .dot{width:22px;height:22px;border-radius:50%}
+#goto{top:50%;left:50%;transform:translate(-50%,-50%);width:1000px;max-width:94vw;max-height:86vh;overflow:auto;padding:22px;display:none}
+.gg{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px}
+.gg button{background:#222733;text-align:left;padding:10px 12px;border-radius:12px;font-size:14px;font-weight:600;line-height:1.25}
+.gg button small{display:block;color:var(--am);font-weight:600;font-size:12px;margin-bottom:2px}
+.gg button.cur{outline:2px solid var(--or)}
+.gg button:hover{background:#31384a}
+#notes{left:50%;bottom:62px;transform:translateX(-50%);width:min(1100px,92vw);padding:18px 24px;display:none;font-size:17px;line-height:1.5;max-height:42vh;overflow:auto}
+#notes b{color:var(--am)}
+#timer{top:14px;left:14px;padding:10px 16px;display:none;align-items:center;gap:12px}
+#timer .tt{font-size:54px;font-weight:800;font-variant-numeric:tabular-nums;min-width:150px}
+#timer.end{background:#6b1414;animation:fl .5s 6}
+@keyframes fl{50%{background:#a82020}}
+#timer button{background:#2a3040;padding:8px 12px;border-radius:10px;font-weight:700;font-size:15px}
+#rand{inset:0;border-radius:0;display:none;place-items:center;background:rgba(6,7,10,.9)}
+#rand .box{text-align:center}
+#rand .big{font-size:110px;font-weight:800;margin:20px 0;min-width:900px}
+#rand .st{font-size:28px;color:var(--mut)}
+.help{font-size:13px;color:#8d96ab;margin-top:12px;line-height:1.6}
+kbd{background:#2a3040;border-radius:6px;padding:1px 7px;font-size:12px}
+.fb{display:flex}
+
+/* ---- Arena / juego ---- */
+#cv.game{background:radial-gradient(1100px 650px at 90% -10%,#4a1a6b 0%,transparent 60%),radial-gradient(900px 600px at -5% 105%,#0f4a63 0%,transparent 60%),#0d0f1a}
+.game .kick{color:var(--cy)}
+.gbanner{display:flex;align-items:center;gap:22px;margin-bottom:10px}
+.gb1{font-weight:800;font-size:24px;letter-spacing:.12em;color:#0d0f1a;background:var(--am);padding:6px 18px;border-radius:10px}
+.gbanner b{font-size:34px;font-weight:800;color:#fff;letter-spacing:.04em}
+.gb2{font-size:24px;color:var(--mut)}
+.gtitle{font-size:56px;font-weight:800;line-height:1.1;margin:4px 0 14px}
+.gtitle em{font-style:normal;color:var(--cy)}
+.cover .rules{max-width:1380px;flex-wrap:wrap}
+.qrbox{position:absolute;right:0;bottom:40px;width:250px;background:#fff;border-radius:22px;padding:14px;text-align:center;color:#111;box-shadow:0 20px 50px rgba(0,0,0,.5);z-index:3}
+.qrbox svg{width:100%;height:auto;display:block}
+.qrbox b{display:block;color:#111;font-size:26px;margin-top:6px}
+.qrbox span{display:block;color:#444;font-size:19px;line-height:1.2}
+.qrbox.lv{right:290px}
+#live{inset:0;border-radius:0;display:none;background:rgba(6,7,10,.96);padding:60px;overflow:auto}
+.lvwrap{display:flex;gap:60px;align-items:center;justify-content:center;min-height:100%}
+.lvqr{width:560px;max-width:42vw;background:#fff;border-radius:28px;padding:20px;flex:none}.lvqr svg{width:100%;height:auto;display:block}
+.lvinfo{max-width:760px}.lvinfo h4{font-size:34px;margin-bottom:10px}
+.lvbig{font-size:54px;font-weight:800;line-height:1.1;margin:8px 0 16px}
+.lvurl{font-size:15px;color:var(--mut);word-break:break-all}
+.lvst{font-size:22px;margin:16px 0}
+.lvteams{display:flex;flex-wrap:wrap;gap:8px}
+.lvhelp{font-size:15px;color:var(--mut);margin-top:18px;line-height:1.45}
+#bar button.liveon{background:#0f3a2c;color:#2ee6a6}
+.tl4 .card p{font-size:26px}.tl4 .card h3{font-size:32px}.tl4 .card{padding:24px 26px}
+.strip{position:absolute;left:96px;right:96px;bottom:62px;display:flex;gap:10px;flex-wrap:wrap}
+.sc{flex:1;min-width:150px;background:rgba(255,255,255,.07);border-radius:14px;padding:6px 12px 10px;border-left:6px solid var(--c);position:relative;overflow:hidden}
+.sc .n{font-size:18px;color:#cfd4e6;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sc b{font-size:34px;line-height:1.05;display:block}
+.sc i{position:absolute;left:0;bottom:0;height:6px;background:var(--c);transition:width .8s}
+.sc.bump{animation:bump 1s;box-shadow:0 0 0 3px var(--mint)}
+.sc.drop{animation:shk .6s;box-shadow:0 0 0 3px var(--red)}
+@keyframes bump{30%{transform:scale(1.12)}}
+@keyframes shk{20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}}
+.clue.lock{opacity:.4}
+.cbar{height:16px;background:rgba(255,255,255,.1);border-radius:99px;overflow:hidden;margin:8px 0 12px}
+.cbar i{display:block;height:100%;background:linear-gradient(90deg,var(--mint),var(--am),var(--red));transition:width .25s linear}
+.buzzed{font-size:44px;font-weight:800;margin:8px 0 12px;animation:pin .4s}
+.chip.locked{opacity:.5;text-decoration:line-through}
+.btn.big{font-size:34px;padding:20px 44px}
+.btn.red{background:var(--red);box-shadow:0 8px 24px rgba(255,93,93,.35)}
+.pop-in{animation:pin .5s}
+@keyframes pin{from{transform:scale(.6);opacity:0}to{transform:none;opacity:1}}
+.obox{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:6px}
+.ob{background:rgba(255,255,255,.07);border-radius:14px;padding:8px 18px;font-size:27px;line-height:1.2}
+.ob b{color:var(--am);margin-right:8px}
+.ob.ok{background:rgba(46,230,166,.2);outline:3px solid var(--mint)}.ob.no{opacity:.45}
+.bt{display:flex;flex-direction:column;gap:6px}
+.br{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.05);border-radius:14px;padding:5px 10px}
+.br .chip{min-width:190px;font-size:20px}
+.cell{width:56px;height:48px;border-radius:12px;background:#2a3040;font-size:24px;font-weight:800;color:#cfd4e6}
+.cell:hover{background:#3b4358}
+.cell.sel{background:var(--cy);color:#06222b}
+.cell.ok{outline:4px solid var(--mint)}
+.cell.bad{background:var(--red);color:#fff}
+.bb{margin-left:auto;min-width:64px;height:48px;border-radius:12px;background:var(--am);color:#2b1f00;font-size:26px;font-weight:800}
+.dice{font-size:150px;line-height:1;margin:6px 0}
+.steal{font-size:38px;margin-top:14px;background:rgba(255,93,93,.15);border-left:8px solid var(--red);padding:14px 26px;border-radius:16px}
+.card.glow{box-shadow:0 0 30px rgba(61,214,245,.18);border-color:rgba(61,214,245,.35)}
+.pop{position:absolute;font-size:60px;pointer-events:none;z-index:40;animation:pp 1.6s ease-out forwards}
+@keyframes pp{to{transform:translate(var(--dx),var(--dy)) rotate(40deg);opacity:0}}
+
+.tb{width:100%;border-collapse:separate;border-spacing:0 8px;margin-top:4px}
+.tb th{font-size:22px;color:var(--am);text-align:left;padding:0 18px;letter-spacing:.08em;text-transform:uppercase}
+.tb td{background:var(--card);font-size:30px;line-height:1.18;padding:11px 18px;vertical-align:middle}
+.tb td:first-child{border-radius:16px 0 0 16px}.tb td:last-child{border-radius:0 16px 16px 0}
+.tb td.warn{color:#ffb4c8}
+.formula{margin-top:14px;background:rgba(255,194,51,.12);border-left:6px solid var(--am);border-radius:12px;padding:12px 18px;font-size:28px;font-weight:700;color:var(--am)}
+.fun{display:flex;flex-direction:column;align-items:center;gap:10px}
+.fs{background:linear-gradient(90deg,#ff6b1a,#ff9a3d);border-radius:16px;padding:16px 10px;text-align:center;font-size:30px;color:#fff}
+.fs b{color:#fff}.fs.post{background:linear-gradient(90deg,#2a8cff,#3dd6f5);width:100%}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+<div id="stage"><div id="cv"><div id="sl"></div></div></div>
+
+<div id="bar">
+  <button data-b="prev" title="Anterior (←)">◀</button>
+  <span class="ct" id="ct">1 / 1</span>
+  <button data-b="next" title="Siguiente (→ / espacio)">▶</button>
+  <button data-b="goto" title="Ir a… (G)">☰ Ir a</button>
+  <button data-b="score" title="Marcador (S)">🏆 Marcador</button>
+  <button data-b="teams" title="Equipos (E)">👥 Equipos</button>
+  <button data-b="rand" title="Equipo al azar (R)">🎲 Al azar</button>
+  <button data-b="timer" title="Temporizador (T)">⏱</button>
+  <button data-b="notes" title="Notas de la profesora (N)">📝 Guía</button>
+    <button data-b="fs" title="Pantalla completa (F)">⛶</button>
+</div>
+
+<div class="panel" id="score"></div>
+<div class="panel" id="modal"></div>
+<div class="panel" id="goto"></div>
+<div class="panel" id="notes"></div>
+<div class="panel" id="timer"><span class="tt" id="tt">00:00</span><button data-t="toggle">⏯</button><button data-t="reset">↺</button><button data-t="add60">+1 min</button><button data-t="sub60">−1 min</button><button data-t="hide">✕</button></div>
+<div class="panel" id="rand"><div class="box"><div class="st">Equipo elegido al azar</div><div class="big" id="rbig">…</div><div class="row" style="justify-content:center"><button class="btn" id="ragain">🎲 Otra vez</button><button class="btn alt" id="rclose">Cerrar</button></div></div></div>
+
+<script>
+(function(){
+'use strict';
+/* ================= Estado ================= */
+const KEY='s8_ventas_presentacion_v1';
+const COLORS=['#ff6b1a','#3dd6f5','#ffc233','#ff4f8b','#2ee6a6','#a78bfa','#ff5d5d','#60a5fa','#f59e0b','#34d399','#e879f9','#94a3b8'];
+function defTeams(n){const a=[];for(let i=1;i<=n;i++)a.push({id:i,name:'Equipo '+i,c:(i-1)%COLORS.length});return a;}
+function fresh(){return {teams:defTeams(8),idx:0,votes:{},bets:{},rev:{},rvn:{},log:[],stars:{},clue:{},pairs:null,steal:{t:null,v:null,n:1,q:null,res:null,show:false,used:[]},nid:100,seq:0,setup:false};}
+let S;
+try{S=JSON.parse(localStorage.getItem(KEY)||'null');}catch(e){S=null;}
+if(!S||!S.teams){S=fresh();}
+S.bets=S.bets||{};S.steal=S.steal||{t:null,v:null,n:1};S.steal.used=S.steal.used||[];S.clue=S.clue||{};S.stars=S.stars||{};
+Object.keys(S.clue).forEach(function(k){const c=S.clue[k];if(!c||c.st===undefined||c.st==='run'||c.st==='buzz'){delete S.clue[k];}});
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
+const $=s=>document.querySelector(s);
+const sl=$('#sl'),cv=$('#cv');
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const team=id=>S.teams.find(t=>t.id==id);
+const col=t=>COLORS[t.c%COLORS.length];
+const pts=id=>S.log.filter(l=>l.team==id).reduce((a,l)=>a+l.d,0);
+function addLog(teamId,d,why,sid){S.log.push({id:++S.seq,team:teamId,d:d,why:why,sid:sid||''});}
+function chip(t,act,sid){
+  return '<button class="chip" style="--c:'+col(t)+'" '+(act?'data-act="'+act+'" ':'')+'data-team="'+t.id+'"'+(sid?' data-sid="'+sid+'"':'')+'><i></i>'+esc(t.name)+'</button>';
+}
+function chipStatic(t){return '<span class="chip" style="--c:'+col(t)+'"><i></i>'+esc(t.name)+'</span>';}
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+/* ================= Diapositivas ================= */
+const SL=[];
+function add(o){SL.push(o);}
+const lastShown={};
+
+/* ---------- Sonidos ---------- */
+let AC=null;
+function tone(f,d,at,type,vol){
+  try{const A=window.AudioContext||window.webkitAudioContext;if(!AC)AC=new A();
+    const o=AC.createOscillator(),g=AC.createGain();o.type=type||'triangle';o.frequency.value=f;
+    const t0=AC.currentTime+(at||0);g.gain.setValueAtTime(.0001,t0);g.gain.exponentialRampToValueAtTime(vol||.25,t0+.02);g.gain.exponentialRampToValueAtTime(.0001,t0+d);
+    o.connect(g);g.connect(AC.destination);o.start(t0);o.stop(t0+d+.02);}catch(e){}
+}
+function sfx(k){
+  if(k==='ok'){[523,659,784,1047].forEach((f,i)=>tone(f,.18,i*.09));}
+  else if(k==='no'){tone(180,.35,0,'sawtooth',.2);tone(140,.4,.12,'sawtooth',.2);}
+  else if(k==='buzz'){tone(740,.12,0,'square',.2);tone(990,.2,.1,'square',.2);}
+  else if(k==='start'){[392,523,659].forEach((f,i)=>tone(f,.14,i*.12));}
+  else if(k==='tick'){tone(880,.08,0,'square',.12);}
+  else if(k==='dice'){tone(300+Math.random()*300,.05,0,'square',.1);}
+  else if(k==='win'){[523,659,784,1047,1319].forEach((f,i)=>tone(f,.25,i*.1));}
+}
+function burst(emojis){
+  const arr=emojis||['🎉','⭐','✨','🚀','🧩'];
+  for(let i=0;i<26;i++){
+    const s=document.createElement('span');s.className='pop';s.textContent=arr[i%arr.length];
+    s.style.left=(200+Math.random()*1500)+'px';s.style.top=(300+Math.random()*400)+'px';
+    s.style.setProperty('--dx',(Math.random()*400-200)+'px');s.style.setProperty('--dy',(-200-Math.random()*300)+'px');
+    cv.appendChild(s);setTimeout(()=>s.remove(),1700);
+  }
+}
+
+/* ---------- Marcador de juego (franja inferior) ---------- */
+function strip(){
+  const mx=Math.max(10,...S.teams.map(t=>pts(t.id)));
+  const h=S.teams.map(function(t){
+    const p=pts(t.id),bump=(lastShown[t.id]!==undefined&&p>lastShown[t.id])?' bump':'',drop=(lastShown[t.id]!==undefined&&p<lastShown[t.id])?' drop':'';
+    lastShown[t.id]=p;
+    return '<div class="sc'+bump+drop+'" style="--c:'+col(t)+'"><span class="n">'+esc(t.name)+(S.stars[t.id]?' ⭐':'')+'</span><b>'+p+'</b><i style="width:'+Math.max(3,100*Math.max(0,p)/mx)+'%"></i></div>';
+  }).join('');
+  return '<div class="strip">'+h+'</div>';
+}
+function banner(round,sub){
+  return '<div class="gbanner"><span class="gb1">🎮 ARENA DE VENTAS</span><b>'+round+'</b><span class="gb2">'+sub+'</span></div>';
+}
+
+/* ---------- Votación simple (contenido) ---------- */
+function voteSlide(o){
+  return {id:o.id,blk:o.blk,t:o.t,title:o.title||o.q,notes:o.notes||'',
+  html:function(s){
+    const v=S.votes[s.id]||{},rev=!!S.rev[s.id],tot=Math.max(1,S.teams.length);
+    const opts=o.opts.map(function(tx,i){
+      const here=S.teams.filter(t=>v[t.id]===i);
+      let cls='';if(rev&&o.correct!=null)cls=(o.correct===i)?' ok':' no';
+      return '<div class="opt'+cls+'"><span class="L">'+(o.labels?o.labels[i]:'ABCD'[i])+'</span><span class="tx">'+tx+'</span><span class="vc">'+here.map(t=>chip(t,rev?'':'cyc',s.id)).join('')+'</span><span class="cnt">'+here.length+'</span><span class="bar" style="width:'+(100*here.length/tot)+'%"></span></div>';
+    }).join('');
+    const none=S.teams.filter(t=>v[t.id]==null);
+    return (o.case?'<div class="case">'+o.case+'</div>':'')+'<div class="q'+(o.small?' s':'')+'">'+o.q+'</div>'
+      +'<div class="opts">'+opts+'</div>'
+      +'<div class="tray"><span class="lbl">'+(none.length?'Sin respuesta · toca para asignar:':'¡Todos respondieron!')+'</span>'+none.map(t=>chip(t,rev?'':'cyc',s.id)).join('')+'</div>'
+      +'<div class="row" style="margin-top:10px"><button class="btn'+(rev?' alt':'')+'" data-act="reveal" data-sid="'+s.id+'">'+(rev?'Ocultar respuesta':'✔ Revelar y puntuar')+'</button>'
+      +'<span class="hint">Cada equipo decide en 20 s. Toca el equipo para asignarle su letra. '+(o.pts?('Acierto +'+o.pts+'.'):'')+'</span></div>'
+      +(rev&&o.explain?'<div class="expl">'+o.explain+'</div>':'')+(o.extra||'');
+  },
+  vote:o};
+}
+
+/* ---------- Ronda de pistas con buzzer (juego) ---------- */
+function cs(id){return S.clue[id]||(S.clue[id]={st:'idle',n:1,el:0,t0:0,buzz:null,locked:[],w:null});}
+function clueSlide(o){
+  return {id:o.id,blk:o.blk,t:o.t,title:o.title,notes:o.notes||'',game:true,
+  html:function(s){
+    const c=cs(s.id),P=[3,2,1];let h=banner(o.round,'Pista nueva cada 5 s · ¡toca tu equipo para frenar!');
+    h+='<div class="gtitle">'+o.title+'</div>';
+    for(let i=0;i<3;i++){
+      const shown=(c.st==='idle')?false:(i<c.n)||c.st==='done';
+      h+='<div class="clue'+(shown?'':' lock')+'"><span class="pt">'+P[i]+' pts</span><span>'+(shown?o.clues[i]:'🔒 Pista '+(i+1)+' · aún oculta')+'</span></div>';
+    }
+    h+='<div class="cbar"><i id="cbf" style="width:'+Math.min(100,(c.st==='run'?(Date.now()-c.t0)/150:(c.el||0)/.15))+'%"></i></div>';
+    if(c.st==='idle'){h+='<div class="row" style="margin:14px 0"><button class="btn big" data-act="cStart" data-sid="'+s.id+'">▶ ¡Arrancar ronda!</button><span class="sm">Los equipos esperan listos…</span></div>';}
+    else if(c.st==='run'){h+='<div class="tray"><span class="lbl">🔔 BUZZER:</span>'+S.teams.map(t=>(c.locked.indexOf(t.id)>-1)?'<span class="chip locked" style="--c:#555">🚫 '+esc(t.name)+'</span>':chip(t,'cBuzz',s.id)).join('')+'</div>';}
+    else if(c.st==='buzz'){const t=team(c.buzz);h+='<div class="buzzed">🔔 ¡'+(t?chipStatic(t):'')+' frenó la ronda!</div><div class="row"><button class="btn mint" data-act="cOk" data-sid="'+s.id+'">✔ Correcto (+'+P[c.n-1]+')</button><button class="btn red" data-act="cNo" data-sid="'+s.id+'">✖ Incorrecto (−1 y bloqueado)</button></div>';}
+    else{h+='<div class="answer pop-in">✔ '+o.answer+'</div><div class="row">'+(c.w?('<span class="sm">¡Punto para</span>'+chipStatic(team(c.w)||{name:'—',c:0})):'<span class="sm">Nadie acertó</span>')+'<button class="btn alt" data-act="cReset" data-sid="'+s.id+'">↺ Repetir ronda</button></div>';}
+    return h+strip();
+  },clue:o};
+}
+function tickClue(){
+  const s=SL[S.idx];if(!s||!s.id||!s.game)return;const c=S.clue[s.id];if(!c||c.st!=='run')return;
+  const el=(Date.now()-c.t0)/1000,nn=Math.min(3,1+Math.floor(el/5));
+  if(nn!==c.n){c.n=nn;sfx('tick');render();return;}
+  const f=document.getElementById('cbf');if(f)f.style.width=Math.min(100,el/15*100)+'%';
+  if(el>=15){c.st='done';c.w=0;c.el=15;sfx('no');save();render();}
+}
+setInterval(tickClue,250);
+
+/* ---------- Ronda con apuesta (juego) ---------- */
+function betSlide(o){
+  return {id:o.id,blk:o.blk,t:o.t,title:o.title||o.q,notes:o.notes||'',game:true,bet:o,
+  html:function(s){
+    const v=S.votes[s.id]||{},bt=S.bets[s.id]||{},rev=!!S.rev[s.id];
+    let h=banner(o.round,'Apuesta 1–3 pts: aciertas y ganas lo apostado, fallas y lo pierdes');
+    h+='<div class="gtitle">'+o.q+'</div>';
+    h+='<div class="obox">'+o.opts.map((tx,i)=>'<div class="ob'+(rev?(o.correct===i?' ok':' no'):'')+'"><b>'+('ABCD'[i])+'</b> '+tx+'</div>').join('')+'</div>';
+    const half=Math.ceil(S.teams.length/2);
+    const tbl=function(arr){return '<div class="bt">'+arr.map(function(t){
+      const sel=v[t.id],b=bt[t.id]||1;
+      return '<div class="br">'+chipStatic(t)+o.opts.map(function(_,i){
+        let cls='cell';if(sel===i)cls+=' sel';if(rev&&o.correct===i)cls+=' ok';if(rev&&sel===i&&o.correct!==i)cls+=' bad';
+        return '<button class="'+cls+'" '+(rev?'':'data-act="bcell" ')+'data-sid="'+s.id+'" data-team="'+t.id+'" data-i="'+i+'">'+'ABCD'[i]+'</button>';
+      }).join('')+'<button class="bb" '+(rev?'':'data-act="bbet" ')+'data-sid="'+s.id+'" data-team="'+t.id+'">×'+b+'</button></div>';}).join('')+'</div>';};
+    h+='<div class="grid g2" style="gap:30px;margin-top:10px">'+tbl(S.teams.slice(0,half))+tbl(S.teams.slice(half))+'</div>';
+    h+='<div class="row" style="margin-top:12px"><button class="btn'+(rev?' alt':' big')+'" data-act="bReveal" data-sid="'+s.id+'">'+(rev?'Ocultar respuesta':'🎯 ¡Revelar!')+'</button><span class="hint">Toca la letra de cada equipo · toca ×n para cambiar su apuesta.</span></div>';
+    if(rev&&o.explain)h+='<div class="expl">'+o.explain+'</div>';
+    return h+strip();
+  }};
+}
+
+/* ================= Contenido ================= */
+function cardT(ic,name,html){return '<div class="card"><span class="ic">'+ic+'</span><h3>'+name+'</h3>'+html+'</div>';}
+const PERF=[
+ {c:'Racional y analítico',s:'Pide datos, compara opciones, pregunta por costos y garantías.',t:'Venta consultiva',k:'Correo con documento adjunto'},
+ {c:'Emocional y rápido',s:'Decide por gusto, reacciona a la imagen, compra por impulso.',t:'AIDA',k:'Redes sociales, mensaje corto'},
+ {c:'Escéptico o técnico',s:'Cuestiona lo que dices y busca el hueco en el argumento.',t:'SPIN Selling',k:'Llamada o reunión uno a uno'},
+ {c:'Institucional, varios decisores',s:'Pide cotización formal y menciona a un jefe o a un comité.',t:'Consultiva + SPIN',k:'Reunión más propuesta escrita'}];
+const CANALES=['Correo con documento adjunto','Redes sociales (mensaje corto)','Llamada uno a uno','Reunión + propuesta escrita'];
+
+add({id:'cover',blk:'Portada',t:'0–1',title:'Portada',
+notes:'<b>0–1 min.</b> Pide que se junten por equipo. Con <b>👥 Equipos</b> (tecla E) nombra, agrega o quita equipos (40 alumnos ≈ 8 equipos de 5). Reglas del día: se suman puntos por acertar, el repaso final es la Arena de ventas con apuestas y robo. La parte expositiva dura ~20 min; el resto es trabajo de equipo sobre el entregable.',
+html:function(){return '<div class="cover"><div class="blob">🎯</div>'
++'<div class="eyebrow">Emprendimiento y Liderazgo de Equipos · Unidad 2 · Sesión 8</div><h1 style="font-size:100px;max-width:1300px">Proceso y técnicas de <span>venta</span></h1>'
++'<p class="sub">Del embudo a la venta consultiva, SPIN y AIDA</p>'
++'<p class="tag" style="margin-bottom:22px">Vender es un proceso, no una casualidad</p>'
++'<div class="rules"><div>🤝 Trabajo <b>en equipo</b></div><div>🧭 Sales con <b>embudo</b> y <b>guion</b></div><div>🏟️ Cierre: <b>Arena</b></div></div>'
++'<div class="row" style="max-width:1400px">'+S.teams.map(chipStatic).join('')+'</div>'
++'<div class="row" style="margin-top:26px"><button class="btn" data-act="teams">👥 Armar equipos</button><span class="sm">Reúnanse con su equipo · 1 min para nombrarse</span></div></div>';}});
+
+add({id:'recap',blk:'Recap',t:'1–2',title:'¿Qué vimos la sesión pasada?',
+notes:'<b>1–2 min.</b> Conecta con la sesión 7: valor percibido y comunicación con el cliente (atención, crisis, objeciones). Puente: hasta aquí la <b>actitud</b> frente al cliente; hoy la <b>estructura</b> completa del proceso de venta. Fuente: Descriptiva S8 §1.',
+html:function(){return '<h2>¿Qué vimos la <em>sesión pasada</em>?</h2><div class="grid g3" style="margin-top:20px">'
++cardT('💎','Valor percibido','<p>Cómo generar valor y <b>comunicarlo</b> al cliente.</p>')
++cardT('🤝','Atención al cliente','<p>La actitud correcta frente a quien nos compra.</p>')
++cardT('🛡️','Crisis y objeciones','<p>Cómo <b>manejar</b> un problema o un “no” sin perder la relación.</p>')+'</div>'
++'<div class="callout or" style="font-size:42px">Hoy pasamos de <b>tener un proyecto</b> a <b>saber venderlo</b>: aplicamos el proceso de venta completo.</div>'
++'<p class="sm" style="margin-top:22px">Diseñarán el embudo de ventas de su proyecto y practicarán prospección y cierre con role-play.</p>';}});
+
+add({id:'obj',blk:'Objetivo',t:'2–3',title:'Objetivo de la clase',
+notes:'<b>2–3 min.</b> Lee el objetivo y la ruta del día. Producto de hoy: embudo con metas por etapa + guion de prospección (se trabajan en clase, se pasan en limpio para la entrega). Fuente: Descriptiva S8 §2.',
+html:function(){return '<h2>🎯 <em>Objetivo</em> de la clase</h2><div class="grid" style="grid-template-columns:1.1fr .9fr;gap:28px;margin-top:6px">'
++'<div><div class="card" style="font-size:36px;line-height:1.3">Que <b>apliques las etapas del proceso de venta</b>, <b>elijas la técnica adecuada</b> para tu cliente y <b>diseñes el embudo</b> de tu proyecto con metas por etapa y un <b>guion de prospección</b>.</div>'
++'<div class="callout mint" style="font-size:32px">Hoy te llevas: <b>embudo con números</b> + <b>guion probado en voz alta</b>.</div></div>'
++'<div class="tl">'+['01|Proceso, no casualidad','02|La técnica correcta','03|Números que diagnostican'].map(function(x){const a=x.split('|');return '<div class="st" style="grid-template-columns:90px 1fr"><span class="num" style="margin:0">'+a[0]+'</span><p style="font-size:34px"><b>'+a[1]+'</b></p></div>';}).join('')+'</div></div>'
++'<p class="sm" style="margin-top:22px">Ruta: Etapas → Técnicas → Embudo → Role-play SPIN → Cierre → Guion</p>';}});
+
+add({id:'detona',blk:'Activación',t:'3–5',title:'¿Por qué meses vs. minutos?',
+notes:'<b>3–5 min.</b> Pregunta detonadora: “Una venta entre empresas puede tardar meses; una compra en redes se decide en minutos. ¿Por qué?” Deja que propongan (varias personas deciden, presupuestos, riesgo, compra emocional) y anota en el pizarrón. Vuelve a sus respuestas al presentar las técnicas. Cifras: preséntalas como <b>órdenes de magnitud</b> (la fuente original no está citada).',
+html:function(){return '<h2>⏳ ¿Por qué <em>meses</em> en una venta y <em>minutos</em> en otra?</h2><div class="grid g2" style="margin-top:6px">'
++'<div class="card" style="border-color:var(--cy)"><span class="tag2" style="background:var(--cy);color:#06222b">B2B · venta a empresas</span><p style="font-size:58px;font-weight:800;margin:8px 0">≈ 10 meses</p><p>Varias personas deciden, hay presupuestos que aprobar y el riesgo es alto. Suele ganar <b>quien responde primero</b>.</p></div>'
++'<div class="card" style="border-color:var(--or)"><span class="tag2">B2C · compra en línea</span><p style="font-size:58px;font-weight:800;margin:8px 0">2–3 días</p><p>Decisión individual y más emocional: <b>75 %</b> se decide en las primeras 24 h. En redes, a veces <b>minutos</b>.</p></div></div>'
++'<div class="callout or" style="font-size:38px">💭 ¿Qué explica la diferencia? → No hay <b>una sola forma correcta de vender</b>: hay una forma correcta <b>para cada situación</b>.</div>'
++'<div class="row" style="margin-top:14px"><button class="btn" style="font-size:24px;padding:10px 22px" data-act="rand">🎲 Equipo al azar</button><span class="hint">Cifras como orden de magnitud (tendencias B2B/B2C 2026; fuente por confirmar).</span></div>';}});
+
+add({id:'proceso',blk:'Contenido',t:'5–9',title:'Proceso de venta y sus 5 etapas',
+notes:'<b>5–9 min.</b> Un proceso de venta es la secuencia estructurada de pasos desde identificar al cliente hasta cerrar y mantener la relación; permite predecir, medir y mejorar. Recorre las 5 etapas con el error típico de cada una. Cierra pidiendo que cada equipo anote en cuál cree que su proyecto está más débil (lo usan en la Actividad 1). Fuente: Descriptiva §5.1–5.2.',
+html:function(){return '<h2>🧭 ¿Qué es un <em>proceso de venta</em>?</h2>'
++'<p style="font-size:32px;max-width:1700px;line-height:1.25">Una <b>secuencia de pasos</b> desde identificar a un cliente hasta cerrar y mantener la relación. No son conversaciones sueltas: es un camino con etapas que permite <b class="hl">predecir, medir y mejorar</b>.</p>'
++'<table class="tb"><tr><th style="width:360px">Etapa</th><th>En qué consiste</th><th style="width:560px">⚠ Error típico</th></tr>'
++[['1 · Prospección','Identificar quién podría necesitar tu producto. Sin esto no hay a quién venderle.','Tratar a “todos” como prospecto: se vuelve spam'],
+ ['2 · Generación y calificación de leads','No todo contacto es un lead: se califica interés + capacidad de compra.','Gastar la semana en un curioso que nunca iba a pagar'],
+ ['3 · Seguimiento ⭐','La etapa más subestimada: muchos leads nunca reciben un segundo contacto.','No dar seguimiento y perder el valor ya generado'],
+ ['4 · Cierre','Formalizar el acuerdo: de prospecto a cliente.','Nunca pedir la venta de forma explícita'],
+ ['5 · Postventa','Retener y generar referidos: volver a vender cuesta mucho menos que un cliente nuevo.','Desaparecer después de cobrar']].map(function(r){return '<tr><td><b>'+r[0]+'</b></td><td>'+r[1]+'</td><td class="warn">'+r[2]+'</td></tr>';}).join('')+'</table>'
++'<div class="callout or" style="margin-top:6px;font-size:30px">✍️ Marquen en equipo: <b>¿en qué etapa está más débil su proyecto?</b></div>';}});
+
+add({id:'consultiva',blk:'Contenido',t:'9–11',title:'Venta consultiva',
+notes:'<b>9–11 min.</b> El vendedor es asesor, no despachador: diagnostica primero, propone después. Diferencia clave: en la venta tradicional se habla primero del producto; en la consultiva se pregunta primero y se recomienda después. Funciona en ventas complejas y de ciclo largo (B2B); peor en compras rápidas. Origen: Mack Hanan (1970). Vuelve a las respuestas de la pregunta detonadora.',
+html:function(){return '<h2>🧑‍⚕️ <em>Venta consultiva</em>: el vendedor como asesor</h2><div class="grid g3" style="margin-top:6px">'
++cardT('🔎','Diagnostica primero','<p>Entiende necesidades, problemas y objetivos reales del cliente y <b>solo después</b> propone.</p><p class="sm" style="margin-top:10px">Tradicional: habla primero del producto.<br><b>Consultiva: pregunta primero, recomienda después.</b></p>')
++cardT('✅','Características','<p>• <b>Escucha más</b> de lo que habla<br>• Resuelve un <b>problema</b>, no coloca un producto<br>• Relación de <b>largo plazo</b><br>• Propuesta <b>personalizada</b></p>')
++cardT('🎯','¿Cuándo funciona?','<p><b style="color:var(--mint)">Mejor:</b> ventas complejas, ciclo largo y alto valor (típico B2B).</p><p style="margin-top:12px"><b style="color:var(--pk)">Peor:</b> compras rápidas y de bajo involucramiento.</p>')+'</div>'
++'<p class="sm" style="margin-top:20px">Método formalizado por Mack Hanan (1970).</p>';}});
+
+add({id:'spin',blk:'Contenido',t:'11–12',title:'SPIN Selling: 4 preguntas',
+notes:'<b>11–12 min.</b> SPIN (Neil Rackham, análisis de +35,000 llamadas): cuatro tipos de pregunta, siempre en este orden, para que el cliente mismo articule por qué necesita una solución. Funciona mejor en ventas consultivas, complejas, B2B.',
+html:function(){return '<h2>❓ <em>SPIN Selling</em>: 4 preguntas, siempre en orden</h2><div class="grid g4" style="margin-top:6px">'
++[['S','Situación','Entender el contexto: qué tiene, cómo opera.','¿Cómo manejan actualmente este proceso?'],
+  ['P','Problema','Explorar dificultades y puntos de dolor.','¿Qué dificultades han tenido con eso?'],
+  ['I','Implicación','Amplificar las consecuencias si no se resuelve.','¿Cómo afecta eso a sus tiempos de entrega o ventas?'],
+  ['N','Necesidad de solución','Que el cliente articule el valor de resolverlo.','¿Qué significaría para el equipo si pudieran resolverlo?']].map(function(x){return '<div class="card"><span class="num">'+x[0]+'</span><h3>'+x[1]+'</h3><p style="font-size:28px">'+x[2]+'</p><p class="sm" style="margin-top:12px;font-size:26px">“'+x[3]+'”</p></div>';}).join('')+'</div>'
++'<div class="callout or" style="font-size:32px">⚠ Ninguna de las cuatro menciona el producto. <b>No presentas nada</b> hasta que el cliente dijo en voz alta que tiene un problema y que resolverlo le importa.</div>'
++'<p class="sm" style="margin-top:14px">Neil Rackham · 35,000+ llamadas de venta analizadas</p>';}});
+
+add({id:'spin2',blk:'Contenido',t:'12–13',title:'SPIN en acción: proyecto de reciclaje',
+notes:'<b>12–13 min.</b> Lee las cuatro preguntas con voz de vendedor y pide que identifiquen cuál es cuál. Observa: ninguna menciona el producto y el cliente llega solo a la conclusión. En el role-play, si escuchas “nuestra app hace…” antes de la cuarta pregunta, detén el ejercicio y que empiecen de nuevo.',
+html:function(){return '<h2>♻️ SPIN <em>en acción</em>: proyecto de reciclaje</h2><div class="tl" style="margin-top:6px">'
++[['S','¿Cómo manejan actualmente la separación de sus residuos reciclables en casa?'],
+  ['P','¿Qué dificultades han tenido para encontrar dónde llevarlos?'],
+  ['I','¿Cómo les afecta eso en su tiempo libre los fines de semana?'],
+  ['N','¿Qué significaría para ustedes no tener que preocuparse nunca más por eso?']].map(function(x){return '<div class="st" style="grid-template-columns:90px 1fr"><span class="num" style="margin:0">'+x[0]+'</span><p style="font-size:38px">“'+x[1]+'”</p></div>';}).join('')+'</div>'
++'<div class="callout mint" style="font-size:34px">✅ Ninguna menciona el producto: el cliente <b>llega solo</b> a la conclusión de que necesita una solución.</div>';}});
+
+add({id:'aida',blk:'Contenido',t:'13–14',title:'AIDA',
+notes:'<b>13–14 min.</b> AIDA organiza un mensaje para llevar a la persona del primer contacto a la acción. Es el mismo esqueleto del pitch de la Sesión 4. Diferencia con SPIN: SPIN estructura una conversación con preguntas; AIDA estructura la forma de presentar un mensaje. Ideal en ventas cortas, bajo involucramiento y marketing de contenidos.',
+html:function(){return '<h2>📣 <em>AIDA</em>: del primer contacto a la acción</h2><div class="grid g4" style="margin-top:6px">'
++[['A','Atención','Captura los primeros segundos: hook, dato o pregunta.'],['I','Interés','Curiosidad con algo relevante para esa persona.'],['D','Deseo','Conecta el producto con un beneficio que sí quiere.'],['A','Acción','Cierra con un llamado a la acción claro y concreto.']].map(function(x){return '<div class="card"><span class="num">'+x[0]+'</span><h3>'+x[1]+'</h3><p style="font-size:29px">'+x[2]+'</p></div>';}).join('')+'</div>'
++'<div class="grid g2" style="margin-top:22px"><div class="callout mint" style="margin:0;font-size:30px"><b>Funciona mejor:</b> ventas cortas, bajo involucramiento y marketing de contenidos.</div>'
++'<div class="callout" style="margin:0;font-size:30px"><b>vs. SPIN:</b> SPIN estructura una <b>conversación</b>; AIDA estructura un <b>mensaje</b> (el pitch de la S4, con otro nombre).</div></div>';}});
+
+add({id:'adapta',blk:'Contenido',t:'14–15',title:'Adaptación: cliente × técnica × canal',
+notes:'<b>14–15 min.</b> Regla: la técnica y el canal dependen del cliente. Rápido: ¿vende a otra empresa con ciclo largo? consultiva/SPIN. ¿Consumidor final, decisión rápida? AIDA. ¿Escéptico o técnico? SPIN en llamada uno a uno. ¿Institucional con cotización? Consultiva para diagnosticar + propuesta escrita. Esta tabla se usa en la Actividad 2 y en el role-play.',
+html:function(){return '<h2>🧩 <em>A la medida</em>: cliente → técnica → canal</h2>'
++'<table class="tb"><tr><th style="width:380px">Tipo de cliente</th><th>Cómo lo reconoces</th><th style="width:300px">Técnica</th><th style="width:420px">Canal</th></tr>'
++PERF.map(function(r){return '<tr><td><b>'+r.c+'</b></td><td>'+r.s+'</td><td class="hl"><b>'+r.t+'</b></td><td>'+r.k+'</td></tr>';}).join('')+'</table>'
++'<div class="callout or" style="font-size:32px">Regla rápida: <b>B2B, ciclo largo, varios decisores → consultiva/SPIN</b> · <b>consumidor final, decisión rápida → AIDA</b>.</div>';}});
+
+SL.push(voteSlide({id:'adapta-v',blk:'Contenido',t:'15–16',title:'Votación: comité y cotización',
+ q:'Un cliente pide cotización formal y menciona que debe consultarlo con su comité. ¿Qué haces?',small:true,
+ opts:['AIDA con un mensaje corto por redes sociales','Consultiva para diagnosticar + propuesta escrita para el comité','Cierre directo en la primera llamada','SPIN solo por mensaje de WhatsApp'],correct:1,pts:1,
+ explain:'Cliente <b>institucional</b>: consultiva para diagnosticar y <b>propuesta escrita</b> para el comité (reunión + propuesta).',
+ notes:'<b>15–16 min.</b> Cada equipo vota (20 s) y se revela. +1 por acierto. Comprueba que distinguen cliente institucional de emocional.'}));
+
+add({id:'embudo',blk:'Contenido',t:'16–18',title:'El embudo de ventas',
+notes:'<b>16–18 min.</b> El embudo es la representación numérica del camino del cliente. Se llama embudo porque en cada etapa se pierde gente. Las etapas son las mismas del proceso. No es un dibujo bonito: es una herramienta de diagnóstico. Lee el contraste “nos va mal” vs “el problema está en el cierre”.',
+html:function(){return '<h2>🔻 El <em>embudo</em> de ventas</h2><div class="grid" style="grid-template-columns:1fr 1fr;gap:34px;margin-top:6px"><div class="fun">'
++[['Prospectos contactados','100%'],['Leads calificados','↓'],['Propuestas o demos','↓'],['Cierres (clientes)','↓']].map(function(x,i){return '<div class="fs" style="width:'+(100-i*17)+'%;opacity:'+(1-i*.12)+'"><b>'+x[0]+'</b></div>';}).join('')
++'<div class="fs post"><b>+ Postventa y referidos</b></div></div>'
++'<div><p style="font-size:32px">En cada etapa <b>se pierde gente</b>: entran muchos arriba y solo una fracción cierra. Las etapas son las mismas del proceso de venta.</p>'
++'<div class="card" style="margin-top:16px;border-color:var(--pk)"><h3>Sin números</h3><p style="font-size:30px">“No nos están comprando.”</p></div>'
++'<div class="card" style="margin-top:14px;border-color:var(--mint)"><h3>Con números</h3><p style="font-size:30px">“De 10 contactados, 4 escuchan, 2 piden precio y ninguna cierra: <b>el problema está en el cierre</b>, no en la promoción.”</p></div></div></div>';}});
+
+add({id:'metricas',blk:'Contenido',t:'18–19',title:'Las 3 métricas del embudo',
+notes:'<b>18–19 min.</b> Tres métricas: conversión por etapa (etapa siguiente ÷ etapa anterior × 100), ticket promedio (ingreso total ÷ clientes cerrados) y tiempo de ciclo (días entre primer contacto y cierre, promediados). Sin medirlas se vende a ciegas.',
+html:function(){return '<h2>📏 <em>Mide</em>: 3 métricas básicas</h2><div class="grid g3" style="margin-top:10px">'
++cardT('📉','Conversión por etapa','<p>Qué % avanza de una etapa a la siguiente.</p><div class="formula">etapa siguiente ÷ etapa anterior × 100</div>')
++cardT('💵','Ticket promedio','<p>Cuánto genera en promedio cada cliente que cierra.</p><div class="formula">ingreso total ÷ clientes cerrados</div>')
++cardT('⏱️','Tiempo de ciclo','<p>Cuánto tarda un prospecto en volverse cliente.</p><div class="formula">días entre 1.er contacto y cierre (promedio)</div>')+'</div>'
++'<div class="callout or">Sin medirlos, estás <b>vendiendo a ciegas</b>.</div>';}});
+
+add({id:'ejemplo',blk:'Contenido',t:'19–20',title:'Ejemplo resuelto: diagnóstico',
+notes:'<b>19–20 min.</b> Proyecta antes de la Actividad 1. Dos lecturas: en <b>volumen</b>, la mayor fuga es prospectos→leads (60 personas) = problema de prospección/perfil; en <b>porcentaje</b>, la conversión más baja es el cierre (25 %) = oferta, precio o técnica de cierre. El cuello de botella es el cierre porque llegar a la propuesta ya costó trabajo. Pregunta final: “si solo mejoran una etapa la próxima semana, ¿cuál?” Subir cierre de 25 % a 40 % = 3 clientes más sin contactar a nadie nuevo.',
+html:function(){return '<h2>🔬 Ejemplo: <em>diagnostica</em> este embudo</h2><div class="grid" style="grid-template-columns:1.05fr .95fr;gap:30px">'
++'<div><table class="tb"><tr><th>Etapa</th><th>Cantidad</th><th>Conversión</th><th>Se pierden</th></tr>'
++[['Prospectos contactados','100','—','—'],['Leads calificados','40','40 %','60'],['Propuestas o demos','20','50 %','20'],['Cierres (clientes)','5','<b class="hl">25 %</b>','15']].map(function(r){return '<tr><td><b>'+r[0]+'</b></td><td>'+r[1]+'</td><td>'+r[2]+'</td><td>'+r[3]+'</td></tr>';}).join('')+'</table>'
++'<p class="sm">Ticket promedio <b>$350</b> · Ingreso <b>$1,750</b> · Ciclo <b>18 días</b></p></div>'
++'<div><div class="card" style="border-color:var(--cy);padding:22px 28px"><h3>📦 En volumen</h3><p style="font-size:28px">Mayor fuga: prospectos → leads (60). Apunta a un <b>perfil mal definido</b> (prospección).</p></div>'
++'<div class="card" style="border-color:var(--or);margin-top:16px;padding:22px 28px"><h3>📊 En porcentaje</h3><p style="font-size:28px">Conversión más baja: <b>cierre, 25 %</b>. Apunta a oferta, precio o técnica de cierre → <b class="hl">cuello de botella</b>.</p></div></div></div>'
++'<div class="callout mint" style="font-size:30px">💡 Si solo mejoran <b>una</b> etapa: subir el cierre de 25 % a 40 % da <b>3 clientes más</b> sin contactar a nadie nuevo.</div>';}});
+
+add({id:'a1',blk:'Actividad 1',t:'20–30',title:'Actividad 1: diagnóstico del embudo',
+notes:'<b>20–30 min (10).</b> Reparte la Plantilla del embudo (Anexo A). Circula y revisa que los números sean plausibles (no cifras redondas sin origen). Mid-check a los 5 min: ¿ya calcularon las tres conversiones?',
+html:function(){return '<h2>📊 <em>Actividad 1</em> · Diagnóstico del embudo <span class="hint" style="font-size:30px">· 10 min</span></h2>'
++'<div class="grid g3" style="margin-top:6px">'
++cardT('1️⃣','Llenen la plantilla','<p>Con <b>números estimados</b> de su propio proyecto (Plantilla Embudo de Ventas).</p>')
++cardT('2️⃣','Calculen','<p>La conversión de cada etapa: <b>siguiente ÷ anterior × 100</b>.</p>')
++cardT('3️⃣','Nombren el cuello','<p>Cuál es su <b>cuello de botella</b> y por qué es ese y no otro.</p>')+'</div>'
++'<div class="callout mint">📦 Producto: embudo con <b>4 cifras, 3 porcentajes</b> y un cuello de botella identificado.</div>'
++'<div class="row" style="margin-top:16px"><button class="btn" data-act="timer" data-sec="600">▶ 10:00</button><button class="btn alt" data-act="timer" data-sec="0">⏹</button></div>';}});
+
+add({id:'a2',blk:'Actividad 2',t:'30–36',title:'Actividad 2: técnica por cliente y canal',
+notes:'<b>30–36 min (6).</b> Cada equipo ubica a su cliente real en uno de los 4 perfiles y completa la frase con una señal observable (no una corazonada). Revisa 2–3 frases en voz alta.',
+html:function(){return '<h2>🧭 <em>Actividad 2</em> · Técnica por cliente y canal <span class="hint" style="font-size:30px">· 6 min</span></h2>'
++'<div class="grid g2" style="margin-top:6px"><div class="card"><span class="num">1</span><h3>Ubiquen a su cliente</h3><p>En uno de los <b>4 perfiles</b>: racional, emocional, escéptico o institucional.</p></div>'
++'<div class="card"><span class="num">2</span><h3>Completen la frase</h3><p>Escríbanla en equipo (una sola).</p></div></div>'
++'<div class="callout or" style="font-size:42px;line-height:1.3">“Vamos a usar <b>[técnica]</b> por <b>[canal]</b> porque nuestro cliente <b>[señal observable]</b>.”</div>'
++'<div class="callout mint">📦 Producto: técnica elegida <b>con justificación escrita</b>, no con una corazonada.</div>'
++'<div class="row" style="margin-top:16px"><button class="btn" data-act="timer" data-sec="360">▶ 6:00</button><button class="btn alt" data-act="timer" data-sec="0">⏹</button></div>';}});
+
+add({id:'a3',blk:'Actividad 3',t:'36–56',title:'Actividad 3: role-play de prospección SPIN',
+notes:'<b>36–56 min (20).</b> Tríos: vende / cliente / observa (tarjeta del Anexo C). Usan su propio proyecto. Con <b>🎲 Cliente y canal al azar</b> asigna un combo a cada trío. Ronda de 5 min por vendedor; rotan para que al menos 2 pasen por vendedor; debrief de 2 min. Si escuchas “nuestra app hace…” antes de la cuarta pregunta, detén y reinicia. Observa: ¿usa las 4 preguntas en orden? ¿el mensaje cambia según cliente y canal? ¿el cliente responde realista?',
+html:function(){const cc=S.cc;return '<h2>🎭 <em>Actividad 3</em> · Role-play SPIN <span class="hint" style="font-size:30px">· 20 min</span></h2>'
++'<div class="grid g3" style="margin-top:0;gap:18px">'
++'<div class="card" style="padding:22px 26px"><h3>👥 Tríos</h3><p style="font-size:28px">🗣️ <b>Vende</b> · 🙋 <b>Cliente</b> · 👀 <b>Observa</b> (tarjeta Anexo C). Usan <b>su proyecto</b> como producto.</p></div>'
++'<div class="card" style="padding:22px 26px"><h3>❓ 5 minutos</h3><p style="font-size:28px">El vendedor usa las <b>4 preguntas SPIN en orden</b>, sin mencionar el producto antes de la cuarta.</p></div>'
++'<div class="card" style="padding:22px 26px"><h3>🔁 Rotan y debrief</h3><p style="font-size:28px">Al menos <b>2 integrantes</b> son vendedor. Debrief 2 min: ¿qué tuvieron que cambiar del discurso original?</p></div></div>'
++'<div class="grid g2" style="margin-top:18px;gap:18px"><div class="card" style="padding:22px 26px;text-align:center"><div class="row" style="justify-content:center"><button class="btn" data-act="cc">🎲 Cliente y canal al azar</button></div>'
++'<p style="font-size:34px;margin-top:12px;min-height:90px">'+(cc?('<b class="hl">'+cc[0]+'</b><br>por <b>'+cc[1]+'</b>'):'<span class="mut">Pulsa el dado para asignar</span>')+'</p></div>'
++'<div class="card" style="padding:22px 26px"><h3>⏱ Cronómetro</h3><div class="row"><button class="btn" data-act="timer" data-sec="300">▶ 5:00 por turno</button><button class="btn alt" data-act="timer" data-sec="120">▶ 2:00 debrief</button></div>'
++'<p class="sm" style="margin-top:10px">📦 Producto: 4 preguntas SPIN escritas y probadas en voz alta.</p></div></div>';}});
+
+add({id:'a4',blk:'Actividad 4',t:'56–66',title:'Actividad 4: cierre y postventa',
+notes:'<b>56–66 min (10).</b> Cada equipo elige una técnica de cierre y escribe su frase; el compañero que fue “cliente” responde con una objeción y el vendedor cierra otra vez. Luego definen una acción de postventa con fecha (qué manda, a quién, cuándo). Señales de cierre: pregunta por precio/plazos/garantía sin que lo ofrezcas; habla en primera persona del plural; pide detalles de entrega (la más clara).',
+html:function(){return '<h2>🤝 <em>Actividad 4</em> · Cierre y postventa <span class="hint" style="font-size:30px">· 10 min</span></h2>'
++'<div class="grid" style="grid-template-columns:1.25fr .75fr;gap:24px;margin-top:0"><div>'
++'<table class="tb" style="margin-top:-6px"><tr><th style="width:250px">Técnica de cierre</th><th>Ejemplo</th></tr>'
++[['Directo','«¿Lo dejamos apartado para el viernes?»'],['Por alternativa','«¿Lo prefieres de medio litro o de litro?»'],['Por resumen','«Quedamos en que te ahorra dos horas y elimina el error: ¿empezamos el lunes?»'],['Condicional','«Si te consigo la entrega el jueves, ¿cerramos hoy?»']].map(function(r){return '<tr><td><b>'+r[0]+'</b></td><td style="font-size:26px">'+r[1]+'</td></tr>';}).join('')+'</table>'
++'<div class="callout or" style="font-size:28px;margin-top:4px"><b>Ustedes:</b> ① eligen una técnica y redactan su frase · ② el “cliente” pone una objeción y cierran otra vez · ③ definen <b>una acción de postventa con fecha</b>.</div></div>'
++'<div><div class="card" style="padding:20px 24px"><h3>🚦 Señales de “listo”</h3><p style="font-size:26px">Pregunta por precio, plazos o garantía · habla en “nosotros” · pide detalles de entrega.</p></div>'
++'<div class="card" style="padding:20px 24px;margin-top:14px"><h3>💌 Postventa esta semana</h3><p style="font-size:26px">1. Confirmación en 24 h<br>2. Pregunta de satisfacción a los 7 días<br>3. Petición de referido (después del “sí”)</p></div>'
++'<div class="row" style="margin-top:14px"><button class="btn" data-act="timer" data-sec="600">▶ 10:00</button></div></div></div>';}});
+
+add({id:'a5',blk:'Actividad 5',t:'66–75',title:'Actividad 5: guion de prospección',
+notes:'<b>66–75 min (9).</b> Escriben las cinco partes en la plantilla (Anexo B) y lo leen en voz alta cronometrando: apertura + motivo no deben pasar de 30 segundos. Observa si el guion abre con el <b>dolor del cliente</b> o con la descripción del producto (si la primera frase describe la app, el guion está mal).',
+html:function(){return '<h2>📝 <em>Actividad 5</em> · Guion de prospección <span class="hint" style="font-size:30px">· 9 min</span></h2>'
++'<div class="grid" style="grid-template-columns:1fr 1fr;gap:26px;margin-top:0"><div class="tl" style="gap:12px">'
++[['1','Apertura con nombre y contexto','10 s · quién eres, de dónde y por qué a esa persona'],['2','Motivo del contacto','El <b>dolor del cliente</b>, no el producto'],['3','Pregunta de calificación','Una sola: revela interés y capacidad de compra'],['4','Siguiente paso concreto','Demo de 15 min, prueba o cita con fecha'],['5','Cierre con compromiso y fecha','Nunca “cualquier cosa me avisas”']].map(function(x){return '<div class="st" style="grid-template-columns:70px 1fr;padding:12px 22px"><span class="num" style="margin:0;width:54px;height:54px;font-size:28px">'+x[0]+'</span><p style="font-size:27px;line-height:1.2"><b>'+x[1]+'</b><br><span class="mut" style="font-size:23px">'+x[2]+'</span></p></div>';}).join('')+'</div>'
++'<div class="card" style="padding:22px 28px"><h3 style="font-size:30px">🔎 Ejemplo resuelto</h3><p style="font-size:24px;line-height:1.3">«Buenas tardes, licenciada Ramírez. Soy Daniela, estudiante de la Anáhuac Mayab; trabajo con consultorios independientes. <b>Varios consultorios nos dicen que pierden 2–3 citas por semana</b> por pacientes que no llegan y nadie confirmó. <b>¿Quién confirma hoy las citas del día siguiente?</b> Si le interesa, le muestro en 15 minutos cómo automatizarlo; <b>le propongo el jueves a las 10</b>. Si no le funciona, <b>le escribo el viernes</b> para otra fecha.»</p></div></div>'
++'<div class="row" style="margin-top:14px"><button class="btn" data-act="timer" data-sec="540">▶ 9:00</button><span class="sm">📦 Producto: guion completo, apertura + motivo ≤ 30 s, listo para entregar.</span></div>';}});
+
+/* ---------- Arena de ventas ---------- */
+SL.push(betSlide({id:'g-bet1',blk:'Arena',t:'75–76',round:'ARENA · RONDA 1 · APUESTA',q:'¿Cuál es el <em>orden correcto</em> de las cuatro letras de SPIN?',
+ opts:['Necesidad, Implicación, Problema, Situación','Situación, Problema, Implicación, Necesidad de solución','Problema, Situación, Necesidad, Implicación'],correct:1,
+ explain:'<b>S</b>ituación → <b>P</b>roblema → <b>I</b>mplicación → <b>N</b>ecesidad de solución.',
+ notes:'<b>75–76 min.</b> Presenta la Arena (2 rondas de apuesta y robo final). Cada equipo elige letra y apuesta ×1–×3. Acierto: +apuesta. Fallo: −apuesta (el equipo no baja de 0).'}));
+SL.push(betSlide({id:'g-bet2',blk:'Arena',t:'76–77',round:'ARENA · RONDA 2 · MITO O REALIDAD',q:'“AIDA es la técnica ideal para <em>cualquier</em> venta, incluso las complejas B2B de ciclo largo.”',
+ opts:['MITO','REALIDAD'],correct:0,
+ explain:'<b>Mito.</b> AIDA brilla en ventas cortas y de bajo involucramiento; en ventas complejas se usa consultiva o SPIN.',notes:'<b>76–77 min.</b> Duelo rápido con apuesta.'}));
+
+const STEAL_Q=[
+ {q:'¿Cuál es el orden correcto de las cinco etapas del proceso de venta?',o:['Cierre, prospección, seguimiento, leads, postventa','Prospección, generación y calificación de leads, seguimiento, cierre, postventa','Leads, cierre, prospección, postventa, seguimiento'],c:1},
+ {q:'AIDA funciona mejor en…',o:['Ventas complejas B2B de ciclo largo','Ventas cortas, de bajo involucramiento o marketing de contenidos','Solo en llamadas uno a uno'],c:1},
+ {q:'Las tres métricas básicas del embudo son…',o:['Precio, costo y margen','Conversión por etapa, ticket promedio y tiempo de ciclo','Leads, clientes e ingresos totales'],c:1},
+ {q:'¿Cuál es la etapa más subestimada del proceso de venta?',o:['El seguimiento','La prospección','El cierre'],c:0},
+ {q:'Cliente emocional y rápido, que decide por impulso. ¿Qué combinación conviene?',o:['Consultiva + correo con adjunto','AIDA + redes sociales','SPIN + reunión formal'],c:1},
+ {q:'«¿Lo prefieres de medio litro o de litro?» es un cierre…',o:['Directo','Por alternativa','Condicional'],c:1},
+ {q:'En el ejemplo resuelto, ¿dónde estaba el cuello de botella?',o:['En la prospección (60 personas perdidas)','En el cierre (25 % de conversión)','En el ticket promedio'],c:1},
+ {q:'En el guion de prospección, la segunda parte (motivo del contacto) debe hablar de…',o:['El producto y sus funciones','El dolor del cliente','El precio'],c:1}];
+
+add({id:'robo',blk:'Arena',t:'77–78',title:'Final: robo de puntos',game:true,
+notes:'<b>77–78 min.</b> Elige quién roba, a quién y cuántos puntos (1–3). “Lanzar pregunta”: solo responde el equipo que roba (una respuesta consensuada; si no se ponen de acuerdo, falla). “Revelar” y marca ✔/✖. Acierta → <b>roba</b> esos puntos al otro equipo; falla → se los <b>paga</b>. Puedes invertir el resultado. Repite mientras alcance el tiempo (banco de 8 preguntas); cualquier equipo puede robar o ser robado. Si falta tiempo: una sola ronda de robo.',
+html:function(){
+  const st=S.steal,thief=st.t?team(st.t):null,victim=st.v?team(st.v):null,q=(st.q!=null)?STEAL_Q[st.q]:null;
+  let h=banner('FINAL · ROBO','Tú decides quién roba, a quién y cuánto');
+  h+='<div class="grid" style="grid-template-columns:.8fr 1.2fr;gap:22px"><div class="card" style="padding:20px 24px"><h3 style="font-size:30px">1 · ¿Quién roba?</h3><div class="row" style="gap:8px">'+S.teams.map(t=>chip(t,'pickT')).join('')+'</div>'
+   +'<h3 style="margin-top:12px;font-size:30px">2 · ¿A quién?</h3><div class="row" style="gap:8px">'+S.teams.filter(t=>!thief||t.id!=thief.id).map(t=>chip(t,'pickV')).join('')+'</div>'
+   +'<h3 style="margin-top:12px;font-size:30px">3 · ¿Cuántos puntos?</h3><div class="row">'+[1,2,3].map(n=>'<button class="btn'+(st.n==n?'':' alt')+'" style="padding:8px 26px" data-act="amt" data-n="'+n+'">'+n+'</button>').join('')+'</div></div>';
+  h+='<div class="card" style="padding:20px 26px">';
+  if(!q){h+='<p style="font-size:36px;margin-bottom:14px">'+(thief?chipStatic(thief):'<span class="mut">…</span>')+' ➜ '+(victim?chipStatic(victim):'<span class="mut">…</span>')+' · <b>'+st.n+' pt'+(st.n==1?'':'s')+'</b></p><button class="btn big" data-act="stealAsk" '+((thief&&victim)?'':'disabled')+'>❓ Lanzar pregunta</button>';}
+  else{
+    h+='<p style="font-size:30px;margin-bottom:8px">'+(thief?chipStatic(thief):'')+' ➜ '+(victim?chipStatic(victim):'')+' · <b>'+st.n+' pt'+(st.n==1?'':'s')+'</b> · responde solo el equipo que roba</p>'
+      +'<div style="font-size:36px;font-weight:800;line-height:1.15;margin-bottom:10px">'+q.q+'</div>'
+      +q.o.map((tx,i)=>'<div class="ob'+(st.show?(q.c===i?' ok':' no'):'')+'" style="margin-bottom:6px"><b>'+'ABC'[i]+'</b> '+tx+'</div>').join('')
+      +'<div class="row" style="margin-top:10px">'
+      +(st.res?('<span class="sm">Resultado: <b>'+(st.res==='ok'?'✔ roba':'✖ paga')+'</b></span><button class="btn alt" data-act="stealFlip">🔄 Invertir</button><button class="btn" data-act="stealNew">➕ Nuevo robo</button>')
+        :('<button class="btn alt" data-act="stealShow">👁 Revelar respuesta</button><button class="btn mint" data-act="stealOk">✔ Acertó (roba)</button><button class="btn red" data-act="stealNo">✖ Falló (paga)</button>'))
+      +'</div>';
+  }
+  h+='</div></div>';
+  if(st.last)h+='<div class="steal pop-in" style="margin-top:10px;font-size:30px;padding:10px 24px">🏴‍☠️ '+st.last+'</div>';
+  return h+strip();}});
+
+add({id:'podio',blk:'Arena',t:'78–79',title:'Podio del día',
+notes:'<b>78–79 min.</b> Celebra al podio. Los puntos son para jugar: el aprendizaje es el premio real. Siguiente: tarea y fechas.',
+html:function(){
+  const r=S.teams.map(t=>({t:t,p:pts(t.id)})).sort((a,b)=>b.p-a.p);
+  const order=[r[1],r[0],r[2]].filter(Boolean);
+  let conf='';for(let i=0;i<24;i++){conf+='<span class="confetti" style="left:'+(Math.random()*1800|0)+'px;animation-delay:'+(Math.random()*5).toFixed(2)+'s">'+['🎉','⭐','✨','🎯'][i%4]+'</span>';}
+  return conf+'<h2 style="text-align:center">🏆 <em>Podio</em> del día</h2><div class="pod">'+order.map(function(x){
+    const idx=r.indexOf(x);const hh=idx==0?430:(idx==1?300:240);
+    return '<div class="col"><div class="nm" style="color:'+col(x.t)+'">'+esc(x.t.name)+'</div><div class="pt">'+x.p+' pts</div><div class="blk" style="height:'+hh+'px;background:linear-gradient(180deg,'+col(x.t)+',#1b1f29)">'+(idx==0?'🥇':idx==1?'🥈':'🥉')+'</div></div>';}).join('')+'</div>'
+    +'<div class="row" style="justify-content:center;margin-top:20px">'+r.slice(3).map(x=>chipStatic(x.t)+'<span class="sm" style="margin:0 12px 0 -6px">'+x.p+'</span>').join('')+'</div>';}});
+
+add({id:'tarea',blk:'Tarea',t:'79–80',title:'Tarea y fechas',
+notes:'<b>79–80 min.</b> Entregable (Brightspace, 11 de octubre según la descriptiva): (1) embudo con <b>metas por etapa</b> (no solo el número de hoy: la meta al cierre del semestre + conversión implícita); (2) guion de prospección con las 5 partes (formato Anexo B); (3) diagnóstico en tres líneas. Próxima sesión (Semana 10): Ventas y Atención al Cliente, coincide con UChallenge XVII (14–15 oct): <b>traer el guion impreso</b>.',
+html:function(){return '<h2>📚 <em>Tarea</em> y fechas</h2><div class="grid g3" style="margin-top:6px">'
++cardT('📊','1 · Embudo con metas','<p>Estimado de hoy <b>+ la meta por etapa</b> al cierre del semestre y la conversión que implica.</p>')
++cardT('📝','2 · Guion de prospección','<p>Las <b>5 partes</b>, en el formato del Anexo B.</p>')
++cardT('🔎','3 · Diagnóstico en 3 líneas','<p>Tu <b>cuello de botella</b>, con qué número lo sabes y qué acción tomas la próxima semana.</p>')+'</div>'
++'<div class="grid g2" style="margin-top:6px"><div class="callout or" style="margin:0">📅 Entrega por <b>Brightspace</b>: 11 de octubre.</div><div class="callout mint" style="margin:0">🖨️ Próxima sesión: <b>trae tu guion impreso</b> (Ventas y Atención al Cliente · UChallenge XVII).</div></div>';}});
+
+add({id:'cierre',blk:'Cierre',t:'80',title:'¿Qué me llevo hoy?',
+notes:'<b>Cierre.</b> Tres aprendizajes. Cada estudiante escribe “Hoy me llevo…”; pide a 2 personas al azar que lo lean.',
+html:function(){return '<h2>🎒 ¿Qué me <em>llevo hoy</em>?</h2><div class="grid g3" style="margin-top:10px">'
++cardT('🧭','Vender es un proceso','<p>Etapas medibles. <b>El seguimiento</b> es la más subestimada y la <b>postventa</b> es la vía más barata al siguiente cliente.</p>')
++cardT('🎯','La técnica según el cliente','<p><b>Consultiva y SPIN</b> para ventas complejas; <b>AIDA</b> para ventas cortas. Y cerrar es <b>pedir la venta</b>.</p>')
++cardT('📏','El embudo es diagnóstico','<p>Conversión, ticket y ciclo: <b>sin números solo suponemos</b> por qué nos va mal.</p>')+'</div>'
++'<div class="callout or">✏️ Escribe tu frase: <b>“Hoy me llevo…”</b> <button class="btn" style="font-size:22px;padding:8px 20px;margin-left:14px" data-act="rand">🎲 Equipo al azar</button></div>';}});
+
+/* ================= Render ================= */
+function ensurePairs(){
+  const ids=S.teams.map(t=>t.id);
+  let ok=S.pairs&&S.pairs.flat().length===ids.length&&S.pairs.flat().every(i=>ids.indexOf(i)>-1);
+  if(!ok){makePairs();}
+}
+function makePairs(){
+  const ids=shuffle(S.teams.map(t=>t.id)),p=[];
+  for(let i=0;i<ids.length;i+=2)p.push(ids.slice(i,i+2));
+  if(p.length>1&&p[p.length-1].length===1){const l=p.pop();p[p.length-1].push(l[0]);}
+  S.pairs=p;
+}
+function applyRv(){
+  const s=SL[S.idx],n=S.rvn[s.id]||0;
+  sl.querySelectorAll('.rv').forEach((el,i)=>{if(i<n)el.classList.add('on');});
+}
+function render(){
+  const s=SL[S.idx];
+  cv.classList.toggle('game',!!s.game);
+  sl.innerHTML='<div class="top"><span class="kick">'+s.blk+'</span><span class="tm">⏱ min '+s.t+'</span></div>'+s.html(s);
+  applyRv();
+  $('#ct').textContent=(S.idx+1)+' / '+SL.length;
+  $('#prog').style.width=((S.idx+1)/SL.length*100)+'%';
+  if($('#notes').style.display==='block')showNotes();
+  if($('#score').style.display==='block')renderScore();
+  save();
+}
+function go(i){S.idx=Math.max(0,Math.min(SL.length-1,i));render();}
+function next(){
+  const hid=sl.querySelector('.rv:not(.on)');
+  if(hid){hid.classList.add('on');const sid=SL[S.idx].id;S.rvn[sid]=(S.rvn[sid]||0)+1;save();return;}
+  go(S.idx+1);
+}
+function prev(){go(S.idx-1);}
+
+/* ================= Acciones de diapositiva ================= */
+const ACT={
+  cyc:function(b){
+    const sid=b.dataset.sid,id=+b.dataset.team;if(S.rev[sid])return;
+    const sd=SL.find(x=>x.id===sid);const n=sd.vote.opts.length;
+    const v=S.votes[sid]||(S.votes[sid]={});
+    const cur=(v[id]===undefined)?-1:v[id];const nx=cur+1>=n?-1:cur+1;
+    if(nx<0)delete v[id];else v[id]=nx;
+    render();
+  },
+  reveal:function(b){
+    const sid=b.dataset.sid,sd=SL.find(x=>x.id===sid),o=sd.vote,v=S.votes[sid]||{};
+    if(!S.rev[sid]){
+      S.rev[sid]=true;
+      S.teams.forEach(function(t){
+        const i=v[t.id];if(i===undefined)return;
+        const p=o.ptsByOpt?o.ptsByOpt[i]:(i===o.correct?o.pts:0);
+        if(p)addLog(t.id,p,'vote',sid);
+      });
+      if(o.correct!=null){const any=S.teams.some(t=>v[t.id]===o.correct);sfx(any?'ok':'no');if(any)burst();}
+    }else{
+      delete S.rev[sid];S.log=S.log.filter(l=>!(l.sid===sid&&l.why==='vote'));
+    }
+    render();
+  },
+  flip:function(b){b.classList.toggle('f');},
+  teams:function(){openTeams();},
+  rand:function(){randTeam();},
+  timer:function(b){const s=+b.dataset.sec;if(!s){stopTimer();return;}startTimer(s);},
+  pairs:function(){makePairs();render();},
+  clueNext:function(b){const c=S.clue[b.dataset.sid];if(c.n<3)c.n++;render();},
+  clueNone:function(b){const c=S.clue[b.dataset.sid];c.w=0;render();},
+  clueTeam:function(b){const sid=b.dataset.sid,c=S.clue[sid];if(c.w!==null)return;const id=+b.dataset.team;c.w=id;addLog(id,[3,2,1][c.n-1],'pista',sid);render();},
+  clueReset:function(b){const sid=b.dataset.sid;S.log=S.log.filter(l=>!(l.sid===sid&&l.why==='pista'));S.clue[sid]={n:1,w:null};render();},
+  pickT:function(b){S.steal.t=+b.dataset.team;if(S.steal.v==S.steal.t)S.steal.v=null;render();},
+  pickV:function(b){S.steal.v=+b.dataset.team;render();},
+  amt:function(b){S.steal.n=+b.dataset.n;render();},
+  cc:function(){S.cc=[PERF[Math.floor(Math.random()*PERF.length)].c,CANALES[Math.floor(Math.random()*CANALES.length)]];sfx('tick');render();},
+  stealAsk:function(){const st=S.steal;if(!st.t||!st.v)return;let pool=STEAL_Q.map((_,i)=>i).filter(i=>st.used.indexOf(i)<0);if(!pool.length){st.used=[];pool=STEAL_Q.map((_,i)=>i);}
+    st.q=pool[Math.floor(Math.random()*pool.length)];st.used.push(st.q);st.res=null;st.show=false;st.last='';render();},
+  stealShow:function(){S.steal.show=true;render();},
+  stealOk:function(){stealApply('ok');},
+  stealNo:function(){stealApply('no');},
+  stealFlip:function(){const st=S.steal;S.log=S.log.filter(l=>!(l.why==='robo'&&l.id>st.mark));stealApply(st.res==='ok'?'no':'ok');},
+  stealNew:function(){const st=S.steal;S.steal={t:null,v:null,n:1,q:null,res:null,show:false,used:st.used,last:st.last};render();}
+};
+function stealApply(r){
+  const st=S.steal;if(!st.t||!st.v||st.q==null)return;
+  st.mark=S.seq;const a=team(st.t),v=team(st.v);let k;
+  if(r==='ok'){k=Math.min(st.n,Math.max(0,pts(st.v)));if(k>0){addLog(st.v,-k,'robo','robo');addLog(st.t,k,'robo','robo');}
+    st.last=esc(a.name)+' le robó <b>'+k+'</b> pt'+(k==1?'':'s')+' a '+esc(v.name);sfx(k?'win':'no');if(k)burst(['🏴‍☠️','💰','⭐']);}
+  else{k=Math.min(st.n,Math.max(0,pts(st.t)));if(k>0){addLog(st.t,-k,'robo','robo');addLog(st.v,k,'robo','robo');}
+    st.last=esc(a.name)+' falló y le pagó <b>'+k+'</b> pt'+(k==1?'':'s')+' a '+esc(v.name);sfx('no');}
+  st.res=r;st.show=true;render();
+}
+let rolling=false;
+Object.assign(ACT,{
+  cStart:function(b){const c=cs(b.dataset.sid);Object.assign(c,{st:'run',n:1,el:0,t0:Date.now(),buzz:null,locked:[],w:null});sfx('start');render();},
+  cBuzz:function(b){const c=cs(b.dataset.sid);if(c.st!=='run')return;const id=+b.dataset.team;if(c.locked.indexOf(id)>-1)return;c.el=(Date.now()-c.t0)/1000;c.st='buzz';c.buzz=id;sfx('buzz');render();},
+  cOk:function(b){const sid=b.dataset.sid,c=cs(sid),id=c.buzz;addLog(id,[3,2,1][c.n-1],'pista',sid);c.w=id;c.st='done';sfx('ok');burst();render();},
+  cNo:function(b){const sid=b.dataset.sid,c=cs(sid),id=c.buzz;if(pts(id)>0)addLog(id,-1,'pista',sid);c.locked.push(id);c.buzz=null;c.st='run';c.t0=Date.now()-c.el*1000;sfx('no');render();},
+  cReset:function(b){const sid=b.dataset.sid;S.log=S.log.filter(l=>!(l.sid===sid&&l.why==='pista'));delete S.clue[sid];render();},
+  bcell:function(b){const sid=b.dataset.sid,id=+b.dataset.team,i=+b.dataset.i;const v=S.votes[sid]||(S.votes[sid]={});if(v[id]===i)delete v[id];else v[id]=i;render();},
+  bbet:function(b){const sid=b.dataset.sid,id=+b.dataset.team;const bt=S.bets[sid]||(S.bets[sid]={});bt[id]=((bt[id]||1)%3)+1;render();},
+  bReveal:function(b){
+    const sid=b.dataset.sid,o=SL.find(x=>x.id===sid).bet,v=S.votes[sid]||{},bt=S.bets[sid]||{};
+    if(!S.rev[sid]){
+      S.rev[sid]=true;let any=false;
+      S.teams.forEach(function(t){const i=v[t.id];if(i===undefined)return;const bb=bt[t.id]||1;
+        if(i===o.correct){addLog(t.id,bb,'bet',sid);any=true;}
+        else{const loss=Math.min(bb,Math.max(0,pts(t.id)));if(loss>0)addLog(t.id,-loss,'bet',sid);}});
+      sfx(any?'ok':'no');if(any)burst();
+    }else{delete S.rev[sid];S.log=S.log.filter(l=>!(l.sid===sid&&l.why==='bet'));}
+    render();
+  }
+});
+sl.addEventListener('click',function(e){const b=e.target.closest('[data-act]');if(!b)return;const f=ACT[b.dataset.act];if(f)f(b,e);});
+
+/* ================= Marcador ================= */
+function renderScore(){
+  const r=S.teams.map(t=>({t:t,p:pts(t.id)})).sort((a,b)=>b.p-a.p);
+  let h='<h4>🏆 Marcador</h4>';
+  r.forEach(function(x,i){
+    const id=x.t.id;
+    h+='<div class="sr"><b>'+(i+1)+'</b><span>'+chipStatic(x.t)+(S.stars[id]?' ⭐':'')+'</span><span class="pts">'+x.p+'</span>'
+      +'<div class="adj"><button data-sc="-1" data-id="'+id+'">−1</button><button data-sc="1" data-id="'+id+'">+1</button><button data-sc="2" data-id="'+id+'">+2</button><button data-sc="3" data-id="'+id+'">+3</button><button data-sc="star" data-id="'+id+'">⭐</button></div></div>';
+  });
+  const last=S.log.slice(-6).reverse().map(l=>{const t=team(l.team);return t?(esc(t.name)+' '+(l.d>0?'+':'')+l.d+' · '+l.why):'';}).filter(Boolean);
+  h+='<div class="log">Últimos movimientos:<br>'+(last.join('<br>')||'—')+'</div><div class="help">Los puntos de votos y pistas se suman solos; usa los botones para premios manuales (avión, post-it ⭐, participación).</div>';
+  $('#score').innerHTML=h;
+}
+$('#score').addEventListener('click',function(e){
+  const b=e.target.closest('[data-sc]');if(!b)return;const id=+b.dataset.id,k=b.dataset.sc;
+  if(k==='star'){S.stars[id]=S.stars[id]?0:1;}
+  else{addLog(id,+k,'manual','');}
+  renderScore();save();if(SL[S.idx].id==='podio'||SL[S.idx].id==='robo')render();
+});
+
+/* ================= Equipos ================= */
+let resetArm=false;
+function openTeams(){
+  const m=$('#modal');
+  let h='<h4>👥 Equipos de la clase ('+S.teams.length+')</h4>';
+  S.teams.forEach(function(t){
+    h+='<div class="tr"><span class="dot" style="background:'+col(t)+'"></span><input value="'+esc(t.name)+'" data-tn="'+t.id+'" maxlength="28"><button class="mini" data-td="'+t.id+'" title="Quitar equipo">✕</button></div>';
+  });
+  h+='<div class="row" style="margin-top:12px"><button class="mini" data-tadd="1" style="font-size:15px;padding:8px 14px">＋ Agregar equipo</button><button class="mini" data-tpre="8" style="font-size:15px;padding:8px 14px">8 equipos</button><button class="mini" data-tpre="10" style="font-size:15px;padding:8px 14px">10 equipos</button><button class="mini" data-treset="1" style="font-size:15px;padding:8px 14px;background:#5a2030">'+(resetArm?'¿Seguro? Borra puntos y votos':'↺ Reiniciar clase')+'</button></div>'
+   +'<div class="help">Los nombres, puntos y votos se guardan solo en esta computadora. Cierra con <kbd>Esc</kbd>.</div><div class="row" style="margin-top:12px"><button class="btn" id="tclose" style="font-size:18px;padding:10px 22px">Listo</button></div>';
+  m.innerHTML=h;m.style.display='block';
+}
+$('#modal').addEventListener('input',function(e){
+  const id=e.target.dataset.tn;if(!id)return;const t=team(id);if(t){t.name=e.target.value||('Equipo '+t.id);save();}
+});
+$('#modal').addEventListener('click',function(e){
+  const b=e.target.closest('button');if(!b)return;
+  if(b.id==='tclose'){closeTeams();return;}
+  if(b.dataset.tadd){const id=++S.nid;S.teams.push({id:id,name:'Equipo '+(S.teams.length+1),c:S.teams.length%COLORS.length});S.pairs=null;save();openTeams();return;}
+  if(b.dataset.td){const id=+b.dataset.td;S.teams=S.teams.filter(t=>t.id!==id);S.log=S.log.filter(l=>l.team!==id);S.pairs=null;
+    Object.keys(S.votes).forEach(k=>{delete S.votes[k][id];});save();openTeams();return;}
+  if(b.dataset.tpre){const n=+b.dataset.tpre;while(S.teams.length<n){const id=++S.nid;S.teams.push({id:id,name:'Equipo '+(S.teams.length+1),c:S.teams.length%COLORS.length});}S.pairs=null;save();openTeams();return;}
+  if(b.dataset.treset){if(!resetArm){resetArm=true;openTeams();return;}
+    const keep=S.teams.map(t=>({id:t.id,name:t.name,c:t.c}));const idx=S.idx;S=fresh();S.teams=keep;S.idx=idx;S.setup=true;resetArm=false;save();openTeams();render();return;}
+});
+function closeTeams(){$('#modal').style.display='none';resetArm=false;S.setup=true;S.pairs=null;save();render();}
+
+/* ================= Temporizador ================= */
+const T={left:0,total:0,end:0,run:false,iv:null};
+function fmt(s){s=Math.max(0,Math.ceil(s));return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');}
+function beep(){
+  try{const A=window.AudioContext||window.webkitAudioContext;const a=new A();
+    [0,.28,.56].forEach(function(d){const o=a.createOscillator(),g=a.createGain();o.type='triangle';o.frequency.value=d<.5?880:1175;g.gain.setValueAtTime(.0001,a.currentTime+d);g.gain.exponentialRampToValueAtTime(.4,a.currentTime+d+.02);g.gain.exponentialRampToValueAtTime(.0001,a.currentTime+d+.25);o.connect(g);g.connect(a.destination);o.start(a.currentTime+d);o.stop(a.currentTime+d+.26);});
+  }catch(e){}
+}
+function drawT(){$('#tt').textContent=fmt(T.left);}
+function startTimer(sec){stopTimer(true);T.total=sec;T.left=sec;T.end=Date.now()+sec*1000;T.run=true;$('#timer').classList.remove('end');$('#timer').style.display='flex';drawT();
+  T.iv=setInterval(function(){T.left=(T.end-Date.now())/1000;if(T.left<=0){T.left=0;T.run=false;clearInterval(T.iv);drawT();$('#timer').classList.add('end');beep();}else drawT();},200);}
+function stopTimer(keep){if(T.iv)clearInterval(T.iv);T.run=false;if(!keep){T.left=0;$('#timer').style.display='none';}}
+$('#timer').addEventListener('click',function(e){
+  const b=e.target.closest('[data-t]');if(!b)return;const k=b.dataset.t;
+  if(k==='toggle'){if(T.run){T.left=(T.end-Date.now())/1000;stopTimer(true);}else if(T.left>0){T.end=Date.now()+T.left*1000;T.run=true;T.iv=setInterval(function(){T.left=(T.end-Date.now())/1000;if(T.left<=0){T.left=0;T.run=false;clearInterval(T.iv);drawT();$('#timer').classList.add('end');beep();}else drawT();},200);}}
+  if(k==='reset'){stopTimer(true);T.left=T.total;T.end=Date.now()+T.left*1000;$('#timer').classList.remove('end');drawT();}
+  if(k==='add60'){T.left+=60;T.end+=60000;drawT();}
+  if(k==='sub60'){T.left=Math.max(0,T.left-60);T.end-=60000;drawT();}
+  if(k==='hide'){stopTimer();}
+});
+
+/* ================= Equipo al azar ================= */
+let rIv=null;
+function randTeam(){
+  if(!S.teams.length)return;
+  const r=$('#rand');r.style.display='grid';const big=$('#rbig');let n=0;const total=22;
+  clearInterval(rIv);
+  rIv=setInterval(function(){const t=S.teams[Math.floor(Math.random()*S.teams.length)];big.textContent=t.name;big.style.color=col(t);n++;
+    if(n>=total){clearInterval(rIv);}},80);
+}
+$('#ragain').addEventListener('click',randTeam);
+$('#rclose').addEventListener('click',function(){clearInterval(rIv);$('#rand').style.display='none';});
+
+/* ================= Ir a / Notas ================= */
+function openGoto(){
+  let h='<h4>☰ Ir a… ('+SL.length+' diapositivas · 80 min)</h4><div class="gg">';
+  SL.forEach(function(s,i){h+='<button data-g="'+i+'" class="'+(i===S.idx?'cur':'')+'"><small>'+(i+1)+' · '+s.blk+' · min '+s.t+'</small>'+esc(s.title.replace(/<[^>]+>/g,''))+'</button>';});
+  h+='</div>';$('#goto').innerHTML=h;$('#goto').style.display='block';
+}
+$('#goto').addEventListener('click',function(e){const b=e.target.closest('[data-g]');if(!b)return;$('#goto').style.display='none';go(+b.dataset.g);});
+function showNotes(){const s=SL[S.idx];$('#notes').innerHTML='<b>Guía · '+(S.idx+1)+'. '+esc(s.title.replace(/<[^>]+>/g,''))+'</b><br>'+(s.notes||'—');$('#notes').style.display='block';}
+function toggle(id,fn){const el=$(id);if(el.style.display==='block'){el.style.display='none';}else{fn?fn():el.style.display='block';}}
+
+/* ================= Barra, teclado, fit ================= */
+$('#bar').addEventListener('click',function(e){
+  const b=e.target.closest('[data-b]');if(!b)return;const k=b.dataset.b;
+  if(k==='prev')prev();else if(k==='next')next();else if(k==='goto')openGoto();
+  else if(k==='score')toggle('#score',renderScoreShow);else if(k==='teams')openTeams();else if(k==='rand')randTeam();
+  else if(k==='timer'){const t=$('#timer');if(t.style.display==='flex'){stopTimer();}else{t.style.display='flex';drawT();}}
+  else if(k==='notes')toggle('#notes',showNotes);else if(k==='fs')fs();
+});
+function renderScoreShow(){renderScore();$('#score').style.display='block';}
+function fs(){try{if(document.fullscreenElement)document.exitFullscreen();else document.documentElement.requestFullscreen();}catch(e){}}
+function closeAll(){['#score','#modal','#goto','#notes'].forEach(s=>$(s).style.display='none');$('#rand').style.display='none';clearInterval(rIv);if(S.teams)resetArm=false;}
+document.addEventListener('keydown',function(e){
+  if(e.target.tagName==='INPUT')return;
+  const k=e.key;
+  if(k==='ArrowRight'||k===' '||k==='PageDown'||k==='Enter'){e.preventDefault();next();}
+  else if(k==='ArrowLeft'||k==='PageUp'){e.preventDefault();prev();}
+  else if(k==='Home')go(0);else if(k==='End')go(SL.length-1);
+  else if(k==='s'||k==='S')toggle('#score',renderScoreShow);
+  else if(k==='e'||k==='E')openTeams();
+  else if(k==='n'||k==='N')toggle('#notes',showNotes);
+  else if(k==='g'||k==='G')openGoto();
+  else if(k==='r'||k==='R')randTeam();
+  else if(k==='t'||k==='T'){const t=$('#timer');if(t.style.display==='flex')stopTimer();else{t.style.display='flex';drawT();}}
+  else if(k==='f'||k==='F')fs();
+  else if(k==='Escape'){if($('#modal').style.display==='block'){closeTeams();}closeAll();}
+});
+let tx=null;
+document.addEventListener('touchstart',function(e){tx=e.touches[0].clientX;},{passive:true});
+document.addEventListener('touchend',function(e){if(tx===null)return;const dx=e.changedTouches[0].clientX-tx;tx=null;if(Math.abs(dx)>80){if(dx<0)next();else prev();}},{passive:true});
+function fit(){const sc=Math.min(innerWidth/1920,innerHeight/1080);cv.style.transform='translate(-50%,-50%) scale('+sc+')';}
+window.addEventListener('resize',fit);fit();
+if(S.idx>=SL.length)S.idx=0;
+render();
+if(!S.setup){openTeams();}
+window.__S8=function(){return {S:S,SL:SL};};
+})();
+</script>
+</body>
+</html>
