@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sesión 9 — Retrospectiva Uchallenge y Selección de Canal</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Raleway:wght@300;400;500;600;700&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Poppins',sans-serif;background:#f4f6fa;color:#2d3748;padding:20px;min-height:100vh}
+h1,h2,h3,h4{font-family:'Raleway',sans-serif}
+.wizard-container{max-width:880px;margin:0 auto;background:#fff;border-radius:16px;box-shadow:0 4px 24px rgba(0,0,0,0.08);overflow:hidden}
+.wizard-header{background:linear-gradient(135deg,#1a3a6b,#2c5aa0);color:white;padding:24px 32px;text-align:center}
+.wizard-header h1{font-size:1.5em;margin-bottom:4px}
+.wizard-header p{opacity:0.85;font-size:0.88em}
+.toolbar{display:flex;justify-content:flex-end;gap:10px;padding:12px 32px;background:#f8fafc;border-bottom:1px solid #e2e8f0}
+.toolbar-btn{padding:8px 16px;border-radius:6px;font-size:0.78em;font-family:'Poppins',sans-serif;cursor:pointer;border:1px solid #e2e8f0;background:white;color:#475569;transition:all 0.2s}
+.toolbar-btn:hover{background:#f1f5f9}
+.toolbar-btn:active{transform:scale(.96)}
+.toolbar-btn.danger{color:#dc2626;border-color:#fecaca}
+.toolbar-btn.danger:hover{background:#fef2f2}
+.toolbar-btn:disabled{opacity:0.45;cursor:not-allowed}
+.toolbar-btn:disabled:hover{background:white}
+.progress-container{padding:20px 32px;background:#f8fafc;border-bottom:1px solid #e2e8f0}
+.progress-bar{display:flex;justify-content:space-between;align-items:center;position:relative}
+.progress-bar::before{content:'';position:absolute;top:50%;left:0;right:0;height:3px;background:#e2e8f0;transform:translateY(-50%);z-index:0}
+.step-indicator{width:32px;height:32px;border-radius:50%;background:#e2e8f0;display:flex;align-items:center;justify-content:center;font-size:0.72em;font-weight:600;color:#94a3b8;position:relative;z-index:1;transition:all 0.3s;cursor:pointer}
+.step-indicator:hover{transform:scale(1.08);box-shadow:0 0 0 2px #e87722}
+.step-indicator.active{background:#e87722;color:white;transform:scale(1.1)}
+.step-indicator.completed{background:#1a3a6b;color:white}
+.progress-percent-wrap{margin-top:14px}
+.progress-percent-track{height:8px;background:#e2e8f0;border-radius:6px;overflow:hidden}
+.progress-percent-fill{height:100%;background:linear-gradient(90deg,#1a3a6b,#e87722);border-radius:6px;width:0%;transition:width .45s cubic-bezier(.4,0,.2,1)}
+.progress-percent-label{display:flex;justify-content:space-between;font-size:0.7em;color:#64748b;margin-top:6px;font-weight:600}
+.progress-percent-label .pp-pct{color:#e87722}
+.wizard-content{padding:32px;min-height:480px}
+.step-content{display:none}
+.step-content.active{display:block;animation:fadeSlideIn .35s ease}
+@keyframes fadeSlideIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.complete-banner{background:linear-gradient(135deg,#16a34a,#15803d);color:#fff;border-radius:14px;padding:18px 22px;text-align:center;margin-bottom:18px;font-weight:600}
+.complete-banner .emoji-row{font-size:1.6em;margin-bottom:6px}
+.step-title{font-size:1.25em;font-weight:600;color:#1a3a6b;margin-bottom:6px}
+.step-subtitle{font-size:0.83em;color:#64748b;margin-bottom:20px}
+.form-group{margin-bottom:18px}
+.form-group label{display:block;font-weight:500;margin-bottom:5px;color:#374151;font-size:0.88em}
+.form-group input[type="text"],.form-group input[type="number"],.form-group textarea,.form-group select{width:100%;padding:11px 14px;border:2px solid #e2e8f0;border-radius:8px;font-family:'Poppins',sans-serif;font-size:0.88em;transition:border-color 0.2s;background:#f8fafc}
+.form-group input:focus,.form-group textarea:focus,.form-group select:focus{outline:none;border-color:#e87722;background:#fff}
+.form-group textarea{resize:vertical;min-height:64px}
+.hint{font-size:0.76em;color:#64748b;margin-top:4px}
+.blue-banner{background:#f0f4ff;border-left:4px solid #1a3a6b;border-radius:0 10px 10px 0;padding:16px 20px;margin:16px 0}
+.blue-banner h4{color:#1a3a6b;font-size:0.88em;margin-bottom:6px}
+.blue-banner p{font-size:0.82em;color:#475569;line-height:1.5}
+.info-banner{background:#fff7ed;border-left:4px solid #e87722;border-radius:0 10px 10px 0;padding:16px 20px;margin:16px 0}
+.info-banner h4{color:#e87722;font-size:0.88em;margin-bottom:6px}
+.info-banner p{font-size:0.82em;color:#64748b;line-height:1.5}
+.formula-box{background:#f0f4ff;border:1px solid #c7d2fe;border-radius:10px;padding:16px 20px;margin:16px 0}
+.formula-box .formula-title{font-size:0.8em;font-weight:600;color:#1a3a6b;margin-bottom:8px}
+.formula-box .formula-content{font-family:'Courier New',monospace;font-size:0.85em;color:#334155;background:white;padding:10px 14px;border-radius:6px;border:1px solid #e2e8f0}
+.link-btn{display:inline-block;padding:12px 24px;background:#1a3a6b;color:#fff;border-radius:10px;text-decoration:none;font-weight:600;font-size:0.9em;margin:10px 0}
+.link-btn:hover{background:#14304d}
+.gen-btn{padding:10px 20px;background:#e87722;color:#fff;border:none;border-radius:8px;font-family:'Poppins',sans-serif;font-weight:600;font-size:0.85em;cursor:pointer;margin-top:6px}
+.gen-btn:hover{background:#d06a1c}
+.gen-btn:active{transform:scale(.96)}
+.student-row{display:flex;align-items:center;gap:14px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:12px 16px;margin-bottom:10px;flex-wrap:wrap}
+.student-row .sname{font-weight:600;color:#1a3a6b;font-size:0.85em;min-width:140px;flex-shrink:0}
+.student-row input[type="file"]{font-size:0.78em;flex:1;min-width:160px}
+.student-thumb{width:52px;height:52px;object-fit:cover;border-radius:8px;display:none;border:2px solid #16a34a}
+.student-status{font-size:0.72em;font-weight:700;color:#dc2626;padding:4px 10px;border-radius:20px;background:#fee2e2}
+.student-status.done{color:#15803d;background:#dcfce7}
+.channel-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.channel-card{border:2px solid #e2e8f0;border-radius:12px;padding:18px;cursor:pointer;transition:all 0.2s;text-align:center;position:relative}
+.channel-card:hover{border-color:#e87722;transform:translateY(-2px)}
+.channel-card.selected{border-color:#e87722;background:#fff7ed}
+.channel-card .icon{font-size:2em;margin-bottom:6px}
+.channel-card h4{font-size:0.9em;color:#1a3a6b;margin-bottom:4px}
+.channel-card p{font-size:0.74em;color:#64748b;line-height:1.4}
+.channel-card .check-badge{position:absolute;top:10px;right:10px;width:22px;height:22px;border-radius:50%;background:#e87722;color:#fff;display:none;align-items:center;justify-content:center;font-size:0.75em;font-weight:700}
+.channel-card.selected .check-badge{display:flex}
+.criteria-list{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
+.criteria-item{background:#f0f4ff;border:1px solid #c7d2fe;border-radius:8px;padding:10px 12px;font-size:0.78em;color:#334155}
+.timer-box{background:#f8fafc;border:2px solid #e2e8f0;border-radius:14px;padding:22px;text-align:center;margin:16px 0}
+.timer-display{font-family:'Raleway',sans-serif;font-size:2.6em;font-weight:700;color:#1a3a6b}
+.timer-display.warning{color:#dc2626}
+.timer-btns{display:flex;justify-content:center;gap:10px;margin-top:12px}
+.btn-timer{padding:9px 20px;border-radius:8px;font-family:'Poppins',sans-serif;font-size:0.82em;font-weight:600;cursor:pointer;border:none}
+.btn-timer.start{background:#16a34a;color:#fff}
+.btn-timer.pause{background:#e2e8f0;color:#475569}
+.btn-timer.reset{background:#fecaca;color:#991b1b}
+.btn-timer:active{transform:scale(.96)}
+.selected-summary{background:#f0f4ff;border-radius:10px;padding:12px 16px;margin-top:10px;font-size:0.82em;color:#1a3a6b;font-weight:600;display:none}
+/* ===== MATRIZ DE CANALES (vista gráfica para pantalla e impresión) ===== */
+.matrix-wrap{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:16px;margin:16px 0;overflow-x:auto}
+.matrix-row{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;min-width:520px}
+.matrix-col{border:2px solid #e2e8f0;border-radius:10px;padding:12px 8px;text-align:center;background:#f8fafc}
+.matrix-col.on{border-color:#e87722;background:linear-gradient(160deg,#1a3a6b,#2c5aa0);color:#fff}
+.matrix-col .m-icon{font-size:1.5em}
+.matrix-col .m-name{font-size:0.7em;font-weight:700;margin-top:4px;line-height:1.25}
+.matrix-col .m-mark{font-size:0.85em;margin-top:6px;font-weight:700}
+.matrix-col.on .m-mark{color:#fde9d8}
+.matrix-col:not(.on) .m-mark{color:#cbd5e1}
+/* ===== FINDINGS ===== */
+.findings-card{background:linear-gradient(135deg,#f8fafc,#eef1f7);border:2px solid #1a3a6b;border-radius:14px;padding:20px 22px;margin-top:16px}
+.findings-card h4{color:#1a3a6b;font-size:0.95em;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.findings-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.findings-item{background:#fff;border-radius:10px;padding:12px 14px;border-left:4px solid #e87722}
+.findings-item.alert{border-left-color:#dc2626;background:#fef2f2}
+.findings-item.wide{grid-column:1/-1}
+.findings-item .f-label{font-size:0.68em;color:#64748b;text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px;font-weight:600}
+.findings-item .f-value{font-size:0.9em;font-weight:700;color:#1a3a6b;line-height:1.35}
+.findings-item.alert .f-value{color:#b91c1c;font-weight:600;font-size:0.85em}
+.checklist-card{background:#FFF9F0;border-radius:12px;padding:18px 20px;margin-top:18px;border:2px solid #f0e0c8}
+.checklist-card h4{color:#e87722;font-size:0.9em;margin-bottom:10px}
+.checklist-card label{display:flex;align-items:flex-start;gap:10px;padding:6px 0;font-size:0.82em;color:#333;cursor:pointer}
+.checklist-card input[type="checkbox"]{margin-top:2px;accent-color:#e87722;width:15px;height:15px}
+.resumen-section{border:1px solid #e2e8f0;border-radius:12px;padding:18px;margin-bottom:14px}
+.resumen-section h4{color:#1a3a6b;font-size:0.88em;margin-bottom:10px;padding-bottom:8px;border-bottom:2px solid #e87722}
+.resumen-row{display:flex;justify-content:space-between;padding:6px 0;font-size:0.82em;border-bottom:1px solid #f1f5f9;gap:12px}
+.resumen-row:last-child{border-bottom:none}
+.resumen-row .label{color:#64748b;flex-shrink:0}
+.resumen-row .value{font-weight:600;color:#1e293b;text-align:right}
+/* ===== % DE PARTICIPACIÓN INDIVIDUAL ===== */
+.wd-box{background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:18px 20px;margin-top:10px}
+.wd-box h4{color:#1a3a6b;font-size:0.92em;margin-bottom:6px}
+.wd-box .wd-hint{font-size:0.8em;color:#64748b;margin-bottom:12px;line-height:1.45}
+.wd-row{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:9px 12px;margin-bottom:8px;flex-wrap:wrap}
+.wd-row input[type="text"]{flex:1;min-width:140px;padding:7px 10px;border:1px solid #e2e8f0;border-radius:6px;font-family:'Poppins',sans-serif;font-size:0.85em}
+.wd-pct-wrap{display:flex;align-items:center;gap:4px}
+.wd-row input[type="number"]{width:64px;padding:7px 8px;border:1px solid #e2e8f0;border-radius:6px;font-family:'Poppins',sans-serif;font-size:0.85em;text-align:center}
+.wd-row input:focus{outline:none;border-color:#e87722}
+.wd-total{font-size:0.78em;color:#64748b;margin-top:4px}
+.wd-gen-btn{padding:9px 16px;background:#e87722;color:#fff;border:none;border-radius:8px;font-family:'Poppins',sans-serif;font-weight:600;font-size:0.82em;cursor:pointer}
+.wd-gen-btn:hover{background:#d06a1c}
+.wd-gen-btn:active{transform:scale(.96)}
+.wd-add-btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:#fff7ed;border:1px dashed #e87722;border-radius:8px;color:#e87722;font-size:0.8em;font-family:'Poppins',sans-serif;cursor:pointer;margin-top:4px}
+.wd-add-btn:hover{background:#fed7aa}
+.wd-remove-btn{background:none;border:none;color:#dc2626;cursor:pointer;font-size:1.05em;padding:2px 6px}
+/* ===== GALERÍA DE COMPROBANTES (impresión) ===== */
+.proof-gallery{display:none}
+.proof-gallery-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.proof-tile{border:1px solid #e2e8f0;border-radius:8px;padding:6px;text-align:center;background:#f8fafc}
+.proof-tile img{width:100%;height:70px;object-fit:cover;border-radius:6px;display:block}
+.proof-tile .p-name{font-size:0.62em;color:#334155;margin-top:4px;font-weight:600}
+.proof-tile .p-mark{font-size:0.6em;color:#15803d;font-weight:700}
+.nav-buttons{display:flex;justify-content:space-between;padding:20px 32px;border-top:1px solid #e2e8f0;background:#f8fafc}
+.btn{padding:12px 28px;border-radius:8px;font-family:'Poppins',sans-serif;font-weight:500;font-size:0.88em;cursor:pointer;border:none;transition:all 0.2s}
+.btn:active{transform:scale(.96)}
+.btn-prev{background:#e2e8f0;color:#475569}
+.btn-prev:hover{background:#cbd5e1}
+.btn-next{background:#e87722;color:white}
+.btn-next:hover{background:#d06a1c;transform:translateY(-1px)}
+.autosave-indicator{position:fixed;bottom:20px;right:20px;background:#1a3a6b;color:white;padding:8px 16px;border-radius:20px;font-size:0.75em;opacity:0;transition:opacity 0.3s}
+.autosave-indicator.show{opacity:1}
+.print-header,.print-footer{display:none}
+@media(max-width:768px){.wizard-content{padding:20px}.channel-grid,.criteria-list,.findings-grid{grid-template-columns:1fr}.matrix-row{grid-template-columns:repeat(5,110px)}}
+
+/* =========================================================
+   PRINT STYLESHEET — documento de entrega, no un formulario
+   ========================================================= */
+@media print{
+  @page{ margin:14mm 13mm 20mm 13mm; }
+  *{ -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; }
+  body{ background:#fff !important; padding:0; font-size:10.5pt; color:#1e293b; }
+  .wizard-container{ box-shadow:none; max-width:100%; border-radius:0; }
+
+  .toolbar,.nav-buttons,.progress-container,.timer-box,.gen-btn,.student-row input[type="file"]{ display:none !important; }
+
+  .step-content{ display:block !important; page-break-inside:avoid; margin-bottom:20px; }
+  .step-title{ font-size:1.15em; border-bottom:2px solid #e87722; padding-bottom:6px; }
+
+  .print-header{ display:flex !important; justify-content:space-between; align-items:flex-end;
+    border-bottom:3px solid #1a3a6b; padding-bottom:10px; margin-bottom:18px; page-break-after:avoid; }
+  .print-header .ph-left .ph-kicker{ font-size:8.5pt; text-transform:uppercase; letter-spacing:.08em; color:#e87722; font-weight:700; }
+  .print-header .ph-left .ph-title{ font-family:'Raleway',sans-serif; font-size:1.3em; font-weight:700; color:#1a3a6b; }
+  .print-header .ph-right{ text-align:right; font-size:8.5pt; color:#64748b; line-height:1.6; }
+  .print-header .ph-right strong{ color:#1a3a6b; }
+  .wizard-header{ display:none; }
+
+  .print-footer{ display:block !important; position:fixed; bottom:6mm; left:0; right:0;
+    text-align:center; font-size:7.5pt; color:#94a3b8; border-top:1px solid #e2e8f0; padding-top:4px; }
+
+  .form-group input[type="text"],.form-group input[type="number"],.form-group textarea,.form-group select{
+    border:none !important; border-bottom:1px solid #cbd5e1 !important; border-radius:0 !important;
+    background:transparent !important; padding:3px 2px !important; font-size:0.92em; color:#111;
+    min-height:auto !important; resize:none; appearance:none;
+  }
+  .form-group label{ font-size:0.78em; color:#475569; }
+  .hint{ display:none; }
+
+  .blue-banner,.info-banner,.formula-box,.criteria-item,.findings-card,.matrix-wrap,
+  .checklist-card,.resumen-section,.proof-gallery{ page-break-inside:avoid; }
+
+  /* Tarjetas de canal individuales se ocultan: en su lugar se imprime la matriz resumen */
+  .channel-grid{ display:none !important; }
+  .selected-summary{ display:none !important; }
+  .matrix-wrap{ display:block !important; border:1px solid #cbd5e1; }
+  .matrix-col.on{ background:#1a3a6b !important; color:#fff !important; border-color:#1a3a6b !important; }
+
+  /* Comprobantes: mostrar la galería impresa en vez de las filas con <input file> */
+  .student-row{ display:none !important; }
+  .proof-gallery{ display:block !important; }
+  .proof-tile{ border:1px solid #cbd5e1 !important; background:#f8fafc !important; }
+
+  .checklist-card input[type="checkbox"]{ width:13px; height:13px; }
+  .findings-card{ border-width:1.5px; }
+
+  .wd-box .wd-gen-btn,.wd-box .wd-add-btn,.wd-remove-btn{ display:none !important; }
+  .wd-row{ border:1px solid #cbd5e1 !important; page-break-inside:avoid; }
+  .wd-box{ page-break-inside:avoid; }
+}
+
+/* ===== v2: fases, selector, simulador, plan ===== */
+.phase{display:inline-block;font-family:'Poppins',sans-serif;font-size:.5em;font-weight:600;padding:3px 10px;border-radius:20px;vertical-align:middle;margin-left:8px;letter-spacing:.02em}
+.phase-class{background:#dbeafe;color:#1a3a6b}
+.phase-task{background:#ffedd5;color:#c2570c}
+.sub-h{font-size:.92em;color:#1a3a6b;margin:22px 0 10px;padding-bottom:6px;border-bottom:2px solid #e2e8f0}
+.row-btns{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0}
+.crit-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.crit-card{border:2px solid #e2e8f0;border-radius:12px;padding:14px 16px;background:#f8fafc}
+.crit-t{font-weight:700;color:#1a3a6b;font-size:.88em;margin-bottom:6px}
+.crit-card label{display:block;font-size:.76em;color:#475569;margin-bottom:4px}
+.crit-card select,.sim-grid select,.sim-grid input[type=number],.sim-grid input[type=text],.wk-table input{width:100%;padding:9px 10px;border:2px solid #e2e8f0;border-radius:8px;font-family:'Poppins',sans-serif;font-size:.82em;background:#fff}
+.crit-card select:focus,.sim-grid select:focus,.sim-grid input:focus,.wk-table input:focus{outline:none;border-color:#e87722}
+.weights{background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:14px 18px}
+.w-row{display:grid;grid-template-columns:170px 1fr 28px;gap:12px;align-items:center;padding:5px 0;font-size:.84em;color:#334155}
+.w-row input[type=range]{width:100%;accent-color:#e87722}
+.w-row b{color:#e87722;text-align:center;font-size:1.05em}
+.hint-box{background:#f0f4ff;border-left:4px solid #1a3a6b;border-radius:0 10px 10px 0;padding:12px 16px;font-size:.8em;color:#475569;line-height:1.5;margin:8px 0}
+.hint-box:empty{display:none}
+.hint-box.warn{background:#fff7ed;border-left-color:#e87722}
+.rank-list{display:flex;flex-direction:column;gap:10px;margin:10px 0}
+.rank-card{display:grid;grid-template-columns:42px 44px 1fr 86px;gap:12px;align-items:center;border:2px solid #e2e8f0;border-radius:12px;padding:12px 14px;cursor:pointer;position:relative;transition:all .2s;background:#fff}
+.rank-card:hover{border-color:#e87722;transform:translateY(-1px)}
+.rank-card.selected{border-color:#e87722;background:#fff7ed;box-shadow:0 0 0 2px #fed7aa}
+.rank-card .rk{font-family:'Raleway',sans-serif;font-weight:800;font-size:1.1em;color:#94a3b8;text-align:center}
+.rank-card .rk-icon{font-size:1.8em;text-align:center}
+.rank-card h4{font-size:.9em;color:#1a3a6b;margin-bottom:2px}
+.rank-card p{font-size:.72em;color:#64748b;line-height:1.35}
+.badge-rec{display:inline-block;font-family:'Poppins',sans-serif;font-size:.68em;background:#1a3a6b;color:#fff;border-radius:20px;padding:1px 8px;margin-left:6px;font-weight:600;vertical-align:middle}
+.rk-bar{height:7px;background:#e2e8f0;border-radius:6px;margin:6px 0 5px;overflow:hidden}
+.rk-bar i{display:block;height:100%;background:linear-gradient(90deg,#1a3a6b,#e87722);border-radius:6px}
+.rk-fits{display:flex;gap:6px;flex-wrap:wrap}
+.rk-fits span{font-size:.66em;background:#f0f4ff;border:1px solid #c7d2fe;color:#334155;border-radius:6px;padding:1px 7px}
+.rk-score{text-align:center;font-family:'Raleway',sans-serif;font-weight:800;font-size:1.7em;color:#1a3a6b;line-height:1}
+.rk-score small{display:block;font-size:.4em;font-weight:600;color:#94a3b8;margin-top:2px}
+.rank-card .check-badge{position:absolute;top:-8px;right:-8px;width:24px;height:24px;border-radius:50%;background:#e87722;color:#fff;display:none;align-items:center;justify-content:center;font-size:.75em;font-weight:700}
+.rank-card.selected .check-badge{display:flex}
+.matrix-meta{font-size:.72em;color:#475569;margin-bottom:10px;line-height:1.5}
+.matrix-col .m-score{font-family:'Raleway',sans-serif;font-weight:800;font-size:1.05em;margin-top:6px}
+.sim-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px 16px;margin:10px 0}
+.sim-grid .form-group{margin-bottom:6px}
+.sim-grid .form-group label{font-size:.78em}
+.funnel-sim{display:flex;flex-direction:column;align-items:center;gap:6px;margin:10px 0 14px}
+.fn-bar{height:42px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:.8em;font-weight:600;text-align:center;padding:0 10px;min-width:210px;transition:width .35s}
+.fn-bar small{font-weight:400;opacity:.9;margin-left:8px}
+.fn-1{background:#1a3a6b}.fn-2{background:#2c5aa0}.fn-3{background:#e87722}.fn-4{background:#c2570c}
+.kpi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.kpi{background:#fff;border:1px solid #e2e8f0;border-left:4px solid #e87722;border-radius:10px;padding:10px 12px}
+.kpi .k-l{font-size:.64em;color:#64748b;text-transform:uppercase;letter-spacing:.04em;font-weight:600}
+.kpi .k-v{font-family:'Raleway',sans-serif;font-size:1.25em;font-weight:800;color:#1a3a6b;margin-top:2px}
+.kpi.neg{border-left-color:#dc2626;background:#fef2f2}.kpi.neg .k-v{color:#b91c1c}
+.routes{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:8px 0}
+.route{border:2px solid #e2e8f0;border-radius:12px;padding:12px 14px;background:#f8fafc}
+.route h5{font-size:.8em;color:#1a3a6b;margin-bottom:4px;font-family:'Raleway',sans-serif}
+.route .r-v{font-family:'Raleway',sans-serif;font-weight:800;font-size:1.2em;color:#e87722}
+.route p{font-size:.7em;color:#64748b;line-height:1.4;margin-top:3px}
+.metric-box{background:#fff7ed;border-left:4px solid #e87722;border-radius:0 10px 10px 0;padding:12px 16px;font-size:.8em;color:#475569;line-height:1.5;align-self:end}
+.plan-card{border:2px solid #1a3a6b;border-radius:14px;padding:16px 20px;background:#f8fafc}
+.plan-card h4{color:#1a3a6b;font-size:.95em;margin-bottom:10px}
+.plan-row{display:grid;grid-template-columns:190px 1fr;gap:12px;padding:7px 0;border-bottom:1px solid #e2e8f0;font-size:.82em}
+.plan-row:last-of-type{border-bottom:none}
+.plan-row .pl{color:#64748b;font-weight:600}
+.plan-row .pv{color:#1e293b;font-weight:600}
+.plan-row .pv.pre{white-space:pre-wrap;font-weight:500;font-size:.95em}
+.wk-wrap{margin-top:12px;overflow-x:auto}
+.wk-table{width:100%;border-collapse:collapse;font-size:.82em}
+.wk-table th{background:#1a3a6b;color:#fff;text-align:left;padding:8px 10px;font-weight:600;font-size:.84em}
+.wk-table td{padding:7px 10px;border-bottom:1px solid #e2e8f0;vertical-align:middle}
+.wk-table td:first-child{font-weight:700;color:#e87722;width:70px}
+.wk-table td:nth-child(2){width:150px;font-weight:700;color:#1a3a6b}
+.coh-list{display:flex;flex-direction:column;gap:8px}
+.coh{display:flex;gap:10px;align-items:flex-start;border-radius:10px;padding:10px 14px;font-size:.8em;line-height:1.45;border-left:4px solid}
+.coh.ok{background:#f0fdf4;border-color:#16a34a;color:#166534}
+.coh.warn{background:#fffbeb;border-color:#f59e0b;color:#92400e}
+.coh.bad{background:#fef2f2;border-color:#dc2626;color:#991b1b}
+.coh.info{background:#f0f4ff;border-color:#1a3a6b;color:#334155}
+.coh .ci{flex-shrink:0}
+.end-class{background:linear-gradient(135deg,#1a3a6b,#2c5aa0);color:#fff;border-radius:12px;padding:16px 20px;margin-top:18px;font-size:.85em;line-height:1.5}
+.end-class b{color:#fed7aa}
+@media(max-width:768px){.crit-grid,.sim-grid,.routes,.kpi-grid{grid-template-columns:1fr}.rank-card{grid-template-columns:32px 36px 1fr 64px}.plan-row{grid-template-columns:1fr}.w-row{grid-template-columns:110px 1fr 24px}}
+@media print{
+  .rank-list,.row-btns,.weights input[type=range],.hint-box:empty,.end-class .no-print{display:none !important}
+  .crit-card select,.sim-grid select,.sim-grid input,.wk-table input{border:none !important;border-bottom:1px solid #cbd5e1 !important;border-radius:0 !important;background:transparent !important;padding:2px !important;appearance:none;font-size:.92em}
+  .crit-grid{grid-template-columns:1fr 1fr}
+  .weights{page-break-inside:avoid}
+  .w-row{grid-template-columns:150px 30px}
+  .kpi,.route,.plan-card,.coh,.wk-table,.funnel-sim{page-break-inside:avoid}
+  .fn-bar{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .step-content[data-step="4"],.step-content[data-step="5"],.step-content[data-step="2"]{page-break-inside:auto}
+  .step-content[data-step="4"],.step-content[data-step="5"]{page-break-before:auto}
+  .phase{border:1px solid #cbd5e1}
+  .metric-box{page-break-inside:avoid}
+}
+@media print{
+  .step-content,.step-content.active{animation:none !important;opacity:1 !important;transform:none !important}
+  .step-title,.sub-h,.step-subtitle{page-break-after:avoid;break-after:avoid}
+  .end-class{page-break-inside:avoid}
+}
+
+</style>
+</head>
+<body>
+<div class="wizard-container">
+
+<!-- Encabezado de impresión (oculto en pantalla) -->
+<div class="print-header">
+  <div class="ph-left">
+    <div class="ph-kicker">Comercialización y Equipo de Alto Desempeño · 3er Semestre</div>
+    <div class="ph-title">Sesión 9 — Retrospectiva Uchallenge y Selección de Canal</div>
+  </div>
+  <div class="ph-right">
+    <div>Equipo: <strong id="phTeam">—</strong></div>
+    <div>Proyecto: <strong id="phProject">—</strong></div>
+    <div id="phDate">—</div>
+  </div>
+</div>
+
+<div class="wizard-header">
+<h1>🔁 Retrospectiva Uchallenge y Selección de Canal</h1>
+<p>Sesión 9 — Comercialización y Equipo de Alto Desempeño · Emprendimiento 3</p>
+</div>
+<div class="toolbar">
+<button class="toolbar-btn" id="soundToggleBtn" onclick="toggleSound()">🔊 Sonido</button>
+<button class="toolbar-btn" id="btnGenerarPdf" onclick="exportPDF()" disabled>📄 Generar PDF (Ctrl+P)</button>
+<button class="toolbar-btn danger" onclick="clearAllData()">🗑️ Limpiar Datos</button>
+</div>
+<div class="progress-container">
+<div class="progress-bar">
+<div class="step-indicator active" id="ind-0" onclick="goToStepIdx(0)">1</div>
+<div class="step-indicator" id="ind-1" onclick="goToStepIdx(1)">2</div>
+<div class="step-indicator" id="ind-2" onclick="goToStepIdx(2)">3</div>
+<div class="step-indicator" id="ind-3" onclick="goToStepIdx(3)">4</div>
+<div class="step-indicator" id="ind-4" onclick="goToStepIdx(4)">5</div>
+<div class="step-indicator" id="ind-5" onclick="goToStepIdx(5)">6</div>
+<div class="step-indicator" id="ind-6" onclick="goToStepIdx(6)">7</div>
+<div class="step-indicator" id="ind-7" onclick="goToStepIdx(7)">8</div>
+</div>
+<div class="progress-percent-wrap">
+<div class="progress-percent-track"><div class="progress-percent-fill" id="progressFill"></div></div>
+<div class="progress-percent-label"><span id="progressStepNum">Paso 1 de 6</span><span class="pp-pct" id="progressPctNum">0%</span></div>
+</div>
+</div>
+<div class="wizard-content">
+
+<!-- PASO 0: EQUIPO -->
+<div class="step-content active" data-step="0">
+<h2 class="step-title">👥 Identifica a tu equipo</h2>
+<p class="step-subtitle">Antes de comenzar, registren los datos de su equipo.</p>
+<div class="blue-banner"><h4>📘 ¿Qué vamos a hacer hoy?</h4><p><b>En clase:</b> cierran el ciclo del Uchallenge XVII con la encuesta oficial (individual), usan el selector para decidir hasta 2 canales de venta digital, los defienden y llenan la plantilla. <b>Como tarea (entrega 25 de octubre):</b> simulan su embudo digital y arman el plan de canales de 4 semanas con revisión de coherencia.</p></div>
+<div class="form-group"><label>Nombre del equipo *</label><input type="text" id="teamName" placeholder="Ej: Innovadores MX" oninput="saveData()"></div>
+<div class="form-group"><label>Integrantes del equipo * (separados por coma)</label><textarea id="teamMembers" placeholder="Ej: Ana Pérez, Luis Gómez, Marco Uc" oninput="saveData()"></textarea></div>
+<div class="form-group"><label>Nombre de su proyecto *</label><input type="text" id="projectName" placeholder="Ej: EcoSnacks Saludables" oninput="saveData()"></div>
+</div>
+
+<!-- PASO 1: ENCUESTA INDIVIDUAL -->
+<div class="step-content" data-step="1">
+<h2 class="step-title">1️⃣ Encuesta oficial Uchallenge XVII (individual)</h2>
+<p class="step-subtitle">Cada integrante contesta la encuesta y sube su captura de confirmación.</p>
+<div class="blue-banner"><h4>📘 Instrucciones</h4><p>Ingresen al formulario, completen todas las preguntas de manera clara, honesta y objetiva, y den clic en "Enviar". Como comprobante, tomen una captura de la pantalla final ("Se ha registrado tu respuesta") y súbanla aquí.</p></div>
+<a class="link-btn" href="https://forms.gle/UFGaQNcYw9fjf91z7" target="_blank">🔗 Abrir encuesta Uchallenge XVII</a>
+<h3 style="font-size:0.9em;color:#1a3a6b;margin:18px 0 8px">Comprobantes por integrante</h3>
+<p class="hint" style="margin-bottom:8px">Escriban los integrantes en el Paso 0 y generen los espacios de captura.</p>
+<button class="gen-btn" onclick="generateStudentSlots()">🔄 Generar espacios de captura</button>
+<div id="studentSlots" style="margin-top:14px"></div>
+<!-- Galería que solo se muestra al imprimir, con las capturas ya recopiladas -->
+<div class="proof-gallery" id="proofGallery"></div>
+</div>
+
+<!-- PASO 2: SELECTOR DE CANAL Y DEFENSA -->
+<div class="step-content" data-step="2">
+<h2 class="step-title">2️⃣ Selector de canal y defensa <span class="phase phase-class">En clase</span></h2>
+<p class="step-subtitle">Describan su proyecto, ponderen los 4 criterios y decidan con datos hasta 2 canales digitales. Después los defienden frente al grupo.</p>
+<div class="blue-banner"><h4>📘 Cómo funciona (≈ 10 min)</h4><p><b>A)</b> Responden 6 preguntas sobre su proyecto. <b>B)</b> Indican qué tan importante es cada criterio. <b>C)</b> El selector califica los 5 canales de 0 a 100. <b>D)</b> Ustedes eligen máximo 2: pueden apartarse de lo recomendado, pero tendrán que justificarlo. El selector es una ayuda para pensar, no una respuesta oficial.</p></div>
+
+<h3 class="sub-h">A · Perfil de su proyecto</h3>
+<div class="crit-grid">
+ <div class="crit-card"><div class="crit-t">📍 Cliente</div>
+  <label for="selCliente">¿Dónde está tu cliente ideal comprando o navegando?</label>
+  <select id="selCliente" class="sv" onchange="onSel()"><option value="">Selecciona…</option>
+   <option value="busca">Busca y compara productos en plataformas de compra</option>
+   <option value="redes">Descubre y se inspira en redes sociales</option>
+   <option value="platica">Prefiere platicar y preguntar antes de comprar</option>
+   <option value="marca">Ya nos conoce o llega por recomendación / por nuestra marca</option></select></div>
+ <div class="crit-card"><div class="crit-t">📦 Producto</div>
+  <label for="selProducto">¿Cómo es lo que venden?</label>
+  <select id="selProducto" class="sv" onchange="onSel()"><option value="">Selecciona…</option>
+   <option value="estandar">Físico y estandarizado (siempre igual)</option>
+   <option value="visual">Visual o de impulso (comida, moda, diseño)</option>
+   <option value="medida">A la medida o servicio (requiere asesoría y agenda)</option>
+   <option value="demo">Necesita demostración o explicación antes de comprar</option></select></div>
+ <div class="crit-card"><div class="crit-t">⏳ Recursos del equipo</div>
+  <label for="selTiempo">Tiempo semanal para atender el canal</label>
+  <select id="selTiempo" class="sv" onchange="onSel()"><option value="">Selecciona…</option>
+   <option value="low">Menos de 3 h por semana</option><option value="mid">De 3 a 8 h por semana</option><option value="high">Más de 8 h por semana</option></select>
+  <label for="selPresupuesto" style="margin-top:8px">Presupuesto para publicidad</label>
+  <select id="selPresupuesto" class="sv" onchange="onSel()"><option value="">Selecciona…</option>
+   <option value="none">$0 en publicidad</option><option value="some">Hasta $1,000 al mes</option><option value="high">Más de $1,000 al mes</option></select></div>
+ <div class="crit-card"><div class="crit-t">💵 Ticket y margen</div>
+  <label for="selTicket">Ticket promedio por compra</label>
+  <select id="selTicket" class="sv" onchange="onSel()"><option value="">Selecciona…</option>
+   <option value="low">Menos de $100</option><option value="mid">De $100 a $500</option><option value="high">Más de $500</option></select>
+  <label for="selMargen" style="margin-top:8px">Margen sobre el precio</label>
+  <select id="selMargen" class="sv" onchange="onSel()"><option value="">Selecciona…</option>
+   <option value="low">Menos de 20 %</option><option value="mid">De 20 % a 40 %</option><option value="high">Más de 40 %</option></select></div>
+</div>
+
+<h3 class="sub-h">B · ¿Qué tan importante es cada criterio para su proyecto?</h3>
+<div class="weights">
+ <div class="w-row"><span>📍 Cliente</span><input type="range" id="wCliente" class="sv" min="1" max="5" step="1" value="3" oninput="onSel()"><b id="wCliente_v">3</b></div>
+ <div class="w-row"><span>📦 Producto</span><input type="range" id="wProducto" class="sv" min="1" max="5" step="1" value="3" oninput="onSel()"><b id="wProducto_v">3</b></div>
+ <div class="w-row"><span>⏳ Recursos</span><input type="range" id="wRecursos" class="sv" min="1" max="5" step="1" value="3" oninput="onSel()"><b id="wRecursos_v">3</b></div>
+ <div class="w-row"><span>💵 Ticket y margen</span><input type="range" id="wTicket" class="sv" min="1" max="5" step="1" value="3" oninput="onSel()"><b id="wTicket_v">3</b></div>
+ <p class="hint">1 = poco importante · 5 = decisivo. Si todo pesa 3, todos los criterios valen lo mismo.</p>
+</div>
+
+<h3 class="sub-h">C · Resultado del selector</h3>
+<div class="hint-box" id="selectorHint"></div>
+<div class="rank-list" id="rankList"></div>
+<div class="row-btns"><button class="gen-btn" id="btnUseTop" type="button" onclick="useTopTwo()" style="display:none">✔ Usar las 2 recomendadas</button></div>
+<div class="selected-summary" id="selectedSummary"></div>
+
+<h3 style="font-size:0.88em;color:#1a3a6b;margin:16px 0 8px">📊 Matriz de canales — calificación y elección</h3>
+<div class="matrix-wrap">
+<div class="matrix-meta" id="matrixMeta"></div>
+<div class="matrix-row" id="matrixRow"></div>
+</div>
+
+<h3 class="sub-h">D · Defiendan su elección</h3>
+<div class="info-banner"><h4>💡 Regla del juego</h4><p>Elijan como equipo máximo 2 canales. Tendrán 60 segundos para defenderlos frente al grupo, mencionando al menos uno de los 4 criterios de elección y un número del selector.</p></div>
+<div class="criteria-list">
+<div class="criteria-item">📍 ¿Dónde está el cliente?</div>
+<div class="criteria-item">📦 Tipo de producto</div>
+<div class="criteria-item">⏳ Recursos del equipo</div>
+<div class="criteria-item">💵 Ticket y margen</div>
+</div>
+<div class="timer-box">
+<div class="timer-display" id="timerDisplay">01:00</div>
+<div class="timer-btns">
+<button class="btn-timer start" onclick="startTimer()">▶ Iniciar defensa</button>
+<button class="btn-timer pause" onclick="pauseTimer()">⏸ Pausar</button>
+<button class="btn-timer reset" onclick="resetTimer()">↺ Reiniciar</button>
+</div>
+</div>
+<div class="form-group"><label>Frase de defensa (usen al menos un criterio)</label><textarea id="defensaFrase" oninput="saveData()" placeholder="Ej.: Elegimos WhatsApp Business porque nuestro cliente decide uno a uno y necesita agendar..."></textarea></div>
+</div>
+
+<!-- PASO 3: PLANTILLA DE SELECCIÓN -->
+<div class="step-content" data-step="3">
+<h2 class="step-title">3️⃣ Plantilla de selección de canal <span class="phase phase-class">En clase</span></h2>
+<p class="step-subtitle">Documenten formalmente la decisión de canal de su proyecto.</p>
+<div class="form-group"><label>Cliente y producto — resumen en una línea</label><textarea id="plClienteProducto" oninput="saveData()" placeholder="Buyer persona (Sesión 3) + tipo de producto o servicio."></textarea></div>
+<div class="form-group"><label>Canal(es) elegido(s)</label><input type="text" id="plCanales" readonly placeholder="Se completa automáticamente desde el Paso 2"></div>
+<div class="row-btns"><button class="gen-btn" type="button" onclick="draftJustification()">✨ Generar borrador de justificación desde el selector</button></div>
+<div class="form-group"><label>Justificación — usando los 4 criterios</label><textarea id="plJustificacion" oninput="saveData()" placeholder="¿Dónde está el cliente? ¿Tipo de producto? ¿Recursos del equipo? ¿Ticket y margen?"></textarea></div>
+<div class="form-group"><label>Métrica a vigilar las próximas semanas</label>
+<select id="plMetrica" onchange="saveData()">
+<option value="">Selecciona una métrica</option>
+<option value="Alcance">Alcance — cuántas personas ven la oferta</option>
+<option value="Tasa de conversión">Tasa de conversión — % que compra</option>
+<option value="Ticket promedio">Ticket promedio — cuánto gasta cada cliente</option>
+</select>
+</div>
+
+<div class="findings-card">
+<h4>🔎 Resumen de la decisión</h4>
+<div class="findings-grid">
+<div class="findings-item wide"><div class="f-label">Canal(es) elegido(s)</div><div class="f-value" id="fCanales">—</div></div>
+<div class="findings-item wide"><div class="f-label">Justificación</div><div class="f-value" id="fJustificacion" style="font-weight:600;font-size:0.82em">—</div></div>
+<div class="findings-item"><div class="f-label">Métrica a vigilar</div><div class="f-value" id="fMetrica" style="font-size:0.85em">—</div></div>
+<div class="findings-item" id="fComprobantesItem"><div class="f-label">Comprobantes Uchallenge</div><div class="f-value" id="fComprobantes" style="font-size:0.85em">—</div></div>
+</div>
+</div>
+
+<div class="checklist-card">
+<h4>✅ Checklist antes de entregar</h4>
+<label><input type="checkbox" class="check-item" onchange="tickSound()"> Cada integrante subió su comprobante de la encuesta Uchallenge.</label>
+<label><input type="checkbox" class="check-item" onchange="tickSound()"> Elegimos máximo 2 canales con ayuda del selector y los defendimos con al menos un criterio.</label>
+<label><input type="checkbox" class="check-item" onchange="tickSound()"> La plantilla de selección de canal está completa.</label>
+<label><input type="checkbox" class="check-item" onchange="tickSound()"> (Tarea) Corrimos el simulador con los números de nuestro proyecto.</label>
+<label><input type="checkbox" class="check-item" onchange="tickSound()"> (Tarea) Completamos el plan de 4 semanas con meta y acciones.</label>
+<label><input type="checkbox" class="check-item" onchange="tickSound()"> (Tarea) Revisamos las alertas de coherencia y atendimos las pendientes.</label>
+</div>
+<div class="end-class"><b>✅ Aquí termina la parte de clase (≈ 20 min).</b> Los pasos 4 y 5 son la tarea: se hacen en equipo antes del 25 de octubre. Todo se guarda solo en este navegador, así que usen la misma computadora o el mismo navegador.</div>
+</div>
+
+<!-- PASO 4: SIMULADOR DE EMBUDO (TAREA) -->
+<div class="step-content" data-step="4">
+<h2 class="step-title">4️⃣ Simulador de embudo digital <span class="phase phase-task">Tarea</span></h2>
+<p class="step-subtitle">Prueben con números qué pasa en su canal principal durante una semana y qué necesitarían mover para llegar a su meta.</p>
+<div class="blue-banner"><h4>📘 Cómo usarlo</h4><p>Vienen precargados los números del ejemplo visto en clase (2,000 personas ven, 80 escriben, 10 compran). <b>Reemplácenlos con los de su proyecto</b>: reales si ya vendieron (por ejemplo en el Uchallenge), estimados si no. Marquen cuál es el caso para que quede claro en el PDF.</p></div>
+<div class="row-btns"><button class="gen-btn" type="button" onclick="loadSimExample()">↺ Cargar ejemplo de clase</button></div>
+
+<div class="sim-grid">
+ <div class="form-group"><label for="simCanal">Canal que simulan</label><select id="simCanal" class="sv" onchange="onSimCanal()"></select></div>
+ <div class="form-group"><label for="simDatos">Origen de los números</label><select id="simDatos" class="sv" onchange="onSim()"><option value="estimado">⚠️ Estimados por el equipo</option><option value="real">✅ Reales (ventas o Uchallenge)</option></select></div>
+ <div class="form-group"><label for="simAlcance">Alcance semanal (personas que ven la oferta)</label><input type="number" id="simAlcance" class="sv" min="0" step="1" value="2000" oninput="onSim()"></div>
+ <div class="form-group"><label for="simInteres">% que muestra interés (clic, mensaje, entra a la tienda)</label><input type="number" id="simInteres" class="sv" min="0" max="100" step="0.1" value="4" oninput="onSim()"></div>
+ <div class="form-group"><label for="simCompra">% de los interesados que compra</label><input type="number" id="simCompra" class="sv" min="0" max="100" step="0.1" value="12.5" oninput="onSim()"></div>
+ <div class="form-group"><label for="simRecompra">% de compradores que vuelve a comprar (4 semanas)</label><input type="number" id="simRecompra" class="sv" min="0" max="100" step="1" value="10" oninput="onSim()"></div>
+ <div class="form-group"><label for="simTicket">Ticket promedio ($)</label><input type="number" id="simTicket" class="sv" min="0" step="1" value="300" oninput="onSim()"></div>
+ <div class="form-group"><label for="simMargen">Margen bruto sobre el precio (%)</label><input type="number" id="simMargen" class="sv" min="0" max="100" step="1" value="40" oninput="onSim()"></div>
+ <div class="form-group"><label for="simComision">Comisión o costo del canal (% de la venta)</label><input type="number" id="simComision" class="sv" min="0" max="100" step="0.5" value="5" oninput="onSim()"></div>
+ <div class="form-group"><label for="simPauta">Inversión semanal en pauta ($)</label><input type="number" id="simPauta" class="sv" min="0" step="1" value="0" oninput="onSim()"></div>
+</div>
+
+<h3 class="sub-h">Su embudo de la semana</h3>
+<div class="funnel-sim" id="funnelSim"></div>
+<div class="kpi-grid" id="kpiGrid"></div>
+<div class="hint-box" id="simAlerts"></div>
+
+<h3 class="sub-h">¿Qué necesitan para llegar a su meta?</h3>
+<div class="sim-grid">
+ <div class="form-group"><label for="simMeta">Meta de utilidad semanal ($)</label><input type="number" id="simMeta" class="sv" min="0" step="1" placeholder="Ej.: 1500" oninput="onSim()"></div>
+ <div class="form-group"><label for="simPautaProp">Si suben el alcance, ¿lo compran con pauta?</label><select id="simPautaProp" class="sv" onchange="onSim()"><option value="no">No: crece de forma orgánica</option><option value="si">Sí: la pauta crece en proporción</option></select></div>
+</div>
+<div class="routes" id="routes"></div>
+
+<h3 class="sub-h">¿En qué etapa está su proyecto?</h3>
+<div class="sim-grid">
+ <div class="form-group"><label for="simEtapa">Etapa actual</label><select id="simEtapa" class="sv" onchange="onSim()"><option value="">Selecciona…</option><option value="nuevo">Nuevo: casi nadie nos conoce todavía</option><option value="trafico">Ya tenemos tráfico, pero pocas ventas</option><option value="validado">Ya vendemos y está validado</option></select></div>
+ <div class="metric-box" id="metricSuggest"></div>
+</div>
+</div>
+
+<!-- PASO 5: PLAN DE CANALES (TAREA) -->
+<div class="step-content" data-step="5">
+<h2 class="step-title">5️⃣ Plan de canales y revisión <span class="phase phase-task">Tarea · entrega 25 de octubre</span></h2>
+<p class="step-subtitle">Este paso arma el documento de la tarea con lo que ya trabajaron. Solo falta la meta, el seguimiento y revisar las alertas.</p>
+
+<div class="plan-card">
+ <h4>📄 Plan de canales digitales</h4>
+ <div class="plan-row"><span class="pl">Cliente y producto</span><span class="pv" id="pCliente">—</span></div>
+ <div class="plan-row"><span class="pl">Canal(es) elegido(s)</span><span class="pv" id="pCanales">—</span></div>
+ <div class="plan-row"><span class="pl">Justificación (4 criterios)</span><span class="pv pre" id="pJust">—</span></div>
+ <div class="plan-row"><span class="pl">Métrica a vigilar primero</span><span class="pv" id="pMetrica">—</span></div>
+ <p class="hint">Estos cuatro datos vienen del Paso 3. Si algo falta o quieren cambiarlo, regresen a ese paso.</p>
+</div>
+
+<h3 class="sub-h">Meta y seguimiento de 4 semanas</h3>
+<div class="sim-grid">
+ <div class="form-group"><label>Punto de partida (del simulador)</label><input type="text" id="planBase" readonly placeholder="Corran el simulador en el Paso 4"></div>
+ <div class="form-group"><label for="planMeta" id="planMetaLbl">Meta al cierre de la semana 4</label><input type="number" id="planMeta" class="sv" step="any" placeholder="Ej.: 3000" oninput="onPlan()"></div>
+ <div class="form-group"><label for="planMedicion">¿Dónde y con qué miden esta métrica?</label><input type="text" id="planMedicion" class="sv" placeholder="Ej.: Estadísticas de Instagram, registro en Excel…" oninput="saveData()"></div>
+ <div class="form-group"><label for="planResponsable">Responsable del seguimiento</label><input type="text" id="planResponsable" class="sv" placeholder="Nombre del integrante" oninput="saveData()"></div>
+</div>
+<div class="wk-wrap">
+<table class="wk-table"><tr><th>Semana</th><th>Meta de la métrica</th><th>Acción concreta del equipo</th></tr>
+<tr><td>1</td><td id="wk1">—</td><td><input type="text" id="planA1" class="sv" placeholder="¿Qué harán esta semana?" oninput="saveData()"></td></tr>
+<tr><td>2</td><td id="wk2">—</td><td><input type="text" id="planA2" class="sv" oninput="saveData()"></td></tr>
+<tr><td>3</td><td id="wk3">—</td><td><input type="text" id="planA3" class="sv" oninput="saveData()"></td></tr>
+<tr><td>4</td><td id="wk4">—</td><td><input type="text" id="planA4" class="sv" oninput="saveData()"></td></tr></table>
+</div>
+<div class="form-group" style="margin-top:12px"><label for="planB">Plan B: si en la semana 2 no avanzan, ¿qué cambian?</label><textarea id="planB" class="sv" oninput="saveData()" placeholder="Ej.: Probar otro canal, cambiar el mensaje o ajustar el precio…"></textarea></div>
+
+<h3 class="sub-h">🔎 Revisión de coherencia</h3>
+<p class="hint" style="margin-bottom:8px">Alertas automáticas que cruzan lo que eligieron con sus números. No bloquean la entrega, pero conviene atenderlas.</p>
+<div class="coh-list" id="cohList"></div>
+</div>
+
+<!-- PASO PARTICIPACION: % INDIVIDUAL -->
+<div class="step-content" data-step="participacion">
+<h2 class="step-title">📊 Participación Individual del Equipo</h2>
+<p class="step-subtitle">Antes de cerrar, cada integrante registra su % de participación en esta actividad.</p>
+<div class="wd-box" id="wdBox">
+<h4>📊 % de participación por integrante</h4>
+<p class="wd-hint">Generen la tabla con los integrantes registrados en el Paso 0. Cada quien anota su % de aporte en esta actividad — si alguien trabajó al 100%, puede marcar 100%; no hace falta que la suma del equipo dé 100%.</p>
+<button type="button" class="wd-gen-btn" onclick="generateWD()">🔄 Generar tabla de % de participación</button>
+<div id="wdRows"></div>
+<button type="button" class="wd-add-btn" onclick="addWDRow('','')">+ Agregar integrante</button>
+<div class="wd-total" id="wdTotal"></div>
+</div>
+</div>
+
+<!-- PASO 4: RESUMEN -->
+<div class="step-content" data-step="6">
+<h2 class="step-title">📋 Resumen Final</h2>
+<p class="step-subtitle">Vista completa de la sesión. Lista para exportar a PDF.</p>
+<div class="complete-banner"><div class="emoji-row">🎉</div>¡Han completado la Sesión 9! Revisen el checklist del Paso 3 antes de exportar.</div>
+<div class="resumen-section"><h4>👥 Equipo</h4>
+<div class="resumen-row"><span class="label">Equipo:</span><span class="value" id="rEquipo">—</span></div>
+<div class="resumen-row"><span class="label">Proyecto:</span><span class="value" id="rProyecto">—</span></div>
+<div class="resumen-row"><span class="label">Integrantes:</span><span class="value" id="rIntegrantes">—</span></div>
+<div class="resumen-row"><span class="label">% de participación:</span><span class="value" id="rWorkDist">—</span></div>
+</div>
+<div class="resumen-section"><h4>1️⃣ Encuesta Uchallenge</h4>
+<div class="resumen-row"><span class="label">Comprobantes subidos:</span><span class="value" id="rComprobantes">—</span></div>
+</div>
+<div class="resumen-section"><h4>2️⃣ Canal(es) elegido(s)</h4>
+<div class="resumen-row"><span class="label">Canales:</span><span class="value" id="rCanales">—</span></div>
+<div class="resumen-row"><span class="label">Métrica a vigilar:</span><span class="value" id="rMetrica">—</span></div>
+</div>
+<div class="resumen-section"><h4>3️⃣ Selector de canal</h4>
+<div class="resumen-row"><span class="label">Perfil del proyecto:</span><span class="value" id="rSelPerfil">—</span></div>
+<div class="resumen-row"><span class="label">Ranking (top 3):</span><span class="value" id="rSelRank">—</span></div>
+</div>
+<div class="resumen-section"><h4>4️⃣ Simulador de embudo</h4>
+<div class="resumen-row"><span class="label">Supuestos:</span><span class="value" id="rSimBase">—</span></div>
+<div class="resumen-row"><span class="label">Resultado semanal:</span><span class="value" id="rSimRes">—</span></div>
+</div>
+<div class="resumen-section"><h4>5️⃣ Plan de canales</h4>
+<div class="resumen-row"><span class="label">Meta de 4 semanas:</span><span class="value" id="rPlanMeta">—</span></div>
+<div class="resumen-row"><span class="label">Revisión de coherencia:</span><span class="value" id="rAlertas">—</span></div>
+</div>
+<div class="info-banner"><h4>💡 Antes de exportar</h4><p>Verifiquen el checklist del Paso 3 y que todas las capturas del Paso 1 estén cargadas.</p></div>
+</div>
+
+</div>
+<div class="nav-buttons">
+<button class="btn btn-prev" id="btnPrev" onclick="prevStep()" style="visibility:hidden">← Anterior</button>
+<button class="btn btn-next" id="btnNext" onclick="nextStep()">Siguiente →</button>
+</div>
+</div>
+<div class="autosave-indicator" id="autosaveIndicator">✓ Guardado automáticamente</div>
+<p class="print-footer">Comercialización y Equipo de Alto Desempeño · Sesión 9 — Retrospectiva Uchallenge y Selección de Canal</p>
+
+<script>
+var currentStepIdx=0;
+var steps=['0','1','2','3','4','5','participacion','6'];
+var timerInterval=null;
+var timerSeconds=60;
+var selectedChannels=[];
+var studentPhotos={};
+
+var ALL_CHANNELS=[];
+
+function goToStepIdx(i){
+  if(i<0||i>=steps.length) return;
+  showStep(steps[i]);
+}
+
+function showStep(stepId){
+  var allSteps=document.querySelectorAll('.step-content');
+  for(var i=0;i<allSteps.length;i++) allSteps[i].classList.remove('active');
+  var target=document.querySelector('.step-content[data-step="'+stepId+'"]');
+  if(target) target.classList.add('active');
+  var idx=steps.indexOf(stepId);
+  currentStepIdx=idx;
+  for(var i=0;i<steps.length;i++){
+    var ind=document.getElementById('ind-'+i);
+    ind.className='step-indicator';
+    if(i<idx) ind.classList.add('completed');
+    else if(i===idx) ind.classList.add('active');
+  }
+  var pct=Math.round(idx/(steps.length-1)*100);
+  var gateBtn=document.getElementById('btnGenerarPdf');
+  if(gateBtn) gateBtn.disabled=pct<100;
+  document.getElementById('progressFill').style.width=pct+'%';
+  document.getElementById('progressPctNum').textContent=pct+'%';
+  document.getElementById('progressStepNum').textContent='Paso '+(idx+1)+' de '+steps.length;
+  document.getElementById('btnPrev').style.visibility=idx===0?'hidden':'visible';
+  document.getElementById('btnNext').textContent=idx===steps.length-1?'📄 Exportar PDF':'Siguiente →';
+  if(stepId==='2') renderSelector();
+  if(stepId==='3') updateFindings();
+  if(stepId==='4') renderSim();
+  if(stepId==='5') renderPlan();
+  if(stepId==='6'){ populateSummary(); playSound('complete'); } else { playSound('click'); }
+  window.scrollTo(0,0);
+}
+function nextStep(){ if(currentStepIdx>=steps.length-1){exportPDF();return;} showStep(steps[currentStepIdx+1]); }
+function prevStep(){ if(currentStepIdx>0) showStep(steps[currentStepIdx-1]); }
+
+function generateStudentSlots(){
+  var raw=document.getElementById('teamMembers').value.trim();
+  if(!raw){ alert('Escriban primero los integrantes del equipo en el Paso 0.'); return; }
+  var names=raw.split(',').map(function(n){return n.trim();}).filter(function(n){return n.length>0;});
+  var container=document.getElementById('studentSlots');
+  container.innerHTML='';
+  names.forEach(function(name,i){
+    var row=document.createElement('div');
+    row.className='student-row';
+    row.innerHTML='<span class="sname">'+name+'</span>'+
+      '<input type="file" accept="image/*" data-idx="'+i+'" onchange="handleStudentPhoto(event,'+i+',\''+name.replace(/'/g,"\\'")+'\')">'+
+      '<img class="student-thumb" id="thumb_'+i+'">'+
+      '<span class="student-status" id="status_'+i+'">Pendiente</span>';
+    container.appendChild(row);
+  });
+  restoreStudentPhotos();
+  renderProofGallery();
+  playSound('click');
+  saveData();
+}
+
+function handleStudentPhoto(e,idx,name){
+  var file=e.target.files[0];
+  if(!file) return;
+  var reader=new FileReader();
+  reader.onload=function(ev){
+    var img=new Image();
+    img.onload=function(){
+      var canvas=document.createElement('canvas');
+      var maxW=400;
+      var scale=Math.min(1,maxW/img.width);
+      canvas.width=img.width*scale;
+      canvas.height=img.height*scale;
+      var ctx=canvas.getContext('2d');
+      ctx.drawImage(img,0,0,canvas.width,canvas.height);
+      var dataUrl=canvas.toDataURL('image/jpeg',0.7);
+      studentPhotos[idx]={name:name,data:dataUrl};
+      var thumb=document.getElementById('thumb_'+idx);
+      thumb.src=dataUrl; thumb.style.display='block';
+      var status=document.getElementById('status_'+idx);
+      status.textContent='✓ Enviado'; status.classList.add('done');
+      safeSet('s9_student_photos',JSON.stringify(studentPhotos));
+      renderProofGallery();
+      playSound('success');
+      saveData();
+    };
+    img.src=ev.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function restoreStudentPhotos(){
+  var raw=localStorage.getItem('s9_student_photos');
+  if(!raw) return;
+  studentPhotos=JSON.parse(raw);
+  Object.keys(studentPhotos).forEach(function(idx){
+    var thumb=document.getElementById('thumb_'+idx);
+    var status=document.getElementById('status_'+idx);
+    if(thumb){ thumb.src=studentPhotos[idx].data; thumb.style.display='block'; }
+    if(status){ status.textContent='✓ Enviado'; status.classList.add('done'); }
+  });
+}
+
+/* Galería solo visible al imprimir: recopila las capturas de todos los integrantes
+   en una sola cuadrícula, como pide la actividad ("el HTML las recopila"). */
+function renderProofGallery(){
+  var rows=document.querySelectorAll('.student-row');
+  var html='<h3 style="font-size:0.88em;color:#1a3a6b;margin:10px 0 8px">Comprobantes recopilados</h3><div class="proof-gallery-grid">';
+  rows.forEach(function(row,i){
+    var name=row.querySelector('.sname').textContent;
+    var photo=studentPhotos[i];
+    html+='<div class="proof-tile">'+
+      (photo?'<img src="'+photo.data+'">':'<div style="height:70px;display:flex;align-items:center;justify-content:center;color:#dc2626;font-size:0.65em;border:1px dashed #fca5a5;border-radius:6px">Sin captura</div>')+
+      '<div class="p-name">'+name+'</div>'+
+      (photo?'<div class="p-mark">✓ enviado</div>':'')+
+      '</div>';
+  });
+  html+='</div>';
+  document.getElementById('proofGallery').innerHTML=html;
+}
+
+function startTimer(){
+  if(timerInterval) return;
+  timerInterval=setInterval(function(){
+    timerSeconds--;
+    if(timerSeconds<=0){ timerSeconds=0; clearInterval(timerInterval); timerInterval=null; playSound('success'); }
+    updateTimerDisplay();
+  },1000);
+}
+function pauseTimer(){ clearInterval(timerInterval); timerInterval=null; }
+function resetTimer(){ clearInterval(timerInterval); timerInterval=null; timerSeconds=60; updateTimerDisplay(); }
+function updateTimerDisplay(){
+  var m=Math.floor(timerSeconds/60); var s=timerSeconds%60;
+  var disp=document.getElementById('timerDisplay');
+  disp.textContent=(m<10?'0':'')+m+':'+(s<10?'0':'')+s;
+  disp.className='timer-display'+(timerSeconds<=15?' warning':'');
+}
+
+function updateFindings(){
+  document.getElementById('fCanales').textContent=selectedChannels.length>0?selectedChannels.join(' + '):'Aún no eligen canal (Paso 2).';
+  document.getElementById('fJustificacion').textContent=document.getElementById('plJustificacion').value||'Aún no la escriben.';
+  document.getElementById('fMetrica').textContent=document.getElementById('plMetrica').value||'Sin elegir';
+  var total=document.querySelectorAll('.student-row').length;
+  var done=Object.keys(studentPhotos).length;
+  var comprobantesItem=document.getElementById('fComprobantesItem');
+  if(total>0){
+    document.getElementById('fComprobantes').textContent=done+' de '+total+' integrantes';
+    comprobantesItem.classList.toggle('alert', done<total);
+  } else {
+    document.getElementById('fComprobantes').textContent='Genera los espacios en el Paso 1';
+    comprobantesItem.classList.add('alert');
+  }
+}
+
+function populateSummary(){
+  document.getElementById('rEquipo').textContent=document.getElementById('teamName').value||'—';
+  document.getElementById('rProyecto').textContent=document.getElementById('projectName').value||'—';
+  document.getElementById('rIntegrantes').textContent=document.getElementById('teamMembers').value||'—';
+  document.getElementById('rWorkDist').textContent=collectWD().filter(function(x){return x.name;}).map(function(x){return x.name+': '+(x.pct||'0')+'%';}).join(' · ')||'—';
+  var total=document.querySelectorAll('.student-row').length;
+  var done=Object.keys(studentPhotos).length;
+  document.getElementById('rComprobantes').textContent=total>0?(done+' de '+total+' integrantes'):'Genera los espacios en el Paso 1';
+  document.getElementById('rCanales').textContent=selectedChannels.length>0?selectedChannels.join(' + '):'—';
+  document.getElementById('rMetrica').textContent=document.getElementById('plMetrica').value||'—';
+
+  populateSummaryV2();
+  document.getElementById('phTeam').textContent=document.getElementById('teamName').value||'—';
+  document.getElementById('phProject').textContent=document.getElementById('projectName').value||'—';
+  document.getElementById('phDate').textContent=new Date().toLocaleDateString('es-MX',{day:'numeric',month:'long',year:'numeric'});
+}
+
+function saveData(){
+  var checks=document.querySelectorAll('.check-item');
+  var checkValues=Array.from(checks).map(function(el){return el.checked;});
+  var data={
+    teamName:document.getElementById('teamName').value,
+    teamMembers:document.getElementById('teamMembers').value,
+    projectName:document.getElementById('projectName').value,
+    selectedChannels:selectedChannels,
+    defensaFrase:document.getElementById('defensaFrase').value,
+    plClienteProducto:document.getElementById('plClienteProducto').value,
+    plCanales:document.getElementById('plCanales').value,
+    plJustificacion:document.getElementById('plJustificacion').value,
+    plMetrica:document.getElementById('plMetrica').value,
+    checks:checkValues,
+    slotsGenerated:document.getElementById('studentSlots').innerHTML.length>0,
+    workDistribution:collectWD()
+  };
+  data.extra=collectExtra();
+  safeSet('s9_activity_data',JSON.stringify(data));
+  var ind=document.getElementById('autosaveIndicator');
+  ind.classList.add('show');
+  setTimeout(function(){ind.classList.remove('show');},1200);
+}
+
+function loadData(){
+  var raw=localStorage.getItem('s9_activity_data');
+  if(raw){
+    var data=JSON.parse(raw);
+    if(data.teamName) document.getElementById('teamName').value=data.teamName;
+    if(data.teamMembers) document.getElementById('teamMembers').value=data.teamMembers;
+    if(data.projectName) document.getElementById('projectName').value=data.projectName;
+    if(data.defensaFrase) document.getElementById('defensaFrase').value=data.defensaFrase;
+    if(data.plClienteProducto) document.getElementById('plClienteProducto').value=data.plClienteProducto;
+    if(data.plJustificacion) document.getElementById('plJustificacion').value=data.plJustificacion;
+    if(data.plMetrica) document.getElementById('plMetrica').value=data.plMetrica;
+    if(data.checks){ var els=document.querySelectorAll('.check-item'); data.checks.forEach(function(v,i){ if(els[i]) els[i].checked=v; }); }
+    if(data.selectedChannels&&data.selectedChannels.length){selectedChannels=data.selectedChannels.filter(function(c){return CH.some(function(z){return z.ch===c;});}).slice(0,2);}
+    restoreExtra(data.extra);
+    if(data.slotsGenerated && document.getElementById('teamMembers').value) generateStudentSlots();
+    if(data.workDistribution) restoreWD(data.workDistribution);
+  }
+  syncChannels();renderAllV2();
+}
+
+function clampPct(el){var v=parseInt(el.value,10);if(isNaN(v)){v='';}else{if(v<0)v=0;if(v>100)v=100;}el.value=v;updateWDTotal();saveData();}
+function wdRowHTML(name,pct){
+  return '<div class="wd-row"><input type="text" placeholder="Nombre del integrante" value="'+(name||'').replace(/"/g,'&quot;')+'" oninput="saveData()">'+
+  '<div class="wd-pct-wrap"><input type="number" min="0" max="100" step="1" placeholder="%" value="'+((pct===undefined||pct===null)?'':pct)+'" oninput="clampPct(this)">'+
+  '<span>%</span></div>'+
+  '<button type="button" class="wd-remove-btn" onclick="this.closest(\'.wd-row\').remove();updateWDTotal();saveData()">✕</button></div>';
+}
+function addWDRow(name,pct){
+  document.getElementById('wdRows').insertAdjacentHTML('beforeend',wdRowHTML(name,pct));
+  updateWDTotal();
+}
+function generateWD(){
+  var raw=document.getElementById('teamMembers').value.trim();
+  if(!raw){ alert('Escriban primero los integrantes del equipo en el Paso 0.'); return; }
+  var names=raw.split(',').map(function(n){return n.trim();}).filter(function(n){return n.length>0;});
+  document.getElementById('wdRows').innerHTML='';
+  names.forEach(function(n){addWDRow(n,'');});
+  playSound('click');
+  saveData();
+}
+function updateWDTotal(){
+  var rows=document.querySelectorAll('#wdRows .wd-row');
+  var sum=0;
+  rows.forEach(function(r){var v=parseInt(r.querySelector('input[type="number"]').value,10);if(!isNaN(v))sum+=v;});
+  var el=document.getElementById('wdTotal');
+  if(el) el.textContent=rows.length?('Suma informativa del equipo: '+sum+'% (cada integrante puede llegar a 100% de forma independiente)'):'';
+}
+function collectWD(){
+  var rows=document.querySelectorAll('#wdRows .wd-row');
+  var out=[];
+  rows.forEach(function(r){
+    var name=r.querySelector('input[type="text"]').value;
+    var pct=r.querySelector('input[type="number"]').value;
+    out.push({name:name,pct:pct});
+  });
+  return out;
+}
+function restoreWD(arr){
+  document.getElementById('wdRows').innerHTML='';
+  if(arr&&arr.length){arr.forEach(function(it){addWDRow(it.name,it.pct);});}
+  updateWDTotal();
+}
+
+function clearAllData(){
+  if(confirm('¿Están seguros de que desean borrar todos los datos ingresados?')){
+    playSound('error');
+    localStorage.removeItem('s9_activity_data');
+    localStorage.removeItem('s9_student_photos');
+    location.reload();
+  }
+}
+function exportPDF(){ if(currentStepIdx<steps.length-1){ alert('Completa todos los pasos de la actividad (incluyendo el % de participación) antes de generar el PDF.'); return; } updateFindings(); populateSummary(); renderProofGallery(); playSound('complete'); window.print(); }
+function tickSound(){ playSound('tick'); saveData(); }
+
+/* ===== Motor de sonido (Web Audio API, sin archivos externos) ===== */
+var soundEnabled = localStorage.getItem('sound_enabled')!=='off';
+function updateSoundBtn(){ var b=document.getElementById('soundToggleBtn'); if(b) b.textContent = soundEnabled?'🔊 Sonido':'🔇 Sonido'; }
+function toggleSound(){ soundEnabled=!soundEnabled; localStorage.setItem('sound_enabled', soundEnabled?'on':'off'); updateSoundBtn(); if(soundEnabled) playSound('click'); }
+var audioCtx=null;
+function getAudioCtx(){ if(!audioCtx){ try{ audioCtx=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){ return null; } } return audioCtx; }
+function playSound(type){
+  if(!soundEnabled) return;
+  var ctx=getAudioCtx(); if(!ctx) return;
+  if(ctx.state==='suspended') ctx.resume();
+  var now=ctx.currentTime;
+  function tone(freq,start,dur,vol,wave){
+    var osc=ctx.createOscillator(); var gain=ctx.createGain();
+    osc.type=wave||'sine'; osc.frequency.setValueAtTime(freq, now+start);
+    gain.gain.setValueAtTime(0, now+start);
+    gain.gain.linearRampToValueAtTime(vol, now+start+0.01);
+    gain.gain.exponentialRampToValueAtTime(0.001, now+start+dur);
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.start(now+start); osc.stop(now+start+dur+0.02);
+  }
+  if(type==='click'){ tone(520,0,0.08,0.05,'sine'); }
+  else if(type==='tick'){ tone(700,0,0.06,0.04,'sine'); }
+  else if(type==='success'){ tone(523.25,0,0.1,0.05,'sine'); tone(659.25,0.1,0.12,0.05,'sine'); tone(783.99,0.2,0.18,0.06,'sine'); }
+  else if(type==='error'){ tone(200,0,0.15,0.05,'sawtooth'); }
+  else if(type==='complete'){ tone(523.25,0,0.1,0.05,'sine'); tone(659.25,0.09,0.1,0.05,'sine'); tone(783.99,0.18,0.1,0.05,'sine'); tone(1046.5,0.27,0.22,0.07,'sine'); }
+}
+
+/* ===== Ajuste de impresión: evita que el texto largo se corte en el PDF =====
+   Los <textarea> solo imprimen lo que cabe en su caja visible; si el alumno
+   escribió más, el resto se recorta. Antes de imprimir, estiramos cada
+   textarea a la altura exacta de su contenido; al terminar, la regresamos a
+   su altura original para no romper la edición en pantalla. */
+function prepPrintTextareas(){
+  document.querySelectorAll('textarea').forEach(function(t){
+    if(t.dataset.origHeight===undefined) t.dataset.origHeight=t.style.height||'';
+    t.style.height='auto';
+    t.style.height=(t.scrollHeight+3)+'px';
+  });
+}
+function restorePrintTextareas(){
+  document.querySelectorAll('textarea').forEach(function(t){
+    t.style.height=t.dataset.origHeight||'';
+  });
+}
+window.addEventListener('beforeprint', prepPrintTextareas);
+window.addEventListener('afterprint', restorePrintTextareas);
+
+
+/* =====================================================================
+   v2 — Selector ponderado, simulador de embudo, plan y coherencia
+   ===================================================================== */
+function $id(i){return document.getElementById(i);}
+function safeSet(k,v){
+  try{localStorage.setItem(k,v);return true;}
+  catch(e){
+    var ind=$id('autosaveIndicator');
+    if(ind){ind.textContent='⚠️ No se pudo guardar (almacenamiento lleno)';ind.classList.add('show');setTimeout(function(){ind.classList.remove('show');ind.textContent='✓ Guardado automáticamente';},2600);}
+    return false;
+  }
+}
+function num(id,def){var el=$id(id);var v=el?parseFloat(el.value):NaN;return isNaN(v)?(def===undefined?0:def):v;}
+function money(n){return '$'+Math.round(n).toLocaleString('es-MX');}
+function r1(n){return Math.round(n*10)/10;}
+function fmtN(n){return r1(n).toLocaleString('es-MX');}
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+function selText(id){var el=$id(id);if(!el||!el.value)return '';return el.options[el.selectedIndex].text;}
+
+/* ---- Catálogo de canales (orden fijo: MKT, ECO, RED, WA, ADS) ---- */
+var CH=[
+ {ch:'Marketplace',icon:'🛒',note:'Tráfico y logística ya resueltos; pagas comisión. Bueno para producto físico estandarizado.',risk:'la comisión puede comerse el margen',time:2,bud:0,comm:15},
+ {ch:'E-commerce propio',icon:'💻',note:'Control total de marca y margen; tú atraes el tráfico.',risk:'tendremos que generar nuestro propio tráfico',time:3,bud:1,comm:4},
+ {ch:'Redes con venta directa',icon:'📱',note:'Instagram o TikTok Shop. Fuerte donde la imagen y la comunidad venden.',risk:'exige publicar de forma constante',time:3,bud:0,comm:5},
+ {ch:'WhatsApp Business',icon:'💬',note:'Venta 1 a 1, sin inversión. Ideal para servicios o ticket alto.',risk:'cada venta consume tiempo de atención',time:2,bud:0,comm:0},
+ {ch:'Anuncios pagados',icon:'📢',note:'Acelera el tráfico hacia los otros canales; requiere presupuesto.',risk:'sin presupuesto el alcance se detiene',time:1,bud:2,comm:0}
+];
+ALL_CHANNELS=CH;
+var FIT_C={busca:[5,3,2,2,4],redes:[2,3,5,3,4],platica:[1,2,3,5,3],marca:[2,5,4,3,3]};
+var FIT_P={estandar:[5,4,3,2,4],visual:[3,4,5,4,4],medida:[1,2,3,5,3],demo:[2,3,4,5,3]};
+var FIT_T={low:[4,2,5,2,2],mid:[4,4,4,4,4],high:[3,5,4,5,4]};
+var MARG_ADJ={low:[-2,-1,0,0,-2],mid:[-1,0,0,0,-1],high:[0,0,0,0,0]};
+var CRIT_NAMES=['Cliente','Producto','Recursos','Ticket y margen'];
+var PROFILE_IDS=['selCliente','selProducto','selTiempo','selPresupuesto','selTicket','selMargen'];
+
+function profileComplete(){return PROFILE_IDS.every(function(i){var e=$id(i);return e&&e.value;});}
+function weights(){return ['wCliente','wProducto','wRecursos','wTicket'].map(function(id){return num(id,3);});}
+function fitFor(i){
+  var c=FIT_C[$id('selCliente').value][i];
+  var p=FIT_P[$id('selProducto').value][i];
+  var haveT={low:1,mid:2,high:3}[$id('selTiempo').value];
+  var haveB={none:0,some:1,high:2}[$id('selPresupuesto').value];
+  var r=5-1.5*Math.max(0,CH[i].time-haveT)-1.5*Math.max(0,CH[i].bud-haveB);
+  r=Math.max(1,Math.min(5,Math.round(r)));
+  var t=FIT_T[$id('selTicket').value][i]+MARG_ADJ[$id('selMargen').value][i];
+  t=Math.max(1,Math.min(5,t));
+  return [c,p,r,t];
+}
+function scoreList(){
+  if(!profileComplete()) return null;
+  var w=weights(),sw=w.reduce(function(a,b){return a+b;},0)||1;
+  var list=CH.map(function(c,i){
+    var f=fitFor(i),s=0;for(var k=0;k<4;k++) s+=w[k]*f[k];
+    return {i:i,ch:c.ch,icon:c.icon,note:c.note,fit:f,score:Math.round(100*s/(5*sw))};
+  });
+  list.sort(function(a,b){return b.score-a.score||a.i-b.i;});
+  list.forEach(function(x,n){x.rank=n+1;});
+  return list;
+}
+function onSel(){
+  ['wCliente','wProducto','wRecursos','wTicket'].forEach(function(id){var v=$id(id+'_v');if(v)v.textContent=$id(id).value;});
+  renderSelector();saveData();
+}
+function renderSelector(){
+  var list=scoreList(),hint=$id('selectorHint'),box=$id('rankList'),btn=$id('btnUseTop');
+  if(!list){
+    hint.className='hint-box warn';
+    hint.textContent='Respondan las 6 preguntas del perfil (A) para ver la calificación de cada canal.';
+    box.innerHTML='';btn.style.display='none';renderMatrix();return;
+  }
+  hint.className='hint-box';
+  hint.textContent='Calificación de 0 a 100 según el perfil de su proyecto y la importancia que le dieron a cada criterio. Toquen un canal para elegirlo (máximo 2).';
+  btn.style.display='inline-block';
+  box.innerHTML=list.map(function(x){
+    var on=selectedChannels.indexOf(x.ch)>-1;
+    return '<div class="rank-card'+(on?' selected':'')+'" data-ch="'+esc(x.ch)+'" onclick="toggleChannel(this)">'+
+      '<span class="check-badge">✓</span><div class="rk">#'+x.rank+'</div><div class="rk-icon">'+x.icon+'</div>'+
+      '<div><h4>'+esc(x.ch)+(x.rank<=2?'<span class="badge-rec">Recomendado</span>':'')+'</h4><p>'+esc(x.note)+'</p>'+
+      '<div class="rk-bar"><i style="width:'+x.score+'%"></i></div>'+
+      '<div class="rk-fits">'+x.fit.map(function(f,k){return '<span>'+CRIT_NAMES[k]+' '+f+'/5</span>';}).join('')+'</div></div>'+
+      '<div class="rk-score">'+x.score+'<small>/100</small></div></div>';
+  }).join('');
+  renderMatrix();
+}
+function useTopTwo(){
+  var list=scoreList();if(!list)return;
+  selectedChannels=[list[0].ch,list[1].ch];
+  syncChannels();playSound('success');saveData();
+}
+function toggleChannel(el){
+  var ch=el.getAttribute('data-ch'),idx=selectedChannels.indexOf(ch);
+  if(idx>-1){selectedChannels.splice(idx,1);}
+  else{
+    if(selectedChannels.length>=2){alert('Solo pueden elegir máximo 2 canales.');return;}
+    selectedChannels.push(ch);
+  }
+  syncChannels();playSound('click');saveData();
+}
+function syncChannels(){
+  var summary=$id('selectedSummary');
+  if(selectedChannels.length>0){summary.style.display='block';summary.textContent='Canales elegidos: '+selectedChannels.join(' + ');}
+  else{summary.style.display='none';}
+  $id('plCanales').value=selectedChannels.join(' + ');
+  renderSelector();refreshSimChannels();
+}
+/* Matriz visual (se imprime): calificación y elección de los 5 canales */
+function renderMatrix(){
+  var list=scoreList(),byCh={};
+  if(list) list.forEach(function(x){byCh[x.ch]=x;});
+  var w=weights();
+  $id('matrixMeta').innerHTML=list
+    ? '<b>Perfil:</b> '+esc(selText('selCliente'))+' · '+esc(selText('selProducto'))+' · '+esc(selText('selTiempo'))+' · '+esc(selText('selPresupuesto'))+' · ticket '+esc(selText('selTicket').toLowerCase())+' · margen '+esc(selText('selMargen').toLowerCase())+'<br><b>Importancia (1–5):</b> Cliente '+w[0]+' · Producto '+w[1]+' · Recursos '+w[2]+' · Ticket y margen '+w[3]
+    : 'Aún no completan el perfil del proyecto.';
+  $id('matrixRow').innerHTML=CH.map(function(c){
+    var on=selectedChannels.indexOf(c.ch)>-1,x=byCh[c.ch];
+    return '<div class="matrix-col'+(on?' on':'')+'"><div class="m-icon">'+c.icon+'</div><div class="m-name">'+c.ch+'</div>'+
+      '<div class="m-score">'+(x?x.score+'/100':'—')+'</div><div class="m-mark">'+(on?'✓ elegido':(x?'#'+x.rank:'—'))+'</div></div>';
+  }).join('');
+}
+
+/* ---- Borrador de justificación desde el selector ---- */
+function draftJustification(){
+  if(!profileComplete()||!selectedChannels.length){alert('Primero completen el perfil del Paso 2 y elijan sus canales.');return;}
+  var ta=$id('plJustificacion');
+  if(ta.value.trim()&&!confirm('Ya hay texto en la justificación. ¿Reemplazarlo con el borrador?')) return;
+  var list=scoreList(),by={};list.forEach(function(x){by[x.ch]=x;});
+  function fits(k){return selectedChannels.map(function(c){return c+' '+by[c].fit[k]+'/5';}).join(', ');}
+  var risks=selectedChannels.map(function(c){var o=CH.filter(function(z){return z.ch===c;})[0];return c+': '+o.risk;}).join('; ');
+  var t='Canal(es): '+selectedChannels.join(' + ')+' (calificación '+selectedChannels.map(function(c){return by[c].score+'/100';}).join(' y ')+').\n'+
+   '• Cliente: '+selText('selCliente').toLowerCase()+'. Encaje → '+fits(0)+'.\n'+
+   '• Producto: '+selText('selProducto').toLowerCase()+'. Encaje → '+fits(1)+'.\n'+
+   '• Recursos: contamos con '+selText('selTiempo').toLowerCase()+' y '+selText('selPresupuesto').toLowerCase()+'. Encaje → '+fits(2)+'.\n'+
+   '• Ticket y margen: ticket '+selText('selTicket').toLowerCase()+' y margen '+selText('selMargen').toLowerCase()+'. Encaje → '+fits(3)+'.\n'+
+   'Riesgo a vigilar → '+risks+'.';
+  ta.value=t;playSound('success');saveData();
+}
+
+/* ---- Simulador de embudo ---- */
+function simVals(){
+  var A=num('simAlcance'),pi=num('simInteres')/100,pc=num('simCompra')/100,T=num('simTicket'),m=num('simMargen')/100,c=num('simComision')/100,P=num('simPauta'),pr=num('simRecompra')/100;
+  var I=A*pi,V=I*pc,R=V*T,U=R*m-R*c-P;
+  return {A:A,I:I,V:V,R:R,U:U,RC:V*pr,pi:pi,pc:pc,T:T,m:m,c:c,P:P,pr:pr,conv:A>0?V/A:0,cac:V>0?P/V:null,u:V*T*(m-c)};
+}
+function refreshSimChannels(){
+  var sel=$id('simCanal');if(!sel)return;
+  var prev=sel.value,opts=selectedChannels.length?selectedChannels.slice():CH.map(function(c){return c.ch;});
+  sel.innerHTML=opts.map(function(c){return '<option value="'+esc(c)+'">'+esc(c)+'</option>';}).join('');
+  if(opts.indexOf(prev)>-1) sel.value=prev;
+}
+function onSimCanal(){
+  var c=CH.filter(function(z){return z.ch===$id('simCanal').value;})[0];
+  if(c) $id('simComision').value=c.comm;
+  onSim();
+}
+function loadSimExample(){
+  var v={simAlcance:2000,simInteres:4,simCompra:12.5,simRecompra:10,simTicket:300,simMargen:40,simPauta:0};
+  Object.keys(v).forEach(function(k){$id(k).value=v[k];});
+  onSimCanal();playSound('click');
+}
+function onSim(){renderSim();saveData();}
+function renderSim(){
+  var s=simVals(),maxN=Math.max(1,s.A);
+  function wd(n){return Math.max(16,100*Math.log10(1+Math.max(0,n))/Math.log10(1+maxN));}
+  $id('funnelSim').innerHTML=
+   '<div class="fn-bar fn-1" style="width:'+wd(s.A)+'%">Alcance <small>'+fmtN(s.A)+' personas</small></div>'+
+   '<div class="fn-bar fn-2" style="width:'+wd(s.I)+'%">Interés <small>'+fmtN(s.I)+' · '+fmtN(s.pi*100)+' % del alcance</small></div>'+
+   '<div class="fn-bar fn-3" style="width:'+wd(s.V)+'%">Compra <small>'+fmtN(s.V)+' · '+fmtN(s.pc*100)+' % de los interesados</small></div>'+
+   '<div class="fn-bar fn-4" style="width:'+wd(s.RC)+'%">Recompra <small>'+fmtN(s.RC)+' · '+fmtN(s.pr*100)+' % de los compradores</small></div>';
+  var tiles=[
+   ['Ventas por semana',fmtN(s.V),false],['Ingreso semanal',money(s.R),false],['Utilidad semanal',money(s.U),s.U<0],
+   ['Conversión global',fmtN(s.conv*100)+' %',false],['Ticket promedio',money(s.T),false],['Costo por venta (pauta)',s.cac===null?'—':money(s.cac),false]];
+  $id('kpiGrid').innerHTML=tiles.map(function(t){return '<div class="kpi'+(t[2]?' neg':'')+'"><div class="k-l">'+t[0]+'</div><div class="k-v">'+t[1]+'</div></div>';}).join('');
+  var al=[];
+  if(s.A>0&&s.V<1) al.push('Con estos números venden menos de 1 vez por semana. Revisen si el alcance o las conversiones son realistas.');
+  if(s.m>0&&s.c>=s.m) al.push('La comisión del canal ('+fmtN(s.c*100)+' %) iguala o supera su margen ('+fmtN(s.m*100)+' %): cada venta deja pérdida.');
+  if($id('simDatos').value==='estimado') al.push('Los números son estimados. Registren datos reales en las próximas semanas y vuelvan a correr el simulador.');
+  var box=$id('simAlerts');box.className='hint-box'+(al.length?' warn':'');box.innerHTML=al.map(esc).join('<br>');
+  /* rutas hacia la meta */
+  var G=parseFloat($id('simMeta').value),rt=$id('routes');
+  if(isNaN(G)||G<=0){rt.innerHTML='<div class="route" style="grid-column:1/-1"><p>Escriban una meta de utilidad semanal para ver tres caminos: más alcance, mejor conversión o mayor ticket.</p></div>';}
+  else if(s.u<=0){rt.innerHTML='<div class="route" style="grid-column:1/-1"><p><b>Con el margen y la comisión actuales no hay camino:</b> aunque vendan más, cada venta no deja utilidad. Ajusten precio, costo o canal antes de buscar volumen.</p></div>';}
+  else{
+    var prop=$id('simPautaProp').value==='si';
+    var kA=prop?((s.u-s.P)>0?G/(s.u-s.P):null):(G+s.P)/s.u;
+    var kC=(G+s.P)/s.u,kT=(G+s.P)/s.u;
+    var cards=[];
+    cards.push(['📣 Más alcance (métrica: Alcance)',kA===null?'No alcanza':fmtN(s.A*kA)+' personas',kA===null?'Con pauta proporcional, el costo se come la utilidad: no hay camino por aquí.':'Es ×'+fmtN(kA)+' su alcance actual'+(prop?' (con pauta proporcional).':' si las conversiones se mantienen.')]);
+    var nc=s.pc*kC*100;
+    cards.push(['🎯 Mejor conversión (métrica: Tasa de conversión)',nc>100?'Más de 100 %':fmtN(nc)+' % compra',nc>100?'No es realista: combinen con más alcance o ticket.':'De '+fmtN(s.pc*100)+' % a '+fmtN(nc)+' % de los interesados (×'+fmtN(kC)+').']);
+    cards.push(['🧾 Mayor ticket (métrica: Ticket promedio)',money(s.T*kT)+' por compra','Es ×'+fmtN(kT)+' su ticket actual con las mismas ventas. Piensen en combos o paquetes.']);
+    rt.innerHTML=cards.map(function(c){return '<div class="route"><h5>'+c[0]+'</h5><div class="r-v">'+c[1]+'</div><p>'+c[2]+'</p></div>';}).join('');
+  }
+  var et=$id('simEtapa').value,map={nuevo:'Alcance',trafico:'Tasa de conversión',validado:'Ticket promedio'},mb=$id('metricSuggest');
+  mb.innerHTML=et?('<b>Sugerencia según su etapa: '+map[et]+'.</b><br>Regla de la plantilla: proyecto nuevo → alcance; con tráfico pero pocas ventas → conversión; ya validado → ticket. No hay una métrica correcta: es su decisión, pero tiene que ser coherente con su etapa.'):'Elijan la etapa de su proyecto para ver qué métrica conviene vigilar primero.';
+}
+
+/* ---- Plan de 4 semanas ---- */
+function metricBase(){
+  var m=$id('plMetrica').value,s=simVals();
+  if(m==='Alcance') return {v:s.A,u:'personas por semana',d:0};
+  if(m==='Tasa de conversión') return {v:s.conv*100,u:'% de conversión global',d:2};
+  if(m==='Ticket promedio') return {v:s.T,u:'pesos por compra',d:0};
+  return null;
+}
+function onPlan(){renderPlan();saveData();}
+function renderPlan(){
+  $id('pCliente').textContent=$id('plClienteProducto').value||'— (Paso 3)';
+  $id('pCanales').textContent=selectedChannels.length?selectedChannels.join(' + '):'— (Paso 2)';
+  $id('pJust').textContent=$id('plJustificacion').value||'— (Paso 3)';
+  $id('pMetrica').textContent=$id('plMetrica').value||'— (Paso 3)';
+  var b=metricBase(),meta=parseFloat($id('planMeta').value);
+  $id('planBase').value=b?(Math.round(b.v*Math.pow(10,b.d))/Math.pow(10,b.d)).toLocaleString('es-MX')+' '+b.u:'';
+  $id('planMetaLbl').textContent='Meta al cierre de la semana 4'+(b?' ('+b.u+')':'');
+  for(var w=1;w<=4;w++){
+    var cell=$id('wk'+w);
+    if(b&&!isNaN(meta)){var v=b.v+(meta-b.v)*w/4;cell.textContent=(Math.round(v*Math.pow(10,b.d))/Math.pow(10,b.d)).toLocaleString('es-MX');}
+    else cell.textContent='—';
+  }
+  renderCoherence();
+}
+function coherenceChecks(){
+  var out=[],list=scoreList(),s=simVals();
+  if(!selectedChannels.length){out.push({l:'bad',t:'Aún no eligen canal. Regresen al Paso 2.'});return out;}
+  if(list){
+    var top=list.slice(0,2).map(function(x){return x.ch;}),all=true;
+    selectedChannels.forEach(function(c){
+      if(top.indexOf(c)<0){
+        all=false;var x=list.filter(function(z){return z.ch===c;})[0];
+        out.push({l:'warn',t:c+' quedó en el lugar #'+x.rank+' del selector ('+x.score+'/100). Expliquen en su justificación por qué se apartan de lo recomendado.'});
+      }
+    });
+    if(all) out.push({l:'ok',t:'Sus canales coinciden con los 2 mejor calificados por el selector.'});
+  }
+  var j=$id('plJustificacion').value,miss=[];
+  if(!/cliente/i.test(j)) miss.push('cliente');
+  if(!/producto|servicio/i.test(j)) miss.push('producto');
+  if(!/recurso|tiempo|presupuesto|equipo/i.test(j)) miss.push('recursos');
+  if(!/ticket|margen|precio|comisi/i.test(j)) miss.push('ticket y margen');
+  if(!j.trim()) out.push({l:'bad',t:'La justificación del Paso 3 está vacía.'});
+  else if(miss.length) out.push({l:'warn',t:'Su justificación no menciona: '+miss.join(', ')+'. Usen los 4 criterios.'});
+  else out.push({l:'ok',t:'La justificación toca los 4 criterios.'});
+  if(profileComplete()){
+    var tk=$id('selTicket').value,mg=$id('selMargen').value,tm=$id('selTiempo').value,pb=$id('selPresupuesto').value;
+    selectedChannels.forEach(function(c){
+      if(c==='WhatsApp Business'&&tk==='low') out.push({l:'warn',t:'WhatsApp Business exige atención 1 a 1 y su ticket es menor a $100: cuiden que el tiempo invertido no supere la utilidad.'});
+      if(c==='Marketplace'&&mg==='low') out.push({l:'warn',t:'Marketplace cobra comisión y su margen es menor a 20 %: revisen que la utilidad no desaparezca.'});
+      if(c==='Anuncios pagados'&&pb==='none') out.push({l:'bad',t:'Eligieron Anuncios pagados pero declararon $0 de presupuesto para publicidad.'});
+      if((c==='Redes con venta directa'||c==='E-commerce propio')&&tm==='low') out.push({l:'warn',t:c+' requiere tiempo constante y ustedes declararon menos de 3 h por semana.'});
+    });
+  }
+  if(s.A>0&&s.T>0){
+    if(s.u<=0&&s.m>0&&s.c>=s.m) out.push({l:'bad',t:'La comisión del canal ('+fmtN(s.c*100)+' %) iguala o supera su margen ('+fmtN(s.m*100)+' %).'});
+    else if(s.U<0) out.push({l:'bad',t:'Con sus supuestos pierden '+money(-s.U)+' por semana (la pauta supera la utilidad de las ventas).'});
+    else if(s.m>0&&s.c>=0.5*s.m) out.push({l:'warn',t:'La comisión del canal se come más de la mitad de su margen.'});
+    else out.push({l:'ok',t:'En el simulador, su canal deja utilidad semanal de '+money(s.U)+'.'});
+  } else out.push({l:'info',t:'Corran el simulador del Paso 4 para revisar la parte numérica.'});
+  var m=$id('plMetrica').value,et=$id('simEtapa').value,map={nuevo:'Alcance',trafico:'Tasa de conversión',validado:'Ticket promedio'};
+  if(!m) out.push({l:'warn',t:'Falta elegir la métrica a vigilar en el Paso 3.'});
+  else if(et&&map[et]!==m) out.push({l:'info',t:'Su etapa ('+selText('simEtapa').split(':')[0].toLowerCase()+') sugiere vigilar '+map[et]+' y ustedes eligieron '+m+'. Si fue a propósito, explíquenlo en el plan.'});
+  else if(et) out.push({l:'ok',t:'La métrica elegida es coherente con la etapa de su proyecto.'});
+  var meta=parseFloat($id('planMeta').value),b=metricBase();
+  if(m&&b){
+    if(isNaN(meta)) out.push({l:'warn',t:'Falta la meta de la semana 4 en el plan.'});
+    else if(meta<=b.v) out.push({l:'warn',t:'La meta no supera el punto de partida del simulador.'});
+    else out.push({l:'ok',t:'La meta es mayor que su punto de partida: ×'+fmtN(meta/b.v)+'.'});
+  }
+  if($id('simDatos').value==='estimado') out.push({l:'info',t:'Los números del simulador son estimados; márquenlos como reales cuando tengan datos.'});
+  return out;
+}
+function renderCoherence(){
+  var ic={ok:'✅',warn:'⚠️',bad:'⛔',info:'ℹ️'};
+  $id('cohList').innerHTML=coherenceChecks().map(function(c){return '<div class="coh '+c.l+'"><span class="ci">'+ic[c.l]+'</span><span>'+esc(c.t)+'</span></div>';}).join('');
+}
+
+/* ---- Estado extra (campos .sv) ---- */
+function collectExtra(){var o={};document.querySelectorAll('.sv').forEach(function(el){if(el.id)o[el.id]=el.value;});return o;}
+function restoreExtra(o){
+  if(!o) return;
+  Object.keys(o).forEach(function(id){var el=$id(id);if(el&&id!=='simCanal')el.value=o[id];});
+  refreshSimChannels();if(o.simCanal&&$id('simCanal'))$id('simCanal').value=o.simCanal;
+}
+function renderAllV2(){
+  ['wCliente','wProducto','wRecursos','wTicket'].forEach(function(id){var v=$id(id+'_v');if(v)v.textContent=$id(id).value;});
+  renderSelector();renderSim();renderPlan();
+}
+/* Autoguardado cada 30 s */
+setInterval(function(){try{saveData();}catch(e){}},30000);
+/* Ctrl+P / Cmd+P: dejar todo actualizado antes de imprimir */
+window.addEventListener('beforeprint',function(){try{updateFindings();populateSummary();renderProofGallery();renderMatrix();renderSim();renderPlan();}catch(e){}});
+
+function populateSummaryV2(){
+  var list=scoreList(),s=simVals();
+  $id('rSelPerfil').textContent=list?(selText('selCliente')+' · '+selText('selProducto')+' · ticket '+selText('selTicket').toLowerCase()+' · margen '+selText('selMargen').toLowerCase()):'—';
+  $id('rSelRank').textContent=list?list.slice(0,3).map(function(x){return '#'+x.rank+' '+x.ch+' ('+x.score+')';}).join(' · '):'—';
+  $id('rSimBase').textContent=(s.A>0)?($id('simCanal').value+' · alcance '+fmtN(s.A)+' · conversión '+fmtN(s.conv*100)+' % · ticket '+money(s.T)+' · '+($id('simDatos').value==='real'?'datos reales':'datos estimados')):'—';
+  $id('rSimRes').textContent=(s.A>0)?(fmtN(s.V)+' ventas · '+money(s.R)+' ingreso · '+money(s.U)+' utilidad por semana'):'—';
+  var b=metricBase(),meta=parseFloat($id('planMeta').value);
+  $id('rPlanMeta').textContent=(b&&!isNaN(meta))?($id('plMetrica').value+': de '+(Math.round(b.v*100)/100).toLocaleString('es-MX')+' a '+meta.toLocaleString('es-MX')+' en 4 semanas'):'—';
+  var n=coherenceChecks().filter(function(c){return c.l==='bad'||c.l==='warn';}).length;
+  $id('rAlertas').textContent=n?(n+' alerta(s) de coherencia pendientes'):'Sin alertas pendientes';
+}
+
+window.onload=function(){ updateSoundBtn(); refreshSimChannels(); loadData(); updateTimerDisplay(); };
+</script>
+</body>
+</html>
