@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sesión 10 — Liderazgo en acción (Pico Park)</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--blue:#1a3a6b;--blue2:#2c5aa0;--or:#e87722;--or2:#FD6B18;--ink:#2d3748;--mut:#64748b;--line:#e2e8f0}
+body{font-family:'Poppins',sans-serif;background:#f4f6fa;color:var(--ink);padding:20px;min-height:100vh}
+.wizard{max-width:960px;margin:0 auto;background:#fff;border-radius:18px;box-shadow:0 4px 24px rgba(0,0,0,.08);overflow:hidden}
+.hd{background:linear-gradient(135deg,var(--blue),var(--blue2) 60%,var(--or));color:#fff;padding:26px 32px;position:relative}
+.hd h1{font-size:1.55em;font-weight:800;margin-bottom:4px}
+.hd p{opacity:.92;font-size:.88em}
+.hd .em{position:absolute;right:26px;top:14px;font-size:3.2em;opacity:.9}
+.meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.meta span{background:rgba(255,255,255,.18);border-radius:99px;padding:4px 14px;font-size:.76em;font-weight:600}
+.toolbar{display:flex;justify-content:flex-end;gap:10px;padding:12px 32px;background:#f8fafc;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.tbtn{padding:8px 16px;border-radius:8px;font-size:.78em;font-family:inherit;cursor:pointer;border:1px solid var(--line);background:#fff;color:#475569;font-weight:600}
+.tbtn:hover{background:#f1f5f9}
+.tbtn.danger{color:#dc2626;border-color:#fecaca}
+.tbtn.pdf{background:var(--blue);color:#fff;border-color:var(--blue)}
+.tbtn:disabled{opacity:.45;cursor:not-allowed}
+.prog{padding:18px 32px;background:#f8fafc;border-bottom:1px solid var(--line)}
+.dots{display:flex;justify-content:space-between;align-items:center;position:relative;gap:6px}
+.dots::before{content:'';position:absolute;top:50%;left:0;right:0;height:3px;background:var(--line);transform:translateY(-50%);z-index:0}
+.dot{width:34px;height:34px;border-radius:50%;background:var(--line);display:grid;place-items:center;font-size:.74em;font-weight:700;color:#94a3b8;position:relative;z-index:1;cursor:pointer;border:0;font-family:inherit;transition:.2s}
+.dot:hover{transform:scale(1.1);box-shadow:0 0 0 3px rgba(232,119,34,.4)}
+.dot.active{background:var(--or);color:#fff;transform:scale(1.14)}
+.dot.done{background:var(--blue);color:#fff}
+.dot.tarea{background:#7c3aed;color:#fff;width:auto;border-radius:99px;padding:0 14px}
+.pct{margin-top:14px}
+.track{height:10px;background:var(--line);border-radius:99px;overflow:hidden}
+.fill{height:100%;width:0;background:linear-gradient(90deg,var(--blue),var(--or));transition:width .45s}
+.plabel{display:flex;justify-content:space-between;font-size:.74em;color:var(--mut);margin-top:6px;font-weight:600}
+.plabel b{color:var(--or)}
+.content{padding:30px 32px;min-height:460px}
+.step{display:none}
+.step.active{display:block;animation:fs .35s ease}
+@keyframes fs{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.badge{display:inline-block;background:var(--or);color:#fff;font-size:.65em;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:3px 12px;border-radius:99px;margin-bottom:8px}
+.badge.t{background:#7c3aed}
+.st{font-size:1.3em;font-weight:700;color:var(--blue);margin-bottom:4px}
+.ss{font-size:.84em;color:var(--mut);margin-bottom:18px}
+.fg{margin-bottom:16px}
+.fg label{display:block;font-weight:600;margin-bottom:5px;font-size:.86em;color:#374151}
+.fg input[type=text],.fg input[type=number],.fg input[type=date],.fg textarea,.fg select{width:100%;padding:10px 13px;border:2px solid var(--line);border-radius:9px;font-family:inherit;font-size:.88em;background:#fff;color:var(--ink)}
+.fg input:focus,.fg textarea:focus,.fg select:focus{outline:none;border-color:var(--or)}
+.fg textarea{resize:vertical;min-height:70px}
+.fg.ok input,.fg.ok textarea,.fg.ok select{border-color:#86d3a8}
+.hint{font-size:.74em;color:var(--mut);margin-top:3px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.box{border-left:4px solid var(--or);background:#fff7ed;border-radius:0 12px 12px 0;padding:14px 18px;margin:14px 0}
+.box h4{color:var(--or);font-size:.88em;margin-bottom:4px}
+.box p,.box li{font-size:.82em;color:#64748b;line-height:1.5}
+.box.b{border-color:var(--blue);background:#f0f4ff}.box.b h4{color:var(--blue)}
+.card{border:2px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:14px;background:#fff}
+.card h4{color:var(--blue);font-size:.95em;margin-bottom:10px}
+details{margin:12px 0;border:2px solid var(--line);border-radius:12px;padding:10px 16px;background:#fafbff}
+summary{cursor:pointer;font-weight:700;color:var(--blue);font-size:.88em}
+table.t{width:100%;border-collapse:collapse;margin-top:10px;font-size:.78em}
+table.t th{background:var(--blue);color:#fff;text-align:left;padding:7px 10px}
+table.t td{border-bottom:1px solid var(--line);padding:7px 10px;vertical-align:top}
+.mem{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.photo img{max-width:100%;max-height:300px;border-radius:12px;margin-top:10px;display:none;border:2px solid var(--line)}
+.nav{display:flex;justify-content:space-between;margin-top:22px;gap:12px}
+.nbtn{padding:11px 26px;border-radius:99px;border:0;font-family:inherit;font-weight:700;font-size:.88em;cursor:pointer;background:var(--blue);color:#fff}
+.nbtn.alt{background:#fff;color:var(--blue);border:2px solid var(--blue)}
+.nbtn:disabled{opacity:.35;cursor:not-allowed}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#111;color:#fff;padding:12px 22px;border-radius:99px;font-size:.85em;z-index:99;display:none}
+.done-banner{display:none;background:#e4fbef;border:2px solid #0e8f5f;color:#0b6b47;border-radius:12px;padding:12px 18px;font-weight:700;margin:14px 0;font-size:.88em}
+.pwm,.phead{display:none}
+@media(max-width:720px){.g2,.g3,.g4,.mem{grid-template-columns:1fr}.content,.prog,.toolbar,.hd{padding-left:16px;padding-right:16px}.hd .em{display:none}}
+@media print{
+  body{background:#fff;padding:0}
+  .wizard{box-shadow:none;border-radius:0;max-width:none}
+  .toolbar,.prog,.nav,.toast,.tbtn,details summary+*:not(table){}
+  .toolbar,.prog,.nav,.toast,.done-banner{display:none!important}
+  .step{display:block!important;page-break-inside:avoid;margin-bottom:22px;animation:none}
+  .step:not(:first-of-type){page-break-before:always}
+  .content{min-height:0;padding:16px 8px}
+  .hd{padding:16px 20px}
+  .phead{display:block;margin:10px 0 0;font-size:.85em}
+  body.incomplete .pwm{display:block;position:fixed;top:40%;left:0;right:0;text-align:center;font-size:56px;font-weight:800;color:rgba(220,38,38,.18);transform:rotate(-20deg);z-index:9}
+  details{display:none}
+  .photo img{display:block}
+}
+</style>
+</head>
+<body>
+<div class="pwm">ACTIVIDAD INCOMPLETA</div>
+<div class="wizard">
+  <div class="hd">
+    <span class="em">🎮</span>
+    <h1>Sesión 10 — Liderazgo en acción</h1>
+    <p>Liderazgo situacional (Hersey-Blanchard) · Misión cooperativa en Pico Park · Emprendimiento 3er semestre</p>
+    <div class="meta"><span id="mAlumno">Alumno: —</span><span id="mEquipo">Equipo: —</span><span id="mFecha">—</span></div>
+    <div class="phead" id="pHead"></div>
+  </div>
+  <div class="toolbar">
+    <button class="tbtn" id="bSound" onclick="toggleSound()">🔊 Sonido</button>
+    <button class="tbtn pdf" id="bPdf" onclick="doPdf()" disabled>📄 Generar PDF (Ctrl+P / ⌘+P)</button>
+    <button class="tbtn danger" onclick="clearAll()">🗑️ Limpiar datos</button>
+  </div>
+  <div class="prog">
+    <div class="dots" id="dots"></div>
+    <div class="pct"><div class="track"><div class="fill" id="fill"></div></div>
+      <div class="plabel"><span id="pStep">Paso 1 de 7</span><span><b id="pPct">0%</b> completado · el PDF se habilita al 100 %</span></div></div>
+  </div>
+  <div class="content">
+
+  <!-- 1 -->
+  <div class="step" data-step="0" data-title="Equipo y roles">
+    <span class="badge">Antes de jugar</span>
+    <div class="st">1 · Tu equipo y tu rol</div>
+    <div class="ss">Hasta 8 integrantes por equipo, uno por control. Tu equipo se formó por sorteo.</div>
+    <div class="box"><h4>Los roles no se asignan</h4><p>Nadie te dice qué rol tienes: tu equipo los va descubriendo mientras juega. Hay 8 roles posibles (consulta la chuleta de abajo); si el equipo es menor a 8, algunos se combinan. Al terminar, registra el rol que terminaste asumiendo.</p></div>
+    <div class="g2">
+      <div class="fg"><label>Tu nombre completo</label><input type="text" data-k="alumno" data-req="1" placeholder="Nombre y apellidos"></div>
+      <div class="fg"><label>Nombre o número del equipo</label><input type="text" data-k="equipo" data-req="1" placeholder="Ej. Equipo 3"></div>
+    </div>
+    <div class="g2">
+      <div class="fg"><label>Nombre del líder del equipo</label><input type="text" data-k="lider" data-req="1"></div>
+      <div class="fg"><label>Rol que terminaste asumiendo en la misión</label>
+        <select data-k="rol" data-req="1"><option value="">Selecciona…</option><option>Líder</option><option>Subcoordinador</option><option>Comunicador</option><option>Estratega</option><option>Motivador</option><option>Gestor de conflictos</option><option>Técnico</option><option>Analista de madurez</option></select></div>
+    </div>
+    <div class="fg"><label>Integrantes del equipo (incluyéndote)</label>
+      <div class="mem" id="members"></div>
+      <div class="hint">Escribe al menos 2 nombres. Estos nombres se usan en la tabla de participación.</div></div>
+    <details><summary>Chuleta: los 8 roles que tu equipo puede descubrir</summary>
+      <table class="t"><tr><th>Rol</th><th>Qué hace</th></tr>
+      <tr><td>Líder</td><td>Guía la estrategia, decide y elige el estilo en cada pit stop.</td></tr>
+      <tr><td>Subcoordinador</td><td>Apoya al líder en la organización y el seguimiento.</td></tr>
+      <tr><td>Comunicador</td><td>Transmite instrucciones y confirma que todos entienden la meta.</td></tr>
+      <tr><td>Estratega</td><td>Lee el nivel y propone rutas o soluciones.</td></tr>
+      <tr><td>Motivador</td><td>Sube el ánimo y reconoce los logros.</td></tr>
+      <tr><td>Gestor de conflictos</td><td>Interviene cuando hay desacuerdos o tensión.</td></tr>
+      <tr><td>Técnico</td><td>Domina los controles y ayuda a los demás.</td></tr>
+      <tr><td>Analista de madurez</td><td>Diagnostica M1–M4 de sus compañeros durante el juego.</td></tr></table></details>
+  </div>
+
+  <!-- 2 -->
+  <div class="step" data-step="1" data-title="Plan del líder">
+    <span class="badge">Antes de jugar</span>
+    <div class="st">2 · Plan del líder</div>
+    <div class="ss">Tienen 1 minuto de organización antes de su turno. Escriban el plan en equipo.</div>
+    <div class="fg"><label>Estrategia general para superar los niveles</label><textarea data-k="estrategia" data-req="1" data-min="10" placeholder="¿Cómo van a coordinarse? ¿Quién va primero? ¿Qué señal usarán?"></textarea></div>
+    <div class="g2">
+      <div class="fg"><label>Método de decisión que declaran antes de discutir</label>
+        <select data-k="metodo" data-req="1"><option value="">Selecciona…</option><option>Consenso</option><option>Consulta + responsable decide</option><option>Votación con regla de desempate</option></select></div>
+      <div class="fg"><label>Regla de desempate o quién decide</label><input type="text" data-k="desempate" data-req="1" placeholder="Ej. decide la líder si hay empate"></div>
+    </div>
+    <div class="fg"><label>Si hay un desacuerdo durante el juego, ¿cómo lo manejan?</label><textarea data-k="conflictoPlan" data-req="1" data-min="10"></textarea></div>
+    <details open><summary>Chuleta: madurez y estilo (Hersey-Blanchard)</summary>
+      <table class="t"><tr><th>Madurez</th><th>Cómo se ve</th><th>Estilo</th></tr>
+      <tr><td>M1 · cap. baja, disp. baja</td><td>No sabe y no se anima.</td><td>S1 Dirigir (tarea alta, relación baja)</td></tr>
+      <tr><td>M2 · cap. baja, disp. alta</td><td>No sabe, pero quiere.</td><td>S2 Persuadir (tarea alta, relación alta)</td></tr>
+      <tr><td>M3 · cap. alta, disp. baja</td><td>Sabe, pero duda.</td><td>S3 Participar (tarea baja, relación alta)</td></tr>
+      <tr><td>M4 · cap. alta, disp. alta</td><td>Sabe y quiere.</td><td>S4 Delegar (tarea baja, relación baja)</td></tr></table></details>
+  </div>
+
+  <!-- 3 -->
+  <div class="step" data-step="2" data-title="Pit stops">
+    <span class="badge">Durante tu turno</span>
+    <div class="st">3 · Pit stops de liderazgo</div>
+    <div class="ss">Cada vez que superan o pierden un nivel hacen una pausa de 20 s: el Analista diagnostica, el Líder elige estilo. Regístrenlo (mínimo 1 pit stop).</div>
+    <div class="g2">
+      <div class="fg"><label>Niveles superados en tu turno</label><input type="number" min="0" data-k="niveles" data-req="1"></div>
+      <div class="fg"><label>Pit stops bien ejecutados (según observadores, máx. 3)</label><input type="number" min="0" max="3" data-k="psok"></div>
+    </div>
+    <div id="pits"></div>
+    <div class="fg"><label>Conflicto o decisión difícil que ocurrió en el juego y cómo la resolvieron</label><textarea data-k="conflictoJuego" data-req="1" data-min="10"></textarea></div>
+  </div>
+
+  <!-- 4 -->
+  <div class="step" data-step="3" data-title="Observación">
+    <span class="badge">Mientras esperas</span>
+    <div class="st">4 · Observo a otros equipos</div>
+    <div class="ss">Mientras otro equipo juega, tú lo observas. Completa al menos 2 fichas; las demás son opcionales.</div>
+    <div id="obs"></div>
+  </div>
+
+  <!-- 5 -->
+  <div class="step" data-step="4" data-title="Reflexión">
+    <span class="badge">Después de jugar</span>
+    <div class="st">5 · Reflexión individual</div>
+    <div class="ss">Responde con ejemplos concretos de lo que viviste en el juego.</div>
+    <div class="fg"><label>1. ¿Qué rol desempeñaste dentro del equipo?</label><textarea data-k="r1" data-req="1" data-min="10"></textarea></div>
+    <div class="fg"><label>2. ¿Quién fue el líder y cómo ejerció su liderazgo? (ejemplos concretos)</label><textarea data-k="r2" data-req="1" data-min="10"></textarea></div>
+    <div class="fg"><label>3. Describe una situación en la que el liderazgo fue determinante para avanzar.</label><textarea data-k="r3" data-req="1" data-min="10"></textarea></div>
+    <div class="fg"><label>4. Menciona dos momentos donde la comunicación fue clave.</label><textarea data-k="r4" data-req="1" data-min="10"></textarea></div>
+    <div class="g2">
+      <div class="fg"><label>5a. Tipo de liderazgo que predominó</label><select data-k="r5a" data-req="1"><option value="">Selecciona…</option><option>Autocrático</option><option>Participativo</option><option>Transformacional</option><option>Laissez-faire</option><option>Otro</option></select></div>
+      <div class="fg"><label>5b. Estilo situacional más usado</label><select data-k="r5b" data-req="1"><option value="">Selecciona…</option><option>S1 Dirigir</option><option>S2 Persuadir</option><option>S3 Participar</option><option>S4 Delegar</option></select></div>
+    </div>
+    <div class="fg"><label>5c. Justifica tu respuesta</label><textarea data-k="r5c" data-req="1" data-min="10"></textarea></div>
+    <div class="fg"><label>6. ¿Qué conflicto o reto enfrentaron como equipo y cómo se resolvió?</label><textarea data-k="r6" data-req="1" data-min="10"></textarea></div>
+    <div class="fg"><label>7. ¿Qué aprendiste sobre tu forma de colaborar y trabajar con otros?</label><textarea data-k="r7" data-req="1" data-min="10"></textarea></div>
+    <div class="fg"><label>8. ¿Consideras que esta actividad contribuye a tu formación como líder? ¿Por qué?</label><textarea data-k="r8" data-req="1" data-min="10"></textarea></div>
+    <div class="fg"><label>9. ¿Qué opinas de esta actividad de clase?</label><textarea data-k="r9" data-req="1" data-min="10"></textarea></div>
+    <div class="fg photo"><label>10. Foto donde aparezcas con tu equipo realizando la actividad</label>
+      <input type="file" accept="image/*" id="foto"><div class="hint">La imagen se reduce y se guarda en este navegador.</div><img id="fotoImg" alt="Foto del equipo"></div>
+    <div class="fg"><label>¿Qué me llevo de la clase? Estilo que uso en automático y a quién le queda mal</label><textarea data-k="llevo" data-req="1" data-min="10"></textarea></div>
+  </div>
+
+  <!-- 6 -->
+  <div class="step" data-step="5" data-title="Acuerdos">
+    <span class="badge">Entregable de equipo · 1 de noviembre</span>
+    <div class="st">6 · Acuerdos de conflicto y decisión del equipo</div>
+    <div class="ss">Cada acuerdo describe una <b>conducta observable</b>, no una intención. Si ya firmaron un Manifiesto del Equipo, revisen la regla «cómo decidimos sin consenso».</div>
+    <div id="acu"></div>
+    <div class="g2">
+      <div class="fg"><label>Fecha de la primera revisión de estos acuerdos</label><input type="date" data-k="revision" data-req="1"></div>
+      <div class="fg"><label>Firman (nombres de todos los integrantes)</label><input type="text" data-k="firmas" data-req="1"></div>
+    </div>
+  </div>
+
+  <!-- 7 -->
+  <div class="step" data-step="6" data-title="Participación">
+    <span class="badge">Cierre</span>
+    <div class="st">7 · Participación individual en el equipo</div>
+    <div class="ss">Cada integrante puede llegar como máximo a 100 %. No es necesario que la suma del equipo dé 100 %.</div>
+    <div id="part"></div>
+    <div class="done-banner" id="doneB">🎉 ¡Actividad completa! Ya puedes generar tu PDF con el botón o con Ctrl+P / ⌘+P.</div>
+  </div>
+
+  <!-- Tarea -->
+  <div class="step" data-step="7" data-title="Tarea">
+    <span class="badge t">Tarea individual · pestaña adicional</span>
+    <div class="st">+ Tarea · El líder ante el conflicto (Biblioteca Virtual)</div>
+    <div class="ss">No cuenta para el avance de la actividad. Confirma la fecha de entrega en Brightspace.</div>
+    <div class="box b"><h4>Objetivo</h4><p>Buscar en la biblioteca virtual un artículo académico sobre liderazgo situacional o comunicación asertiva en equipos y conectarlo con un conflicto real que viviste en tu equipo de proyecto este semestre.</p></div>
+    <div class="box"><h4>Pasos</h4><ol style="margin-left:18px"><li>Ingresa a la Biblioteca Virtual Anáhuac Mayab (biblioteca.anahuacmayab.mx) con tu usuario institucional.</li><li>En EBSCO Academic Search Complete o ProQuest busca: «situational leadership Hersey Blanchard», «assertive communication teams» o «conflict management entrepreneurial team» (artículo académico, 2020–2025).</li><li>Elige 1 artículo (mínimo 5 páginas). Lee introducción, marco teórico y conclusiones.</li><li>Redacta tu análisis en 3 párrafos y agrega la referencia en APA.</li></ol></div>
+    <div class="fg"><label>Párrafo 1 · Situación de conflicto o comunicación difícil en tu equipo (sin nombres, solo roles)</label><textarea data-k="t1" data-min="10"></textarea></div>
+    <div class="fg"><label>Párrafo 2 · Según el artículo, ¿qué estilo o técnica sería la más adecuada? Incluye una cita</label><textarea data-k="t2" data-min="10"></textarea></div>
+    <div class="fg"><label>Párrafo 3 · ¿Qué harías diferente? Cierra con un compromiso personal explícito y accionable</label><textarea data-k="t3" data-min="10"></textarea></div>
+    <div class="fg"><label>Referencia completa en formato APA</label><textarea data-k="tref" data-min="10"></textarea></div>
+  </div>
+
+  <div class="nav"><button class="nbtn alt" id="bPrev" onclick="go(cur-1)">← Anterior</button><button class="nbtn" id="bNext" onclick="go(cur+1)">Siguiente →</button></div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+var KEY='s10_liderazgo_pico_v1', cur=0, photo='', wasDone=false, soundOn=true, AC=null, loading=true;
+var STEPS=document.querySelectorAll('.step'), N=STEPS.length; // 8 (7 + tarea)
+var STYLE='<option value="">Selecciona…</option><option>S1 Dirigir</option><option>S2 Persuadir</option><option>S3 Participar</option><option>S4 Delegar</option>';
+var MAT='<option value="">Selecciona…</option><option>M1</option><option>M2</option><option>M3</option><option>M4</option>';
+var METH='<option value="">Selecciona…</option><option>Consenso</option><option>Consulta + responsable decide</option><option>Votación con desempate</option><option>No declararon método</option>';
+var SINO='<option value="">Selecciona…</option><option>Sí</option><option>Parcialmente</option><option>No</option>';
+var N15='<option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>';
+function $(s){return document.querySelector(s);}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+
+/* ---------- Generar bloques ---------- */
+(function build(){
+  var m='';for(var i=1;i<=8;i++)m+='<div class="fg" style="margin:0"><input type="text" data-k="m'+i+'" '+(i<=2?'data-req="1" ':'')+'placeholder="Integrante '+i+'"></div>';
+  $('#members').innerHTML=m;
+  var p='';for(var j=1;j<=3;j++)p+='<div class="card"><h4>Pit stop '+j+(j>1?' (opcional)':'')+'</h4><div class="g2"><div class="fg"><label>Persona diagnosticada</label><input type="text" data-k="p'+j+'a" '+(j===1?'data-req="1"':'')+'></div><div class="fg"><label>Tarea o momento del nivel</label><input type="text" data-k="p'+j+'b" '+(j===1?'data-req="1"':'')+'></div></div><div class="g3"><div class="fg"><label>Madurez</label><select data-k="p'+j+'c" '+(j===1?'data-req="1"':'')+'>'+MAT+'</select></div><div class="fg"><label>Estilo elegido</label><select data-k="p'+j+'d" '+(j===1?'data-req="1"':'')+'>'+STYLE+'</select></div><div class="fg"><label>¿Funcionó?</label><select data-k="p'+j+'e">'+SINO+'</select></div></div><div class="fg" style="margin:0"><label>Frase concreta que dijo el líder</label><input type="text" data-k="p'+j+'f" '+(j===1?'data-req="1"':'')+'></div></div>';
+  $('#pits').innerHTML=p;
+  var o='';for(var k=1;k<=4;k++){var r=k<=2?'data-req="1"':'';o+='<div class="card"><h4>Observación '+k+(k>2?' (opcional)':'')+'</h4><div class="g2"><div class="fg"><label>Equipo observado</label><input type="text" data-k="o'+k+'a" '+r+'></div><div class="fg"><label>Estilo predominante del líder</label><select data-k="o'+k+'b" '+r+'>'+STYLE+'</select></div></div><div class="g2"><div class="fg"><label>¿El estilo coincidió con la madurez de los jugadores?</label><select data-k="o'+k+'c" '+r+'>'+SINO+'</select></div><div class="fg"><label>Método de decisión usado</label><select data-k="o'+k+'d" '+r+'>'+METH+'</select></div></div><div class="fg"><label>Conflicto observado y cómo se resolvió</label><input type="text" data-k="o'+k+'e" '+r+' placeholder="Si no hubo, escribe «sin conflicto»"></div><div class="fg"><label>Frase o conducta que sirve de evidencia</label><input type="text" data-k="o'+k+'f" '+r+'></div><div class="g3"><div class="fg"><label>Comunicación (1–5)</label><select data-k="o'+k+'g" '+r+'>'+N15+'</select></div><div class="fg"><label>Coordinación (1–5)</label><select data-k="o'+k+'h" '+r+'>'+N15+'</select></div><div class="fg"><label>Adaptación del estilo (1–5)</label><select data-k="o'+k+'i" '+r+'>'+N15+'</select></div></div></div>';}
+  $('#obs').innerHTML=o;
+  var AC6=['1. Qué decisiones toma cada quién, por área (con nombre)','2. Qué decisiones requieren consenso','3. Cómo se desempata','4. Qué pasa después de decidir («disiento y me comprometo»)','5. Cómo se aborda un conflicto de relación','6. Qué conductas no se toleran (2 o 3, nombradas)'];
+  var a='';AC6.forEach(function(t,i){a+='<div class="card"><h4>'+t+'</h4><div class="g2" style="grid-template-columns:2fr 1fr"><div class="fg" style="margin:0"><label>Cómo se ve en la práctica (conducta observable)</label><textarea data-k="a'+(i+1)+'a" data-req="1" data-min="10" style="min-height:60px"></textarea></div><div class="fg" style="margin:0"><label>Responsable</label><input type="text" data-k="a'+(i+1)+'b" data-req="1"></div></div></div>';});
+  $('#acu').innerHTML=a;
+  var d='';for(var q=1;q<=N;q++){}
+  var dots='';for(var s=0;s<N;s++){dots+='<button class="dot'+(s===7?' tarea':'')+'" data-d="'+s+'" title="'+STEPS[s].getAttribute('data-title')+'">'+(s===7?'+ Tarea':(s+1))+'</button>';}
+  $('#dots').innerHTML=dots;
+})();
+
+/* ---------- Participación dinámica ---------- */
+function names(){var a=[];for(var i=1;i<=8;i++){var v=($('[data-k=m'+i+']').value||'').trim();if(v)a.push({i:i,n:v});}return a;}
+function buildPart(){
+  var ns=names(),h='';
+  if(!ns.length)h='<p class="hint">Escribe los integrantes en el paso 1 para calificar su participación.</p>';
+  ns.forEach(function(x){var old=$('[data-k=pc'+x.i+']');var val=old?old.value:(saved['pc'+x.i]||'');h+='<div class="card" style="display:grid;grid-template-columns:1fr 160px;gap:14px;align-items:center"><b>'+esc(x.n)+'</b><div class="fg" style="margin:0"><label>% de participación (0–100)</label><input type="number" min="0" max="100" data-k="pc'+x.i+'" data-req="1" value="'+esc(val)+'"></div></div>';});
+  $('#part').innerHTML=h;
+  $('#part').querySelectorAll('input').forEach(function(el){el.addEventListener('input',function(){if(+el.value>100)el.value=100;if(+el.value<0)el.value=0;refresh();});});
+}
+var saved={};
+
+/* ---------- Estado ---------- */
+function collect(){var d={};document.querySelectorAll('[data-k]').forEach(function(el){d[el.getAttribute('data-k')]=el.value;});d.__foto=photo;d.__step=cur;return d;}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(collect()));}catch(e){}}
+function load(){try{saved=JSON.parse(localStorage.getItem(KEY)||'{}')||{};}catch(e){saved={};}
+  document.querySelectorAll('[data-k]').forEach(function(el){var k=el.getAttribute('data-k');if(saved[k]!==undefined)el.value=saved[k];});
+  photo=saved.__foto||'';if(photo){$('#fotoImg').src=photo;$('#fotoImg').style.display='block';}
+  cur=Math.min(saved.__step||0,N-1);}
+function isFilled(el){var v=(el.value||'').trim();var m=+el.getAttribute('data-min')||1;return v.length>=m;}
+
+/* ---------- Progreso ---------- */
+function refresh(){
+  var req=[].slice.call(document.querySelectorAll('[data-req]'));
+  var ok=0,perStep={};
+  req.forEach(function(el){var f=isFilled(el);if(f)ok++;var st=el.closest('.step').getAttribute('data-step');perStep[st]=perStep[st]||{t:0,o:0};perStep[st].t++;if(f)perStep[st].o++;el.closest('.fg').classList.toggle('ok',f);});
+  var total=req.length+1; // +1 foto
+  if(photo)ok++; var st4=perStep['4']=perStep['4']||{t:0,o:0};st4.t++;if(photo)st4.o++;
+  var pct=Math.round(100*ok/total);
+  $('#fill').style.width=pct+'%';$('#pPct').textContent=pct+'%';
+  document.querySelectorAll('.dot').forEach(function(d){var s=+d.getAttribute('data-d');d.classList.toggle('active',s===cur);if(s<7){var p=perStep[s];d.classList.toggle('done',!!p&&p.o===p.t&&s!==cur);}});
+  var done=pct>=100;
+  $('#bPdf').disabled=!done;document.body.classList.toggle('incomplete',!done);$('#doneB').style.display=done?'block':'none';
+  if(done&&!wasDone&&!loading){playDone();toast('🎉 ¡Completaste la actividad al 100 %!');}
+  wasDone=done;
+  $('#mAlumno').textContent='Alumno: '+($('[data-k=alumno]').value||'—');$('#mEquipo').textContent='Equipo: '+($('[data-k=equipo]').value||'—');
+  $('#pHead').textContent='Alumno: '+($('[data-k=alumno]').value||'—')+' · Equipo: '+($('[data-k=equipo]').value||'—')+' · '+$('#mFecha').textContent;
+}
+function go(i){
+  cur=Math.max(0,Math.min(N-1,i));
+  STEPS.forEach(function(s,k){s.classList.toggle('active',k===cur);});
+  $('#bPrev').disabled=cur===0;$('#bNext').disabled=cur===N-1;
+  $('#pStep').textContent=cur===7?'Pestaña adicional · Tarea':'Paso '+(cur+1)+' de 7';
+  click();refresh();save();window.scrollTo({top:0,behavior:'smooth'});
+}
+document.getElementById('dots').addEventListener('click',function(e){var b=e.target.closest('[data-d]');if(b)go(+b.getAttribute('data-d'));});
+document.addEventListener('input',function(e){
+  if(e.target.getAttribute&&e.target.getAttribute('data-k')){var k=e.target.getAttribute('data-k');if(/^m[1-8]$/.test(k)){saved=collect();buildPart();}refresh();}
+});
+$('#foto').addEventListener('change',function(e){
+  var f=e.target.files[0];if(!f)return;var r=new FileReader();
+  r.onload=function(){var im=new Image();im.onload=function(){var mx=900,k=Math.min(1,mx/Math.max(im.width,im.height));var c=document.createElement('canvas');c.width=im.width*k;c.height=im.height*k;c.getContext('2d').drawImage(im,0,0,c.width,c.height);photo=c.toDataURL('image/jpeg',.72);$('#fotoImg').src=photo;$('#fotoImg').style.display='block';refresh();save();};im.src=r.result;};
+  r.readAsDataURL(f);
+});
+
+/* ---------- Sonido ---------- */
+function ctx(){if(!AC){try{AC=new (window.AudioContext||window.webkitAudioContext)();}catch(e){}}return AC;}
+function tone(f,d,at,v){var a=ctx();if(!a||!soundOn)return;var o=a.createOscillator(),g=a.createGain();o.type='triangle';o.frequency.value=f;var t=a.currentTime+(at||0);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(v||.2,t+.02);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g);g.connect(a.destination);o.start(t);o.stop(t+d+.02);}
+function click(){tone(660,.06,0,.08);}
+function playDone(){[523,659,784,1047,1319].forEach(function(f,i){tone(f,.25,i*.11,.22);});}
+function toggleSound(){soundOn=!soundOn;$('#bSound').textContent=soundOn?'🔊 Sonido':'🔇 Sonido';}
+function toast(t){var e=$('#toast');e.textContent=t;e.style.display='block';clearTimeout(e._t);e._t=setTimeout(function(){e.style.display='none';},3200);}
+
+/* ---------- PDF / limpiar / impresión ---------- */
+function doPdf(){if($('#bPdf').disabled){toast('Completa el 100 % para generar el PDF.');return;}window.print();}
+document.addEventListener('keydown',function(e){if((e.ctrlKey||e.metaKey)&&(e.key==='p'||e.key==='P')){e.preventDefault();doPdf();}});
+function clearAll(){if(!confirm('¿Borrar todos los datos de esta actividad? Esta acción no se puede deshacer.'))return;try{localStorage.removeItem(KEY);}catch(e){}location.reload();}
+var _h=[];
+window.addEventListener('beforeprint',function(){_h=[];document.querySelectorAll('textarea').forEach(function(t){_h.push(t.style.height);t.style.height='auto';t.style.height=t.scrollHeight+4+'px';});});
+window.addEventListener('afterprint',function(){document.querySelectorAll('textarea').forEach(function(t,i){t.style.height=_h[i]||'';});});
+
+/* ---------- Inicio ---------- */
+load();
+$('#mFecha').textContent=new Date().toLocaleDateString('es-MX',{day:'numeric',month:'long',year:'numeric'});
+buildPart();
+go(cur);
+loading=false;
+setInterval(save,30000);
+</script>
+</body>
+</html>
