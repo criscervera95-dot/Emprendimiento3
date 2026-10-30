@@ -73,20 +73,27 @@ table.t td{border-bottom:1px solid var(--line);padding:7px 10px;vertical-align:t
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#111;color:#fff;padding:12px 22px;border-radius:99px;font-size:.85em;z-index:99;display:none}
 .done-banner{display:none;background:#e4fbef;border:2px solid #0e8f5f;color:#0b6b47;border-radius:12px;padding:12px 18px;font-weight:700;margin:14px 0;font-size:.88em}
 .pwm,.phead{display:none}
-@media(max-width:720px){.g2,.g3,.g4,.mem{grid-template-columns:1fr}.content,.prog,.toolbar,.hd{padding-left:16px;padding-right:16px}.hd .em{display:none}}
+@media screen and (max-width:720px){.g2,.g3,.g4,.mem{grid-template-columns:1fr}.content,.prog,.toolbar,.hd{padding-left:16px;padding-right:16px}.hd .em{display:none}}
 @media print{
-  body{background:#fff;padding:0}
+  @page{size:A4;margin:10mm}
+  body{background:#fff;padding:0;font-size:10pt}
   .wizard{box-shadow:none;border-radius:0;max-width:none}
-  .toolbar,.prog,.nav,.toast,.tbtn,details summary+*:not(table){}
-  .toolbar,.prog,.nav,.toast,.done-banner{display:none!important}
-  .step{display:block!important;page-break-inside:avoid;margin-bottom:22px;animation:none}
-  .step:not(:first-of-type){page-break-before:always}
-  .content{min-height:0;padding:16px 8px}
-  .hd{padding:16px 20px}
-  .phead{display:block;margin:10px 0 0;font-size:.85em}
+  .toolbar,.prog,.nav,.toast,.done-banner,.box,.hint,.ss,details,.badge{display:none!important}
+  .step,.step.active{display:block!important;margin-bottom:10px;animation:none!important;opacity:1!important;transform:none!important}
+  .st{break-after:avoid}
+  .step.skip{display:none!important}
+  .content{min-height:0;padding:6px 4px}
+  .hd{padding:10px 16px}.hd h1{font-size:1.2em}.hd .em{display:none}.hd p{font-size:.78em}
+  .phead{display:block;margin:6px 0 0;font-size:.8em}
+  .st{font-size:1.05em;margin:6px 0 4px;border-bottom:2px solid var(--or);padding-bottom:2px}
+  .fg{margin-bottom:6px;break-inside:avoid}.fg label{font-size:.72em;margin-bottom:1px}
+  .fg input,.fg textarea,.fg select{padding:3px 6px!important;font-size:.8em!important;border-width:1px!important;min-height:0!important}
+  .card{padding:6px 10px;margin-bottom:6px;border-width:1px;break-inside:avoid}.card.skip{display:none!important}
+  .card h4{font-size:.8em;margin-bottom:4px}
+  .g2,.g3{gap:6px}
+  #s5 .fg{break-inside:avoid}
+  .photo img{display:block;max-height:140px}
   body.incomplete .pwm{display:block;position:fixed;top:40%;left:0;right:0;text-align:center;font-size:56px;font-weight:800;color:rgba(220,38,38,.18);transform:rotate(-20deg);z-index:9}
-  details{display:none}
-  .photo img{display:block}
 }
 </style>
 </head>
@@ -184,7 +191,7 @@ table.t td{border-bottom:1px solid var(--line);padding:7px 10px;vertical-align:t
   </div>
 
   <!-- 5 -->
-  <div class="step" data-step="4" data-title="Reflexión">
+  <div class="step" data-step="4" data-title="Reflexión" id="s5">
     <span class="badge">Después de jugar</span>
     <div class="st">5 · Reflexión individual</div>
     <div class="ss">Responde con ejemplos concretos de lo que viviste en el juego.</div>
@@ -339,7 +346,10 @@ function doPdf(){if($('#bPdf').disabled){toast('Completa el 100 % para generar e
 document.addEventListener('keydown',function(e){if((e.ctrlKey||e.metaKey)&&(e.key==='p'||e.key==='P')){e.preventDefault();doPdf();}});
 function clearAll(){if(!confirm('¿Borrar todos los datos de esta actividad? Esta acción no se puede deshacer.'))return;try{localStorage.removeItem(KEY);}catch(e){}location.reload();}
 var _h=[];
-window.addEventListener('beforeprint',function(){_h=[];document.querySelectorAll('textarea').forEach(function(t){_h.push(t.style.height);t.style.height='auto';t.style.height=t.scrollHeight+4+'px';});});
+window.addEventListener('beforeprint',function(){
+  document.querySelectorAll('.card').forEach(function(c){var ks=c.querySelectorAll('[data-k]');if(!ks.length)return;var any=false,req=false;ks.forEach(function(k){if((k.value||'').trim())any=true;if(k.hasAttribute('data-req'))req=true;});c.classList.toggle('skip',!any&&!req);});
+  var t=document.querySelector('[data-step="7"]');var tf=false;t.querySelectorAll('[data-k]').forEach(function(k){if((k.value||'').trim())tf=true;});t.classList.toggle('skip',!tf);
+  _h=[];document.querySelectorAll('textarea').forEach(function(t){_h.push(t.style.height);t.style.height='auto';t.style.height=t.scrollHeight+4+'px';});});
 window.addEventListener('afterprint',function(){document.querySelectorAll('textarea').forEach(function(t,i){t.style.height=_h[i]||'';});});
 
 /* ---------- Inicio ---------- */
