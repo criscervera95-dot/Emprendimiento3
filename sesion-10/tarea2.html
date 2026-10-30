@@ -117,6 +117,9 @@ table.t td{border-bottom:1px solid var(--line);padding:7px 10px;vertical-align:t
 .cl{list-style:none;display:grid;gap:6px;margin:8px 0 14px;font-size:.86em}
 .cl li{padding:8px 12px;border-radius:9px;background:#f1f5f9;color:#64748b}.cl li.ok{background:#e4fbef;color:#0b6b47;font-weight:600}
 #doc{display:none}
+.wd-row{display:grid;grid-template-columns:1fr 130px;gap:10px;margin-bottom:8px}
+.wd-row input{width:100%;padding:9px 12px;border:2px solid var(--line);border-radius:9px;font-family:inherit;font-size:.88em}
+.wdw{display:flex;align-items:center;gap:6px;font-weight:700;color:var(--blue)}
 .content textarea[data-minw]{min-height:140px}
 #doc.screen{display:block;border:2px solid var(--line);border-radius:14px;padding:18px 22px;background:#fff;margin-top:6px}
 #doc h1{font-size:1.15em;color:var(--blue);margin-bottom:2px}
@@ -131,7 +134,7 @@ table.t td{border-bottom:1px solid var(--line);padding:7px 10px;vertical-align:t
   body{background:#fff;padding:0}
   .wizard{box-shadow:none;border-radius:0;max-width:none;background:#fff}
   .toolbar,.prog,.nav,.toast,.hd .em,.hd .meta,.phead{display:none!important}
-  .content>.step{display:none!important}.content>.step[data-step="2"]{display:block!important;animation:none!important}.content>.step[data-step="2"]>*:not(#doc){display:none!important}
+  .content>.step{display:none!important}.content>.step[data-step="4"]{display:block!important;animation:none!important}.content>.step[data-step="4"]>*:not(#doc){display:none!important}
   .hd{padding:10px 16px;border-radius:8px}.hd h1{font-size:1.2em}.hd p{font-size:.78em}
   .content{padding:6px 0;min-height:0}
   #doc,#doc.screen{display:block!important;border:0;padding:6px 2px;margin:0}
@@ -158,23 +161,29 @@ table.t td{border-bottom:1px solid var(--line);padding:7px 10px;vertical-align:t
   <div class="prog">
     <div class="dots" id="dots"></div>
     <div class="pct"><div class="track"><div class="fill" id="fill"></div></div>
-      <div class="plabel"><span id="pStep">Paso 1 de 3</span><span><b id="pPct">0%</b> completado · el PDF se habilita al 100 %</span></div></div>
+      <div class="plabel"><span id="pStep">Paso 1 de 5</span><span><b id="pPct">0%</b> completado · el PDF se habilita al 100 %</span></div></div>
   </div>
   <div class="content">
 
-  <div class="step" data-step="0" data-title="Mi artículo">
-    <span class="badge">Paso 1 · Biblioteca y artículo</span>
-    <div class="st">Mi artículo académico</div>
-    <div class="ss">Marca cada paso conforme lo hagas y captura los datos de tu artículo. La referencia APA se arma sola.</div>
-    <div class="g2"><div class="fg"><label>Tu nombre completo</label><input type="text" data-k="alumno" data-req="1" placeholder="Nombre y apellidos" ></div><div class="fg"><label>Equipo UChallenge</label><input type="text" data-k="equipo" data-req="1" placeholder="Nombre del equipo o proyecto" ></div></div>
-    <div class="qbox"><h4>1 · Mi ruta de búsqueda</h4>
+  <div class="step" data-step="0" data-title="Mi equipo">
+    <span class="badge">Paso 1 · Equipo UChallenge</span>
+    <div class="st">👥 Identifica a tu equipo</div>
+    <div class="ss">Registra los datos del equipo y marca cada paso de tu búsqueda en la biblioteca.</div>
+    <div class="g2"><div class="fg"><label>Nombre del equipo / proyecto UChallenge</label><input type="text" data-k="equipo" data-req="1" placeholder="Ej. Innovadores MX" ></div><div class="fg"><label>Tu nombre completo (quien redacta)</label><input type="text" data-k="alumno" data-req="1" placeholder="Nombre y apellidos" ></div></div>
+    <div class="fg"><label>Integrantes del equipo (separados por coma)</label><textarea data-k="integ" data-req="1" maxlength="400" placeholder="Ej. Ana Pérez, Luis Gómez, Marco Uc" style="min-height:60px"></textarea><div class="cnt" data-hint="integ" style="text-align:left"></div></div>
+    <div class="qbox"><h4>Mi ruta de búsqueda</h4>
       <button type="button" class="chk" data-c="c1"><i>✓</i><span>Ingresé a la Biblioteca Virtual Anáhuac Mayab (biblioteca.anahuacmayab.mx) con mi usuario institucional.</span></button><input type="hidden" data-k="c1" data-req="1">
       <button type="button" class="chk" data-c="c2"><i>✓</i><span>Filtré por <b>artículo académico</b> y años <b>2020–2025</b>.</span></button><input type="hidden" data-k="c2" data-req="1">
       <button type="button" class="chk" data-c="c3"><i>✓</i><span>Elegí <b>1 artículo</b> de <b>mínimo 5 páginas</b>.</span></button><input type="hidden" data-k="c3" data-req="1">
       <button type="button" class="chk" data-c="c4"><i>✓</i><span>Leí la <b>introducción</b>, el <b>marco teórico</b> y las <b>conclusiones</b>.</span></button><input type="hidden" data-k="c4" data-req="1">
       <div class="fg"><label>Base donde lo encontré</label><div class="chips " data-ch="base"><button type="button" class="chip " data-v="EBSCO Academic Search Complete">EBSCO Academic Search Complete</button><button type="button" class="chip " data-v="ProQuest">ProQuest</button><button type="button" class="chip " data-v="Otra">Otra</button></div><input type="hidden" data-k="base" data-req="1"></div>
       <div class="fg" style="margin:0"><label>Término con el que lo busqué</label><div class="chips " data-ch="term"><button type="button" class="chip " data-v="situational leadership Hersey Blanchard">situational leadership Hersey Blanchard</button><button type="button" class="chip " data-v="assertive communication teams">assertive communication teams</button><button type="button" class="chip " data-v="conflict management entrepreneurial team">conflict management entrepreneurial team</button><button type="button" class="chip " data-v="Otro">Otro</button></div><input type="hidden" data-k="term" data-req="1"></div></div>
-    <div class="qbox"><h4>2 · Datos del artículo (referencia APA 7)</h4>
+  </div>
+  <div class="step" data-step="1" data-title="Mi artículo">
+    <span class="badge">Paso 2 · Artículo académico</span>
+    <div class="st">Mi artículo académico</div>
+    <div class="ss">Captura los datos del artículo que elegiste. La referencia APA se arma sola.</div>
+    <div class="qbox"><h4>Datos del artículo (referencia APA 7)</h4>
       <div class="fg"><label>Autor(es) en formato APA</label><input type="text" data-k="aut" data-req="1" placeholder="Apellido, N., &amp; Apellido, N."><div class="cnt" data-hint="aut"></div></div>
       <div class="g3"><div class="fg"><label>Año (2020–2025)</label><input type="number" data-k="anio" data-req="1" placeholder="2023" min="2020" max="2025"></div><div class="fg"><label>Volumen</label><input type="text" data-k="vol" data-req="1" placeholder="12" ></div><div class="fg"><label>Número (opcional)</label><input type="text" data-k="num" placeholder="3"></div></div>
       <div class="fg"><label>Título del artículo</label><input type="text" data-k="titulo" data-req="1" placeholder="Solo la primera palabra con mayúscula" ></div>
@@ -185,8 +194,8 @@ table.t td{border-bottom:1px solid var(--line);padding:7px 10px;vertical-align:t
       <div class="apa empty" id="apaPrev">Completa los datos para ver la referencia.</div></div>
   </div>
 
-  <div class="step" data-step="1" data-title="Mi análisis de caso">
-    <span class="badge">Paso 2 · Tres párrafos</span>
+  <div class="step" data-step="2" data-title="Mi análisis de caso">
+    <span class="badge">Paso 3 · Tres párrafos</span>
     <div class="st">Análisis de caso</div>
     <div class="ss">Escribe con tus palabras, en prosa. Cada párrafo: entre <b>60 y 150 palabras</b>. Usa los botones para empezar.</div>
     <div class="qbox"><h4>Párrafo 1 · La situación que viví</h4>
@@ -215,8 +224,20 @@ table.t td{border-bottom:1px solid var(--line);padding:7px 10px;vertical-align:t
       <div class="cnt" data-hint="p3" style="text-align:left"></div></div>
   </div>
 
-  <div class="step" data-step="2" data-title="Revisión y entrega">
-    <span class="badge">Paso 3 · Revisa y genera tu PDF</span>
+  <div class="step" data-step="3" data-title="Participación del equipo">
+    <span class="badge">Paso 4 · Participación individual</span>
+    <div class="st">📊 Participación individual del equipo</div>
+    <div class="ss">Antes de cerrar, cada integrante registra su % de participación en esta tarea.</div>
+    <div class="qbox"><h4>% de participación por integrante</h4>
+      <div class="ss" style="margin-bottom:8px">Cada quien anota su % de aporte. Si alguien trabajó al 100 %, puede marcar 100 %; <b>no hace falta que la suma del equipo dé 100 %</b>.</div>
+      <button type="button" class="btn2" id="bWd">🔄 Generar tabla con los integrantes</button>
+      <div id="wdRows" style="margin:10px 0"></div>
+      <button type="button" class="btn2" id="bWdAdd" style="background:#fff;color:var(--blue);border:2px solid var(--blue)">+ Agregar integrante</button>
+      <div class="cnt" id="wdSum" style="text-align:left;margin-top:6px"></div>
+      <input type="hidden" data-k="wd" data-req="1"></div>
+  </div>
+  <div class="step" data-step="4" data-title="Revisión y entrega">
+    <span class="badge">Paso 5 · Revisa y genera tu PDF</span>
     <div class="st">Revisión final</div>
     <div class="ss">Esto es lo que se imprimirá. Verifica cada punto; el PDF se habilita al completar todo.</div>
     <ul class="cl" id="cl"></ul>
@@ -231,7 +252,7 @@ table.t td{border-bottom:1px solid var(--line);padding:7px 10px;vertical-align:t
 <div class="toast" id="toast"></div>
 <script>
 
-var KEY='t2_liderazgo_articulo_v1',cur=0,wasDone=false,soundOn=true,AC=null,loading=true,saved={};
+var KEY='t2_liderazgo_articulo_v2',cur=0,wasDone=false,soundOn=true,AC=null,loading=true,saved={};
 var STEPS=document.querySelectorAll('.content>.step'),N=STEPS.length;
 var VAGUE=/\b(intentar|intentaré|tratar de|trataré|procurar|mejorar|ser mejor|respeto|siempre|nunca|más)\b/i;
 function $(s){return document.querySelector(s);}
@@ -243,7 +264,15 @@ function esc(t){return String(t).replace(/[&<>"]/g,function(c){return{'&':'&amp;
 function surnames(){var a=V('aut'),m=[],r=/([^,&]+),\s*[^,&]+?\./g,x;while((x=r.exec(a)))m.push(x[1].replace(/^[\s.]+/,'').trim());return m;}
 function who(){var s=surnames();if(!s.length)return V('aut').split(',')[0]||'Autor';return s.length===1?s[0]:s.length===2?s[0]+' & '+s[1]:s[0]+' et al.';}
 function pagsN(){var m=V('pags').match(/(\d+)\s*[-–—]\s*(\d+)/);return m?(+m[2]-+m[1]+1):0;}
+function names(){return V('integ').split(/[,\n;]+/).map(function(x){return x.trim();}).filter(Boolean);}
+function wdRows(){var o=[];document.querySelectorAll('#wdRows .wd-row').forEach(function(r){o.push({n:r.querySelector('.wdn').value.trim(),p:r.querySelector('.wdp').value});});return o;}
+function wdSync(){var rows=wdRows();fld('wd').value=rows.length?JSON.stringify(rows):'';var sum=rows.reduce(function(a,x){return a+(+x.p||0);},0);$('#wdSum').textContent=rows.length?'Suma informativa del equipo: '+sum+' % (cada integrante puede llegar a 100 % de forma independiente)':'';}
+function wdAdd(n,p){var d=document.createElement('div');d.className='wd-row';d.innerHTML='<input type="text" class="wdn" placeholder="Nombre del integrante"><div class="wdw"><input type="number" class="wdp" min="0" max="100" step="1" placeholder="%"><span>%</span></div>';d.querySelector('.wdn').value=n||'';d.querySelector('.wdp').value=(p===undefined||p===null)?'':p;$('#wdRows').appendChild(d);}
+function wdGen(){var old={};wdRows().forEach(function(x){old[x.n]=x.p;});$('#wdRows').innerHTML='';names().forEach(function(n){wdAdd(n,old[n]);});wdSync();}
+function wdLoad(){var v=fld('wd').value;if(!v)return;try{JSON.parse(v).forEach(function(x){wdAdd(x.n,x.p);});}catch(e){}wdSync();}
 var VAL={
+ integ:function(v){return names().length>=2;},
+ wd:function(v){try{var a=JSON.parse(v);return a.length>=1&&a.every(function(x){return x.n&&x.p!==''&&+x.p>=0&&+x.p<=100;});}catch(e){return false;}},
  anio:function(v){var n=+v;return n>=2020&&n<=2025;},
  pags:function(){return pagsN()>=5;},
  aut:function(v){return /^[^,]{2,},\s*\S/.test(v);},
@@ -266,6 +295,7 @@ function syncUI(){
  document.querySelectorAll('.chk[data-c]').forEach(function(b){b.classList.toggle('on',fld(b.getAttribute('data-c')).value==='1');});
  document.querySelectorAll('[data-mt]').forEach(function(m){var k=m.getAttribute('data-mt'),n=words(V(k));m.textContent=n+' palabras · recomendado 60–150';m.className='meter '+(n>150?'warn':n>=60?'ok':'');if(n>150)m.textContent=n+' palabras · intenta resumir a máx. 150';});
  var ap=apa(),ab=$('#apaPrev');ab.className='apa'+(ap?'':' empty');ab.innerHTML=ap||'Completa los datos para ver la referencia.';
+ var nn=names().length;hint('integ',!V('integ')?'':nn>=2?'✅ '+nn+' integrantes':'⚠ Escribe al menos 2 nombres separados por coma',nn>=2?'ok':'warn');
  var a=V('aut');hint('aut',!a?'':VAL.aut(a)?'✅ Formato APA':'⚠ Usa «Apellido, N.»',VAL.aut(a)?'ok':'warn');
  var pn=pagsN();hint('pags',!V('pags')?'':pn>=5?'✅ '+pn+' páginas':'⚠ Mínimo 5 páginas (escribe «145-162»)',pn>=5?'ok':'warn');
  var cita=V('cita'),pg=V('pg');$('#bCita').disabled=!(cita.length>=15&&pg&&V('aut')&&V('anio'));
@@ -276,20 +306,20 @@ function syncUI(){
  hint('p2',V('p2')?(VAL.p2(V('p2'))?'✅ Incluye tu cita':'⚠ Inserta tu cita textual en el párrafo (botón arriba).'):'',VAL.p2(V('p2'))?'ok':'warn');
  hint('p3',V('p3')?(/me comprometo/i.test(V('p3'))?'✅ Cierra con compromiso':'⚠ Debe incluir «me comprometo a…» (botón de insertar).'):'',/me comprometo/i.test(V('p3'))?'ok':'warn');
  document.querySelectorAll('.qbox').forEach(function(q){var r=q.querySelectorAll('[data-req]');if(!r.length)return;var all=true;r.forEach(function(e){if(!isFilled(e))all=false;});q.classList.toggle('done',all);});
- var L=[['Artículo de mínimo 5 páginas y año 2020–2025',pn>=5&&VAL.anio(V('anio'))],['Ruta de búsqueda completa (4 pasos)',['c1','c2','c3','c4'].every(function(k){return V(k)==='1';})],['Situación descrita sin nombres propios',words(V('p1'))>=60&&V('c5')==='1'],['Cita textual incluida en el párrafo 2',VAL.p2(V('p2'))],['Compromiso personal explícito al cierre',VAL.p3(V('p3'))&&V('ca').length>=8],['Referencia APA completa',!!ap]];
+ var L=[['Artículo de mínimo 5 páginas y año 2020–2025',pn>=5&&VAL.anio(V('anio'))],['Ruta de búsqueda completa (4 pasos)',['c1','c2','c3','c4'].every(function(k){return V(k)==='1';})],['Situación descrita sin nombres propios',words(V('p1'))>=60&&V('c5')==='1'],['Cita textual incluida en el párrafo 2',VAL.p2(V('p2'))],['Compromiso personal explícito al cierre',VAL.p3(V('p3'))&&V('ca').length>=8],['Referencia APA completa',!!ap],['Equipo, integrantes y % de participación registrados',VAL.integ(V('integ'))&&VAL.wd(V('wd'))&&!!V('equipo')]];
  $('#cl').innerHTML=L.map(function(x){return '<li class="'+(x[1]?'ok':'')+'">'+(x[1]?'✅ ':'⬜ ')+x[0]+'</li>';}).join('');
  renderDoc();
 }
 function renderDoc(){
  var ap=apa(),p=function(k){return esc(V(k));};
- $('#doc').innerHTML='<h1>Análisis de caso: del artículo a mi equipo</h1><div class="dm">'+p('alumno')+' · Equipo UChallenge: '+p('equipo')+' · '+$('#mFecha').textContent+'</div>'
+ $('#doc').innerHTML='<h1>Análisis de caso: del artículo a mi equipo</h1><div class="dm"><b>Equipo UChallenge:</b> '+p('equipo')+' · <b>Integrantes:</b> '+esc(names().join(', '))+'<br><b>Redactó:</b> '+p('alumno')+' · '+$('#mFecha').textContent+'</div>'
  +'<div class="art">Búsqueda en <b>'+p('base')+'</b> con «'+p('term')+'» · artículo de '+pagsN()+' páginas</div>'
  +'<h2>Párrafo 1 · Situación vivida ('+p('ctx')+')</h2><p>'+p('p1')+'</p>'
  +'<h2>Párrafo 2 · '+p('estilo')+' según el artículo</h2><p>'+p('p2')+'</p>'
  +'<h2>Párrafo 3 · Lo que haría diferente</h2><p>'+p('p3')+'</p>'
 
  +'<h2>Referencia (APA 7)</h2><div class="ref">'+(ap||'')+'</div>'
- +(V('plen')?'<div class="dm" style="margin-top:8px">Plenaria: '+p('plen')+'</div>':'');
+ +'<div class="dm" style="margin-top:8px"><b>% de participación:</b> '+(function(){try{return JSON.parse(V('wd')).map(function(x){return esc(x.n)+': '+esc(x.p)+' %';}).join(' · ');}catch(e){return '—';}})()+(V('plen')?' · Plenaria: '+p('plen'):'')+'</div>';
 }
 document.addEventListener('click',function(e){
  var c=e.target.closest('.chip[data-v]');
@@ -299,6 +329,8 @@ document.addEventListener('click',function(e){
  var s=e.target.closest('.chip[data-st]');
  if(s){var t=fld(s.getAttribute('data-st')),add=s.getAttribute('data-t');t.value=(t.value?t.value.trim()+' ':'')+add;t.focus();click();onChange();return;}
  if(e.target.id==='bCita'&&!e.target.disabled){var t2=fld('p2'),q='“'+V('cita').replace(/^["“”«]|["“”»]$/g,'')+'” ('+who()+', '+V('anio')+', p. '+V('pg')+')';if(t2.value.toLowerCase().indexOf(V('cita').slice(0,20).toLowerCase())<0){t2.value=(t2.value?t2.value.trim()+' ':'')+q;}click();onChange();return;}
+ if(e.target.id==='bWd'){wdGen();click();onChange();return;}
+ if(e.target.id==='bWdAdd'){wdAdd('','');wdSync();click();onChange();return;}
  if(e.target.id==='bComp'&&!e.target.disabled){var t3=fld('p3'),q3='Me comprometo a '+V('ca')+' cada vez que '+V('cb')+', y sabré que lo logré porque '+V('cc')+'.';if(!/me comprometo/i.test(t3.value))t3.value=(t3.value?t3.value.trim()+' ':'')+q3;click();onChange();}
 });
 function onChange(){syncUI();refresh();save();}
@@ -314,7 +346,7 @@ function refresh(){
 }
 function go(i){cur=Math.max(0,Math.min(N-1,i));STEPS.forEach(function(s,k){s.classList.toggle('active',k===cur);});$('#bPrev').disabled=cur===0;$('#bNext').disabled=cur===N-1;$('#pStep').textContent='Paso '+(cur+1)+' de '+N+' · '+STEPS[cur].getAttribute('data-title');click();refresh();save();window.scrollTo({top:0,behavior:'smooth'});}
 $('#dots').addEventListener('click',function(e){var b=e.target.closest('[data-d]');if(b)go(+b.getAttribute('data-d'));});
-document.addEventListener('input',function(e){if(e.target.getAttribute&&e.target.getAttribute('data-k'))onChange();});
+document.addEventListener('input',function(e){if(e.target.classList&&e.target.classList.contains('wdp')){var n=+e.target.value;if(n>100)e.target.value=100;if(n<0)e.target.value=0;}if(e.target.closest&&e.target.closest('#wdRows')){wdSync();onChange();return;}if(e.target.getAttribute&&e.target.getAttribute('data-k'))onChange();});
 /* ---------- Sonido y confeti ---------- */
 function ctx(){if(!AC){try{AC=new (window.AudioContext||window.webkitAudioContext)();}catch(e){}}return AC;}
 function tone(f,d,at,v){var a=ctx();if(!a||!soundOn)return;var o=a.createOscillator(),g=a.createGain();o.type='triangle';o.frequency.value=f;var t=a.currentTime+(at||0);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(v||.2,t+.02);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g);g.connect(a.destination);o.start(t);o.stop(t+d+.02);}
@@ -330,7 +362,7 @@ document.addEventListener('keydown',function(e){if((e.ctrlKey||e.metaKey)&&(e.ke
 function clearAll(){if(!confirm('¿Borrar todos los datos de esta tarea? Esta acción no se puede deshacer.'))return;try{localStorage.removeItem(KEY);}catch(e){}location.reload();}
 window.addEventListener('beforeprint',function(){renderDoc();});
 load();$('#mFecha').textContent=new Date().toLocaleDateString('es-MX',{day:'numeric',month:'long',year:'numeric'});
-syncUI();go(cur);loading=false;setInterval(save,30000);
+wdLoad();syncUI();go(cur);loading=false;setInterval(save,30000);
 
 </script>
 </body>

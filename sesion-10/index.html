@@ -272,14 +272,14 @@ html:function(){return '<h2>Piensa en tu equipo…</h2><div style="font-size:92p
 
 /* 4 · OBJETIVO */
 add({id:'obj',blk:'3 · Objetivo y actividad',t:'6–8',title:'Objetivo de la sesión y actividad',
-notes:'<b>Minuto 6–8.</b><ul><li>Lee el objetivo en voz alta: verbo + alumno + qué + cómo.</li><li>Explica en una frase la actividad: «hoy aprenden el modelo en 12 minutos y lo usan en vivo jugando».</li><li>Menciona los tres productos: misión en Game Room, hoja de observación y acuerdos del equipo.</li></ul>',
+notes:'<b>Minuto 6–8.</b><ul><li>Lee el objetivo en voz alta: verbo + alumno + qué + cómo.</li><li>Explica en una frase la actividad: «hoy aprenden el modelo en 12 minutos y lo usan en vivo jugando».</li><li>Menciona los tres productos: misión en Game Room, hoja de observación y reflexión individual (HTML).</li></ul>',
 html:function(){return '<h2>Objetivo de la <em>sesión</em></h2>'
- +'<div class="card" style="padding:30px 38px"><p style="font-size:36px;line-height:1.3"><b>Aplicar</b>, el alumno, el <b>liderazgo situacional de Hersey-Blanchard</b>, diagnosticando la madurez de sus compañeros y ajustando su estilo de dirección, al <b>superar en equipo una misión cooperativa en vivo</b> y documentar los acuerdos de conflicto y decisión de su equipo.</p></div>'
+ +'<div class="card" style="padding:30px 38px"><p style="font-size:36px;line-height:1.3"><b>Aplicar</b>, el alumno, el <b>liderazgo situacional de Hersey-Blanchard</b>, diagnosticando la madurez de sus compañeros y ajustando su estilo de dirección, al <b>superar en equipo una misión cooperativa en vivo</b> y reflexionar por escrito sobre lo que vivió con su equipo.</p></div>'
  +'<h2 style="margin-top:26px;font-size:54px">Actividad de hoy</h2>'
  +'<div class="grid g3">'
  +card('🎮','Misión en Game Room','<p>Sorpresa: cada equipo juega su turno con 8 controles. Los demás observan.</p>')
  +card('📋','Hoja de observación','<p>Los equipos que esperan analizan estilo, conflicto y decisión del equipo que juega.</p>')
- +card('🤝','Acuerdos del equipo','<p>Seis acuerdos de conflicto y decisión para entregar el 1 de noviembre.</p>')
+ +card('📝','Reflexión individual','<p>Tu HTML: lo que viviste jugando, liderazgo situacional y feedback de la clase.</p>')
  +'</div>';}});
 
 /* 5 · HB idea */
@@ -423,29 +423,35 @@ html:function(){
  +'<div class="gcard"><h3>3 · ¿Cómo decidieron bajo presión?</h3><p>¿Declararon el método antes de discutir o negociaron quién decidía?</p></div>'
  +'</div></div>';}});
 
-/* 17 · Acuerdos */
-add({id:'acuerdos',blk:'6 · Game Room (en turnos)',t:'70–76',title:'Acuerdos del equipo: conflicto y decisión',
-notes:'<b>Minuto 70–76 (6 min).</b><ul><li>Con lo que vivieron en Pico Park, cada equipo redacta los seis acuerdos con conducta observable (no intención) en su documento de equipo; no van en el HTML individual.</li><li>En clase basta con borrador de los acuerdos 1, 3 y 4. El documento completo se entrega el <b>1 de noviembre</b> en Brightspace.</li><li>Si el equipo firmó un Manifiesto en la Sesión 5, revisen la regla «cómo decidimos sin consenso».</li><li>Inicia temporizador de 6 min.</li></ul>',
-html:function(){return '<h2>Seis <em>acuerdos</em> del equipo</h2><p style="margin-bottom:16px">Cada acuerdo se redacta como <b>conducta observable</b>, no como intención.</p>'
- +'<div class="grid g3">'
- +card('','<span class="num">1</span><br>Qué decide cada quién','<p>Áreas con responsable que decide solo.</p>')
- +card('','<span class="num">2</span><br>Qué requiere consenso','<p>Lista corta: lo que compromete a todos a largo plazo.</p>')
- +card('','<span class="num">3</span><br>Cómo se desempata','<p>Definido de antemano y por escrito.</p>')
- +card('','<span class="num">4</span><br>Qué pasa después de decidir','<p>«Disiento y me comprometo»: se sostiene la decisión.</p>')
- +card('','<span class="num">5</span><br>Cómo se aborda un conflicto de relación','<p>En privado, pronto y entre las partes.</p>')
- +card('','<span class="num">6</span><br>Qué conductas no se toleran','<p>Dos o tres nombradas. Corregir en público suele ser la primera.</p>')
- +'</div><div class="callout dk">Entrega del equipo: <b>1 de noviembre</b> en Brightspace.</div>';}});
+/* 17 · Tarea 2 */
+add({id:'tarea2',blk:'6 · Game Room (en turnos)',t:'70–76',title:'Tarea 2: del artículo a mi equipo',
+notes:'<b>Minuto 70–76 (6 min).</b><ul><li>Presenta la Tarea 2: buscan en la Biblioteca Virtual un artículo sobre liderazgo situacional o comunicación asertiva y lo conectan con un conflicto real de su equipo UChallenge o de trabajo en clase.</li><li>Recorre los 7 pasos de la lámina. Insiste en: artículo de mínimo 5 páginas, años 2020–2025, referencia APA y compromiso personal accionable.</li><li>Muestra el HTML de la tarea: pide datos del equipo y los integrantes, arma la referencia APA, tiene detector de cita y compromiso, y cierra con el % de participación de cada integrante.</li><li>La entrega es el PDF en Brightspace; algunos casos se comparten en plenaria la siguiente sesión.</li></ul>',
+html:function(){return '<h2>Tarea 2: del <em>artículo</em> a mi equipo</h2><p style="margin-bottom:10px;font-size:34px">Conecta un artículo académico con un conflicto real de tu equipo.</p>'
+ +'<div class="grid g2" style="grid-template-columns:1.05fr .95fr;align-items:start;gap:30px">'
+ +'<div class="card" style="padding:22px 30px"><ol style="margin-left:34px;display:grid;gap:9px;font-size:28px;line-height:1.22">'
+ +'<li>Ingresa a la <b>Biblioteca Virtual</b> con tu usuario institucional.</li>'
+ +'<li>Busca en <b>EBSCO o ProQuest</b> (artículo académico, <b>2020–2025</b>).</li>'
+ +'<li>Elige <b>1 artículo</b> de mínimo <b>5 páginas</b>.</li>'
+ +'<li>Lee introducción, marco teórico y conclusiones.</li>'
+ +'<li>Redacta tu <b>análisis de caso</b> en 3 párrafos.</li>'
+ +'<li>Referencia completa en <b>APA</b>.</li>'
+ +'<li>Entrega el <b>PDF</b> en Brightspace.</li></ol></div>'
+ +'<div class="grid" style="gap:14px">'
+ +'<div class="card" style="padding:16px 26px"><h3 style="font-size:36px;margin-bottom:4px">1 · Situación vivida</h3><p style="font-size:27px;line-height:1.25">Conflicto o comunicación difícil en tu equipo. <b>Sin nombres</b>, solo roles.</p></div>'
+ +'<div class="card" style="padding:16px 26px"><h3 style="font-size:36px;margin-bottom:4px">2 · Lo que dice el artículo</h3><p style="font-size:27px;line-height:1.25">Estilo o técnica más adecuada, con una <b>cita</b> del artículo.</p></div>'
+ +'<div class="card" style="padding:16px 26px"><h3 style="font-size:36px;margin-bottom:4px">3 · Lo que haría diferente</h3><p style="font-size:27px;line-height:1.25">Cierra con un <b>compromiso personal</b> explícito y accionable.</p></div>'
+ +'</div></div><div class="callout dk" style="margin-top:18px">Entrega de los <b>equipos UChallenge</b> · HTML con datos del equipo y % de participación · algunos casos se comparten en plenaria la siguiente sesión.</div>';}});
 
 /* 18 · Cierre */
 add({id:'close',blk:'7 · Cierre',t:'76–80',title:'¿Qué me llevo de la clase?',
-notes:'<b>Minuto 76–80 (4 min).</b><ul><li>Cada alumno responde por escrito, en silencio, las tres frases (1 min). Después comparte uno voluntario de cada equipo.</li><li>Retoma la pregunta detonadora: ahora ya saben por qué tratar a todos igual no es equidad.</li><li>Recordatorios: acuerdos del equipo el 1 de noviembre; tarea individual de Biblioteca Virtual (pestaña Tarea del HTML).</li><li>Anuncia la Sesión 11: modelo SBI y comunicación no violenta. Hoy vieron cuándo intervenir; la próxima semana verán cómo decirlo. Pide llevar los acuerdos de hoy.</li></ul>',
+notes:'<b>Minuto 76–80 (4 min).</b><ul><li>Cada alumno responde por escrito, en silencio, las tres frases (1 min). Después comparte uno voluntario de cada equipo.</li><li>Retoma la pregunta detonadora: ahora ya saben por qué tratar a todos igual no es equidad.</li><li>Recordatorios: entregar tu HTML de reflexión y la Tarea 2 (artículo de la Biblioteca Virtual) en Brightspace; algunos casos se comparten en plenaria la siguiente sesión.</li><li>Anuncia la Sesión 11: modelo SBI y comunicación no violenta. Hoy vieron cuándo intervenir; la próxima semana verán cómo decirlo.</li></ul>',
 html:function(){return '<h2>¿Qué me <em>llevo</em> de la clase?</h2>'
  +'<div class="grid g3">'
  +card('🔁','El estilo que uso en automático es…','<p>y le queda mal a…</p>')
  +card('🧩','Hoy descubrí en el juego que liderar es…','<p>(una conducta concreta).</p>')
- +card('✍️','Un acuerdo que sí voy a cumplir en mi equipo es…','<p>(observable y con fecha).</p>')
+ +card('✍️','Una conducta de liderazgo que voy a practicar es…','<p>(observable y con fecha).</p>')
  +'</div><div class="grid g2" style="margin-top:22px">'
- +'<div class="callout dk" style="margin:0">Entregas: <b>acuerdos del equipo</b> · 1 de noviembre. <b>Tarea individual</b> de Biblioteca Virtual.</div>'
+ +'<div class="callout dk" style="margin:0">Entregas: <b>reflexión HTML</b> y <b>Tarea 2</b> (artículo de Biblioteca Virtual) en Brightspace.</div>'
  +'<div class="callout" style="margin:0">Próxima sesión: <b>Comunicación asertiva y feedback</b> (SBI y comunicación no violenta).</div></div>';}});
 
 /* ================= EN VIVO: registro de alumnos (MQTT sobre WebSocket) ================= */
