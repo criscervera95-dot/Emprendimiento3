@@ -172,7 +172,7 @@ table.t td{border-bottom:1px solid var(--line);padding:7px 10px;vertical-align:t
   <div class="step" data-step="1" data-title="Liderazgo y mi aprendizaje">
     <span class="badge">Parte 2 · Individual</span>
     <div class="st">Liderazgo y mi aprendizaje</div>
-    <div class="ss">Conecta el juego con liderazgo situacional y con lo que aprendiste.</div>
+    <div class="ss">Conecta el juego con liderazgo situacional y con lo que aprendiste. Al final, sube la foto de tu equipo.</div>
     <div class="qbox"><h4>1 · Al jugar, ¿qué pasó entre tu equipo y el juego?</h4>
       <div class="fg"><label>¿Qué tanto se necesitó coordinación para pasar los niveles?</label><div class="chips stars" data-ch="p2a"><button type="button" class="chip stars" data-v="★ 1" data-d="">★ 1</button><button type="button" class="chip stars" data-v="★★ 2" data-d="">★★ 2</button><button type="button" class="chip stars" data-v="★★★ 3" data-d="">★★★ 3</button><button type="button" class="chip stars" data-v="★★★★ 4" data-d="">★★★★ 4</button><button type="button" class="chip stars" data-v="★★★★★ 5" data-d="">★★★★★ 5</button></div><input type="hidden" data-k="p2a" data-req="1"><span class="pv" data-pv="p2a"></span></div>
       <div class="fg" style="margin:0"><label>Un momento donde fue imposible avanzar solos</label><textarea data-k="p2" data-req="1" data-min="10" maxlength="250" placeholder="Describe qué tuvieron que hacer juntos…"></textarea><div class="cnt" data-cn="p2">0/250</div></div></div>
@@ -186,37 +186,22 @@ table.t td{border-bottom:1px solid var(--line);padding:7px 10px;vertical-align:t
     <div class="qbox"><h4>4 · ¿Qué aprendiste sobre tu forma de colaborar y trabajar con otros?</h4>
       <div class="chips"><button type="button" class="chip sm" data-st="r7" data-t="Aprendí que cuando…">＋ Aprendí que cuando…</button><button type="button" class="chip sm" data-st="r7" data-t="Me di cuenta de que a veces yo…">＋ Me di cuenta de que a veces yo…</button><button type="button" class="chip sm" data-st="r7" data-t="Lo que más me costó fue…">＋ Lo que más me costó fue…</button></div>
       <textarea data-k="r7" data-req="1" data-min="10" maxlength="300" placeholder=""></textarea><div class="cnt" data-cn="r7">0/300</div></div>
+    <div class="qbox photo"><h4>5 · Foto con tu equipo realizando la actividad</h4>
+      <input type="file" accept="image/*" id="foto"><div class="hint">La imagen se reduce y se guarda en este navegador.</div><img id="fotoImg" alt="Foto del equipo"></div>
   </div>
   <div class="step" data-step="2" data-title="Feedback de la clase">
     <span class="badge">Parte 3 · Para tu profesora</span>
     <div class="st">Feedback de la clase</div>
     <div class="ss">Tu opinión sincera ayuda a mejorar la clase. Es importante para mí.</div>
-    <div class="qbox"><h4>1 · ¿Cómo valoras la sesión de hoy?</h4>
-      <div class="fg"><label>Valoración general</label><div class="chips " data-ch="f1"><button type="button" class="chip " data-v="😕 Mejorable" data-d="">😕 Mejorable</button><button type="button" class="chip " data-v="😐 Regular" data-d="">😐 Regular</button><button type="button" class="chip " data-v="🙂 Buena" data-d="">🙂 Buena</button><button type="button" class="chip " data-v="😄 Muy buena" data-d="">😄 Muy buena</button><button type="button" class="chip " data-v="🤩 Excelente" data-d="">🤩 Excelente</button></div><input type="hidden" data-k="f1" data-req="1"><span class="pv" data-pv="f1"></span></div>
-      <div class="fg" style="margin:0"><label>¿Por qué?</label><textarea data-k="f1b" data-req="1" data-min="10" maxlength="200" placeholder=""></textarea><div class="cnt" data-cn="f1b">0/200</div></div></div>
-    <div class="qbox"><h4>2 · Cuánto me sirvió cada parte (1 = poco, 5 = mucho)</h4>
-      <div class="fg"><label>🎬 La explicación del tema</label><div class="chips stars" data-ch="f2a"><button type="button" class="chip stars" data-v="★ 1" data-d="">★ 1</button><button type="button" class="chip stars" data-v="★★ 2" data-d="">★★ 2</button><button type="button" class="chip stars" data-v="★★★ 3" data-d="">★★★ 3</button><button type="button" class="chip stars" data-v="★★★★ 4" data-d="">★★★★ 4</button><button type="button" class="chip stars" data-v="★★★★★ 5" data-d="">★★★★★ 5</button></div><input type="hidden" data-k="f2a" data-req="1"><span class="pv" data-pv="f2a"></span></div>
-      <div class="fg"><label>🎮 El juego en equipo</label><div class="chips stars" data-ch="f2b"><button type="button" class="chip stars" data-v="★ 1" data-d="">★ 1</button><button type="button" class="chip stars" data-v="★★ 2" data-d="">★★ 2</button><button type="button" class="chip stars" data-v="★★★ 3" data-d="">★★★ 3</button><button type="button" class="chip stars" data-v="★★★★ 4" data-d="">★★★★ 4</button><button type="button" class="chip stars" data-v="★★★★★ 5" data-d="">★★★★★ 5</button></div><input type="hidden" data-k="f2b" data-req="1"><span class="pv" data-pv="f2b"></span></div>
-      <div class="fg" style="margin:0"><label>💬 La conversación final (debrief)</label><div class="chips stars" data-ch="f2c"><button type="button" class="chip stars" data-v="★ 1" data-d="">★ 1</button><button type="button" class="chip stars" data-v="★★ 2" data-d="">★★ 2</button><button type="button" class="chip stars" data-v="★★★ 3" data-d="">★★★ 3</button><button type="button" class="chip stars" data-v="★★★★ 4" data-d="">★★★★ 4</button><button type="button" class="chip stars" data-v="★★★★★ 5" data-d="">★★★★★ 5</button></div><input type="hidden" data-k="f2c" data-req="1"><span class="pv" data-pv="f2c"></span></div></div>
-    <div class="qbox"><h4>3 · Organización de la clase</h4>
-      <div class="fg"><label>Las instrucciones de la dinámica fueron…</label><div class="chips " data-ch="f3a"><button type="button" class="chip " data-v="Confusas" data-d="">Confusas</button><button type="button" class="chip " data-v="Regulares" data-d="">Regulares</button><button type="button" class="chip " data-v="Claras" data-d="">Claras</button><button type="button" class="chip " data-v="Muy claras" data-d="">Muy claras</button></div><input type="hidden" data-k="f3a" data-req="1"><span class="pv" data-pv="f3a"></span></div>
-      <div class="fg" style="margin:0"><label>El tiempo de juego por equipo fue…</label><div class="chips " data-ch="f3b"><button type="button" class="chip " data-v="Muy corto" data-d="">Muy corto</button><button type="button" class="chip " data-v="Justo" data-d="">Justo</button><button type="button" class="chip " data-v="Muy largo" data-d="">Muy largo</button></div><input type="hidden" data-k="f3b" data-req="1"><span class="pv" data-pv="f3b"></span></div></div>
-    <div class="qbox"><h4>4 · Lo que más me sirvió de la clase</h4>
-      <div class="chips"><button type="button" class="chip sm" data-st="f4" data-t="Me sirvió que…">＋ Me sirvió que…</button><button type="button" class="chip sm" data-st="f4" data-t="Entendí mejor…">＋ Entendí mejor…</button><button type="button" class="chip sm" data-st="f4" data-t="Me gustó cuando…">＋ Me gustó cuando…</button></div>
-      <textarea data-k="f4" data-req="1" data-min="10" maxlength="300" placeholder=""></textarea><div class="cnt" data-cn="f4">0/300</div></div>
-    <div class="qbox"><h4>5 · Lo que cambiaría o mejoraría</h4>
-      <div class="chips"><button type="button" class="chip sm" data-st="f5" data-t="Cambiaría…">＋ Cambiaría…</button><button type="button" class="chip sm" data-st="f5" data-t="Me faltó…">＋ Me faltó…</button><button type="button" class="chip sm" data-st="f5" data-t="Sugiero que…">＋ Sugiero que…</button></div>
-      <textarea data-k="f5" data-req="1" data-min="10" maxlength="300" placeholder=""></textarea><div class="cnt" data-cn="f5">0/300</div></div>
-    <div class="qbox"><h4>6 · ¿Esta actividad contribuye a tu formación como líder?</h4>
+    <div class="qbox"><h4>1 · ¿Qué te pareció la actividad de clase?</h4>
+      <div class="fg"><label>Mi valoración</label><div class="chips " data-ch="f1"><button type="button" class="chip " data-v="😕 Mejorable" data-d="">😕 Mejorable</button><button type="button" class="chip " data-v="😐 Regular" data-d="">😐 Regular</button><button type="button" class="chip " data-v="🙂 Buena" data-d="">🙂 Buena</button><button type="button" class="chip " data-v="😄 Muy buena" data-d="">😄 Muy buena</button><button type="button" class="chip " data-v="🤩 Excelente" data-d="">🤩 Excelente</button></div><input type="hidden" data-k="f1" data-req="1"><span class="pv" data-pv="f1"></span></div>
+      <div class="fg" style="margin:0"><label>Cuéntame por qué</label><textarea data-k="f1b" data-req="1" data-min="10" maxlength="300" placeholder=""></textarea><div class="cnt" data-cn="f1b">0/300</div></div></div>
+    <div class="qbox"><h4>2 · ¿Esta actividad contribuye a tu formación como líder?</h4>
       <div class="fg"><label>¿Qué tanto?</label><div class="chips stars" data-ch="r8s"><button type="button" class="chip stars" data-v="★ 1" data-d="">★ 1</button><button type="button" class="chip stars" data-v="★★ 2" data-d="">★★ 2</button><button type="button" class="chip stars" data-v="★★★ 3" data-d="">★★★ 3</button><button type="button" class="chip stars" data-v="★★★★ 4" data-d="">★★★★ 4</button><button type="button" class="chip stars" data-v="★★★★★ 5" data-d="">★★★★★ 5</button></div><input type="hidden" data-k="r8s" data-req="1"><span class="pv" data-pv="r8s"></span></div>
       <div class="fg" style="margin:0"><label>¿Por qué?</label><textarea data-k="r8" data-req="1" data-min="10" maxlength="300" placeholder=""></textarea><div class="cnt" data-cn="r8">0/300</div></div></div>
-    <div class="qbox"><h4>7 · ¿Qué me llevo de clase?</h4>
-      <div class="chips"><button type="button" class="chip sm" data-st="f7" data-t="Me llevo que un líder…">＋ Me llevo que un líder…</button><button type="button" class="chip sm" data-st="f7" data-t="Voy a aplicar…">＋ Voy a aplicar…</button><button type="button" class="chip sm" data-st="f7" data-t="Quiero practicar…">＋ Quiero practicar…</button></div>
-      <textarea data-k="f7" data-req="1" data-min="10" maxlength="250" placeholder="Una idea o acción que sí vas a usar…"></textarea><div class="cnt" data-cn="f7">0/250</div></div>
-    <div class="qbox"><h4>8 · Algo más que quieras decirle a tu profesora <span class="badge" style="margin-left:6px">opcional</span></h4>
-      <textarea data-k="f8" maxlength="300" placeholder=""></textarea><div class="cnt" data-cn="f8">0/300</div></div>
-    <div class="qbox photo"><h4>9 · Foto con tu equipo realizando la actividad</h4>
-      <input type="file" accept="image/*" id="foto"><div class="hint">La imagen se reduce y se guarda en este navegador.</div><img id="fotoImg" alt="Foto del equipo"></div>
+    <div class="qbox"><h4>3 · ¿Recomendarías repetir estas dinámicas dentro de la asignatura?</h4>
+      <div class="fg"><label>Mi respuesta</label><div class="chips " data-ch="f3"><button type="button" class="chip " data-v="✅ Sí" data-d="">✅ Sí</button><button type="button" class="chip " data-v="🤔 Con ajustes" data-d="">🤔 Con ajustes</button><button type="button" class="chip " data-v="❌ No" data-d="">❌ No</button></div><input type="hidden" data-k="f3" data-req="1"><span class="pv" data-pv="f3"></span></div>
+      <div class="fg" style="margin:0"><label>¿Por qué?</label><textarea data-k="f3b" data-req="1" data-min="10" maxlength="300" placeholder=""></textarea><div class="cnt" data-cn="f3b">0/300</div></div></div>
   </div>
   <div class="done-banner" id="doneB">🎉 ¡Actividad completa! Ya puedes generar tu PDF con el botón o con Ctrl+P / ⌘+P.</div>
   <div class="nav"><button class="nbtn alt" id="bPrev" onclick="go(cur-1)">← Anterior</button><button class="nbtn" id="bNext" onclick="go(cur+1)">Siguiente →</button></div>
@@ -224,7 +209,7 @@ table.t td{border-bottom:1px solid var(--line);padding:7px 10px;vertical-align:t
 </div>
 <div class="toast" id="toast"></div>
 <script>
-var KEY='s10_liderazgo_pico_v4', cur=0, photo='', wasDone=false, soundOn=true, AC=null, loading=true, saved={};
+var KEY='s10_liderazgo_pico_v5', cur=0, photo='', wasDone=false, soundOn=true, AC=null, loading=true, saved={};
 var STEPS=document.querySelectorAll('.step'), N=STEPS.length;
 var VAGUE=/\b(intentar|intentaremos|tratar de|trataremos|procurar|procuraremos|mejorar|mejor comunicaci[oó]n|buena comunicaci[oó]n|respeto|respetar|ser responsables|siempre|nunca)\b/i;
 function $(s){return document.querySelector(s);}
@@ -270,7 +255,7 @@ function onChange(){syncChips();refresh();save();}
 function refresh(){
   var req=[].slice.call(document.querySelectorAll('[data-req]')),ok=0,per={};
   req.forEach(function(el){var f=isFilled(el);if(f)ok++;var st=el.closest('.step').getAttribute('data-step');per[st]=per[st]||{t:0,o:0};per[st].t++;if(f)per[st].o++;var fg=el.closest('.fg');if(fg)fg.classList.toggle('ok',f);});
-  var total=req.length+1;if(photo)ok++;var pl=per[N-1]=per[N-1]||{t:0,o:0};pl.t++;if(photo)pl.o++;
+  var total=req.length+1;if(photo)ok++;var pl=per[1]=per[1]||{t:0,o:0};pl.t++;if(photo)pl.o++;
   var pct=Math.round(100*ok/total);
   $('#fill').style.width=pct+'%';$('#pPct').textContent=pct+'%';
   document.querySelectorAll('.dot').forEach(function(d){var s=+d.getAttribute('data-d');d.classList.toggle('active',s===cur);var p=per[s];d.classList.toggle('done',!!p&&p.o===p.t&&s!==cur);});
