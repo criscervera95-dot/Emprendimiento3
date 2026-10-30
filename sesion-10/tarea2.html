@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tarea 2 — Del artículo a mi equipo</title>
+<style>
+
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--blue:#1a3a6b;--blue2:#2c5aa0;--or:#e87722;--or2:#FD6B18;--ink:#2d3748;--mut:#64748b;--line:#e2e8f0}
+body{font-family:'Poppins',sans-serif;background:#f4f6fa;color:var(--ink);padding:20px;min-height:100vh}
+.wizard{max-width:960px;margin:0 auto;background:#fff;border-radius:18px;box-shadow:0 4px 24px rgba(0,0,0,.08);overflow:hidden}
+.hd{background:linear-gradient(135deg,var(--blue),var(--blue2) 60%,var(--or));color:#fff;padding:26px 32px;position:relative}
+.hd h1{font-size:1.55em;font-weight:800;margin-bottom:4px}
+.hd p{opacity:.92;font-size:.88em}
+.hd .em{position:absolute;right:26px;top:14px;font-size:3.2em;opacity:.9}
+.meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.meta span{background:rgba(255,255,255,.18);border-radius:99px;padding:4px 14px;font-size:.76em;font-weight:600}
+.toolbar{display:flex;justify-content:flex-end;gap:10px;padding:12px 32px;background:#f8fafc;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.tbtn{padding:8px 16px;border-radius:8px;font-size:.78em;font-family:inherit;cursor:pointer;border:1px solid var(--line);background:#fff;color:#475569;font-weight:600}
+.tbtn:hover{background:#f1f5f9}
+.tbtn.danger{color:#dc2626;border-color:#fecaca}
+.tbtn.pdf{background:var(--blue);color:#fff;border-color:var(--blue)}
+.tbtn:disabled{opacity:.45;cursor:not-allowed}
+.prog{padding:18px 32px;background:#f8fafc;border-bottom:1px solid var(--line)}
+.dots{display:flex;justify-content:space-between;align-items:center;position:relative;gap:6px}
+.dots::before{content:'';position:absolute;top:50%;left:0;right:0;height:3px;background:var(--line);transform:translateY(-50%);z-index:0}
+.dot{width:34px;height:34px;border-radius:50%;background:var(--line);display:grid;place-items:center;font-size:.74em;font-weight:700;color:#94a3b8;position:relative;z-index:1;cursor:pointer;border:0;font-family:inherit;transition:.2s}
+.dot:hover{transform:scale(1.1);box-shadow:0 0 0 3px rgba(232,119,34,.4)}
+.dot.active{background:var(--or);color:#fff;transform:scale(1.14)}
+.dot.done{background:var(--blue);color:#fff}
+.dot.tarea{background:#7c3aed;color:#fff;width:auto;border-radius:99px;padding:0 14px}
+.pct{margin-top:14px}
+.track{height:10px;background:var(--line);border-radius:99px;overflow:hidden}
+.fill{height:100%;width:0;background:linear-gradient(90deg,var(--blue),var(--or));transition:width .45s}
+.plabel{display:flex;justify-content:space-between;font-size:.74em;color:var(--mut);margin-top:6px;font-weight:600}
+.plabel b{color:var(--or)}
+.content{padding:30px 32px;min-height:460px}
+.step{display:none}
+.step.active{display:block;animation:fs .35s ease}
+@keyframes fs{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.badge{display:inline-block;background:var(--or);color:#fff;font-size:.65em;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:3px 12px;border-radius:99px;margin-bottom:8px}
+.badge.t{background:#7c3aed}
+.st{font-size:1.3em;font-weight:700;color:var(--blue);margin-bottom:4px}
+.ss{font-size:.84em;color:var(--mut);margin-bottom:18px}
+.fg{margin-bottom:16px}
+.fg label{display:block;font-weight:600;margin-bottom:5px;font-size:.86em;color:#374151}
+.fg input[type=text],.fg input[type=number],.fg input[type=date],.fg textarea,.fg select{width:100%;padding:10px 13px;border:2px solid var(--line);border-radius:9px;font-family:inherit;font-size:.88em;background:#fff;color:var(--ink)}
+.fg input:focus,.fg textarea:focus,.fg select:focus{outline:none;border-color:var(--or)}
+.fg textarea,.qbox>textarea{resize:vertical;min-height:70px}
+.qbox>textarea{width:100%;padding:10px 13px;border:2px solid var(--line);border-radius:9px;font-family:inherit;font-size:.88em;background:#fff;color:var(--ink)}
+.qbox>textarea:focus{outline:none;border-color:var(--or)}
+.fg.ok input,.fg.ok textarea,.fg.ok select{border-color:#86d3a8}
+.hint{font-size:.74em;color:var(--mut);margin-top:3px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.box{border-left:4px solid var(--or);background:#fff7ed;border-radius:0 12px 12px 0;padding:14px 18px;margin:14px 0}
+.box h4{color:var(--or);font-size:.88em;margin-bottom:4px}
+.box p,.box li{font-size:.82em;color:#64748b;line-height:1.5}
+.box.b{border-color:var(--blue);background:#f0f4ff}.box.b h4{color:var(--blue)}
+.card{border:2px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:14px;background:#fff}
+.card h4{color:var(--blue);font-size:.95em;margin-bottom:10px}
+details{margin:12px 0;border:2px solid var(--line);border-radius:12px;padding:10px 16px;background:#fafbff}
+summary{cursor:pointer;font-weight:700;color:var(--blue);font-size:.88em}
+table.t{width:100%;border-collapse:collapse;margin-top:10px;font-size:.78em}
+table.t th{background:var(--blue);color:#fff;text-align:left;padding:7px 10px}
+table.t td{border-bottom:1px solid var(--line);padding:7px 10px;vertical-align:top}
+.mem{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.photo img{max-width:100%;max-height:300px;border-radius:12px;margin-top:10px;display:none;border:2px solid var(--line)}
+.nav{display:flex;justify-content:space-between;margin-top:22px;gap:12px}
+.nbtn{padding:11px 26px;border-radius:99px;border:0;font-family:inherit;font-weight:700;font-size:.88em;cursor:pointer;background:var(--blue);color:#fff}
+.nbtn.alt{background:#fff;color:var(--blue);border:2px solid var(--blue)}
+.nbtn:disabled{opacity:.35;cursor:not-allowed}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#111;color:#fff;padding:12px 22px;border-radius:99px;font-size:.85em;z-index:99;display:none}
+.done-banner{display:none;background:#e4fbef;border:2px solid #0e8f5f;color:#0b6b47;border-radius:12px;padding:12px 18px;font-weight:700;margin:14px 0;font-size:.88em}
+.pwm,.phead{display:none}
+@media screen and (max-width:720px){.g2,.g3,.g4,.mem{grid-template-columns:1fr}.content,.prog,.toolbar,.hd{padding-left:16px;padding-right:16px}.hd .em{display:none}}
+
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:2px 0 8px}
+.chip{border:2px solid var(--line);background:#fff;color:#334155;border-radius:99px;padding:8px 14px;font:600 .82em 'Poppins',sans-serif;cursor:pointer;transition:.15s;display:inline-flex;align-items:center;gap:6px}
+.chip:hover{border-color:var(--or);transform:translateY(-1px)}
+.chip.on{background:var(--blue);border-color:var(--blue);color:#fff;box-shadow:0 4px 10px rgba(26,58,107,.3)}
+.chip.st.on{background:var(--or);border-color:var(--or)}
+.chip.sm{padding:5px 11px;font-size:.74em;border-style:dashed;color:var(--blue)}
+.stars .chip{padding:6px 12px;font-size:.95em}
+.cdesc{font-size:.76em;color:var(--mut);min-height:1.3em;margin:-2px 0 8px}
+.pv{display:none}
+.printing .step{display:block!important}
+.stem{display:grid;grid-template-columns:auto 1fr;gap:8px;align-items:center;margin-bottom:8px}
+.stem input{width:100%;padding:8px 12px;border:2px solid var(--line);border-radius:9px;font-family:inherit;font-size:.86em;background:#fff;color:var(--ink)}
+.stem input:focus{outline:none;border-color:var(--or)}
+.stem b{font-size:.84em;color:var(--blue);white-space:nowrap}
+.cnt{font-size:.7em;color:#94a3b8;text-align:right;margin-top:2px}
+.det{font-size:.76em;font-weight:600;margin-top:5px;padding:6px 10px;border-radius:8px;background:#f1f5f9;color:#64748b}
+.det.ok{background:#e4fbef;color:#0b6b47}.det.warn{background:#fff7ed;color:#b45309}
+.qbox{border:2px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:14px;background:#fff;transition:.2s}
+.qbox.done{border-color:#86d3a8;background:#fbfffd}
+.qbox h4{color:var(--blue);font-size:.9em;margin-bottom:8px}
+.pop{position:fixed;font-size:2em;pointer-events:none;z-index:99;animation:pp 1.6s ease-out forwards}
+@keyframes pp{to{transform:translate(var(--dx),var(--dy)) rotate(40deg);opacity:0}}
+
+.chk{display:flex;gap:10px;align-items:flex-start;width:100%;text-align:left;border:2px solid var(--line);background:#fff;border-radius:11px;padding:10px 14px;margin-bottom:8px;font:500 .86em 'Poppins',sans-serif;color:#334155;cursor:pointer;transition:.15s}
+.chk i{flex:none;width:22px;height:22px;border-radius:7px;border:2px solid #cbd5e1;display:grid;place-items:center;font-style:normal;color:#fff;font-size:.85em;transition:.15s}
+.chk.on{border-color:#3fbf86;background:#f3fcf8}.chk.on i{background:#22a06b;border-color:#22a06b}
+.chk:hover{border-color:var(--or)}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+@media screen and (max-width:720px){.g3{grid-template-columns:1fr}}
+.meter{font-size:.72em;font-weight:700;margin-top:3px;text-align:right;color:#94a3b8}.meter.ok{color:#0b6b47}.meter.warn{color:#b45309}
+.apa{background:#f8fafc;border:2px dashed #cbd5e1;border-radius:11px;padding:12px 16px;font-size:.84em;color:#1e293b;padding-left:34px;text-indent:-18px;line-height:1.5}
+.apa.empty{color:#94a3b8;font-style:italic;text-indent:0;padding-left:16px}
+.cite{background:#fff7ed;border-left:4px solid var(--or);border-radius:8px;padding:9px 12px;font-size:.84em;margin:6px 0 8px;font-style:italic}
+.btn2{border:0;background:var(--blue);color:#fff;border-radius:99px;padding:8px 16px;font:700 .78em 'Poppins',sans-serif;cursor:pointer}
+.btn2:disabled{background:#cbd5e1;cursor:not-allowed}
+.cl{list-style:none;display:grid;gap:6px;margin:8px 0 14px;font-size:.86em}
+.cl li{padding:8px 12px;border-radius:9px;background:#f1f5f9;color:#64748b}.cl li.ok{background:#e4fbef;color:#0b6b47;font-weight:600}
+#doc{display:none}
+.content textarea[data-minw]{min-height:140px}
+#doc.screen{display:block;border:2px solid var(--line);border-radius:14px;padding:18px 22px;background:#fff;margin-top:6px}
+#doc h1{font-size:1.15em;color:var(--blue);margin-bottom:2px}
+#doc .dm{font-size:.76em;color:var(--mut);margin-bottom:10px}
+#doc h2{font-size:.88em;color:var(--or);margin:12px 0 3px}
+#doc p{font-size:.88em;line-height:1.55;text-align:justify;white-space:pre-wrap}
+#doc .cb{margin-top:10px;border-left:4px solid var(--or);background:#fff7ed;padding:7px 12px;font-size:.86em;border-radius:6px}
+#doc .ref{margin-top:12px;padding-left:28px;text-indent:-28px;font-size:.86em;line-height:1.5}
+#doc .art{font-size:.78em;color:#475569;background:#f1f5f9;border-radius:8px;padding:6px 10px}
+@media print{
+  @page{size:A4;margin:14mm}
+  body{background:#fff;padding:0}
+  .wizard{box-shadow:none;border-radius:0;max-width:none;background:#fff}
+  .toolbar,.prog,.nav,.toast,.hd .em,.hd .meta,.phead{display:none!important}
+  .content>.step{display:none!important}.content>.step[data-step="2"]{display:block!important;animation:none!important}.content>.step[data-step="2"]>*:not(#doc){display:none!important}
+  .hd{padding:10px 16px;border-radius:8px}.hd h1{font-size:1.2em}.hd p{font-size:.78em}
+  .content{padding:6px 0;min-height:0}
+  #doc,#doc.screen{display:block!important;border:0;padding:6px 2px;margin:0}
+  #doc p{font-size:10.5pt;line-height:1.5}
+  #doc h2{break-after:avoid}#doc p,#doc .cb,#doc .ref{break-inside:avoid}
+  body.incomplete .pwm{display:block;position:fixed;top:40%;left:0;right:0;text-align:center;font-size:56px;font-weight:800;color:rgba(220,38,38,.18);transform:rotate(-20deg);z-index:9}
+}
+</style>
+</head>
+<body>
+<div class="pwm">TAREA INCOMPLETA</div>
+<div class="wizard">
+  <div class="hd">
+    <span class="em">📚</span>
+    <h1>Tarea 2 — Del artículo a mi equipo</h1>
+    <p>Análisis de caso con evidencia académica · Emprendimiento 3er semestre</p>
+    <div class="meta"><span id="mAlumno">Alumno: —</span><span id="mFecha">—</span></div>
+  </div>
+  <div class="toolbar">
+    <button class="tbtn" id="bSound" onclick="toggleSound()">🔊 Sonido</button>
+    <button class="tbtn pdf" id="bPdf" onclick="doPdf()" disabled>📄 Generar PDF (Ctrl+P / ⌘+P)</button>
+    <button class="tbtn danger" onclick="clearAll()">🗑️ Limpiar datos</button>
+  </div>
+  <div class="prog">
+    <div class="dots" id="dots"></div>
+    <div class="pct"><div class="track"><div class="fill" id="fill"></div></div>
+      <div class="plabel"><span id="pStep">Paso 1 de 3</span><span><b id="pPct">0%</b> completado · el PDF se habilita al 100 %</span></div></div>
+  </div>
+  <div class="content">
+
+  <div class="step" data-step="0" data-title="Mi artículo">
+    <span class="badge">Paso 1 · Biblioteca y artículo</span>
+    <div class="st">Mi artículo académico</div>
+    <div class="ss">Marca cada paso conforme lo hagas y captura los datos de tu artículo. La referencia APA se arma sola.</div>
+    <div class="g2"><div class="fg"><label>Tu nombre completo</label><input type="text" data-k="alumno" data-req="1" placeholder="Nombre y apellidos" ></div><div class="fg"><label>Equipo UChallenge</label><input type="text" data-k="equipo" data-req="1" placeholder="Nombre del equipo o proyecto" ></div></div>
+    <div class="qbox"><h4>1 · Mi ruta de búsqueda</h4>
+      <button type="button" class="chk" data-c="c1"><i>✓</i><span>Ingresé a la Biblioteca Virtual Anáhuac Mayab (biblioteca.anahuacmayab.mx) con mi usuario institucional.</span></button><input type="hidden" data-k="c1" data-req="1">
+      <button type="button" class="chk" data-c="c2"><i>✓</i><span>Filtré por <b>artículo académico</b> y años <b>2020–2025</b>.</span></button><input type="hidden" data-k="c2" data-req="1">
+      <button type="button" class="chk" data-c="c3"><i>✓</i><span>Elegí <b>1 artículo</b> de <b>mínimo 5 páginas</b>.</span></button><input type="hidden" data-k="c3" data-req="1">
+      <button type="button" class="chk" data-c="c4"><i>✓</i><span>Leí la <b>introducción</b>, el <b>marco teórico</b> y las <b>conclusiones</b>.</span></button><input type="hidden" data-k="c4" data-req="1">
+      <div class="fg"><label>Base donde lo encontré</label><div class="chips " data-ch="base"><button type="button" class="chip " data-v="EBSCO Academic Search Complete">EBSCO Academic Search Complete</button><button type="button" class="chip " data-v="ProQuest">ProQuest</button><button type="button" class="chip " data-v="Otra">Otra</button></div><input type="hidden" data-k="base" data-req="1"></div>
+      <div class="fg" style="margin:0"><label>Término con el que lo busqué</label><div class="chips " data-ch="term"><button type="button" class="chip " data-v="situational leadership Hersey Blanchard">situational leadership Hersey Blanchard</button><button type="button" class="chip " data-v="assertive communication teams">assertive communication teams</button><button type="button" class="chip " data-v="conflict management entrepreneurial team">conflict management entrepreneurial team</button><button type="button" class="chip " data-v="Otro">Otro</button></div><input type="hidden" data-k="term" data-req="1"></div></div>
+    <div class="qbox"><h4>2 · Datos del artículo (referencia APA 7)</h4>
+      <div class="fg"><label>Autor(es) en formato APA</label><input type="text" data-k="aut" data-req="1" placeholder="Apellido, N., &amp; Apellido, N."><div class="cnt" data-hint="aut"></div></div>
+      <div class="g3"><div class="fg"><label>Año (2020–2025)</label><input type="number" data-k="anio" data-req="1" placeholder="2023" min="2020" max="2025"></div><div class="fg"><label>Volumen</label><input type="text" data-k="vol" data-req="1" placeholder="12" ></div><div class="fg"><label>Número (opcional)</label><input type="text" data-k="num" placeholder="3"></div></div>
+      <div class="fg"><label>Título del artículo</label><input type="text" data-k="titulo" data-req="1" placeholder="Solo la primera palabra con mayúscula" ></div>
+      <div class="fg"><label>Nombre de la revista</label><input type="text" data-k="rev" data-req="1" placeholder="Journal of …" ></div>
+      <div class="g2"><div class="fg"><label>Páginas (inicio–fin)</label><input type="text" data-k="pags" data-req="1" placeholder="145-162" ></div><div class="fg"><label>DOI o URL</label><input type="text" data-k="doi" data-req="1" placeholder="https://doi.org/…" ></div></div>
+      <div class="cnt" data-hint="pags" style="text-align:left;margin-bottom:8px"></div>
+      <label style="font-size:.8em;font-weight:600;color:#475569">Así quedará tu referencia</label>
+      <div class="apa empty" id="apaPrev">Completa los datos para ver la referencia.</div></div>
+  </div>
+
+  <div class="step" data-step="1" data-title="Mi análisis de caso">
+    <span class="badge">Paso 2 · Tres párrafos</span>
+    <div class="st">Análisis de caso</div>
+    <div class="ss">Escribe con tus palabras, en prosa. Cada párrafo: entre <b>60 y 150 palabras</b>. Usa los botones para empezar.</div>
+    <div class="qbox"><h4>Párrafo 1 · La situación que viví</h4>
+      <div class="ss" style="margin-bottom:6px">Conflicto o comunicación difícil en tu equipo este semestre. <b>Sin nombres</b>, solo roles y situaciones: qué pasó, qué se dijo o hizo, qué consecuencia tuvo.</div>
+      <div class="fg"><label>¿Dónde ocurrió?</label><div class="chips " data-ch="ctx"><button type="button" class="chip " data-v="UChallenge">UChallenge</button><button type="button" class="chip " data-v="Trabajo en clase">Trabajo en clase</button></div><input type="hidden" data-k="ctx" data-req="1"></div>
+      <div class="chips"><button type="button" class="chip sm" data-st="p1" data-t="Durante la entrega de…, el integrante encargado de… dijo…">＋ Durante la entrega de…, el integrante encargado de… dijo…</button><button type="button" class="chip sm" data-st="p1" data-t="El conflicto empezó cuando…">＋ El conflicto empezó cuando…</button><button type="button" class="chip sm" data-st="p1" data-t="Como resultado, el equipo…">＋ Como resultado, el equipo…</button></div>
+      <textarea data-k="p1" data-req="1" data-minw="60" maxlength="1100" placeholder="Describe la situación con roles (p. ej. «la responsable de finanzas»)…"></textarea><div class="meter" data-mt="p1"></div>
+      <button type="button" class="chk" data-c="c5"><i>✓</i><span>Revisé que mi párrafo <b>no incluye nombres propios</b>, solo roles.</span></button><input type="hidden" data-k="c5" data-req="1"></div>
+    <div class="qbox"><h4>Párrafo 2 · Lo que dice el artículo</h4>
+      <div class="ss" style="margin-bottom:6px">¿Qué estilo de liderazgo o técnica de comunicación sería la más adecuada para esa situación y por qué? <b>Incluye una cita</b> del artículo.</div>
+      <div class="fg"><label>Estilo o técnica que propongo</label><div class="chips " data-ch="estilo"><button type="button" class="chip " data-v="S1 Dirigir">S1 Dirigir</button><button type="button" class="chip " data-v="S2 Persuadir">S2 Persuadir</button><button type="button" class="chip " data-v="S3 Participar">S3 Participar</button><button type="button" class="chip " data-v="S4 Delegar">S4 Delegar</button><button type="button" class="chip " data-v="Comunicación asertiva (mensajes «yo»)">Comunicación asertiva (mensajes «yo»)</button><button type="button" class="chip " data-v="Escucha activa">Escucha activa</button><button type="button" class="chip " data-v="Negociación / gestión del conflicto">Negociación / gestión del conflicto</button><button type="button" class="chip " data-v="Otra">Otra</button></div><input type="hidden" data-k="estilo" data-req="1"></div>
+      <div class="fg"><label>Cita textual del artículo</label><textarea data-k="cita" data-req="1" data-min="15" maxlength="300" placeholder="Copia la frase tal como aparece…" style="min-height:56px"></textarea></div>
+      <div class="g2"><div class="fg"><label>Página de la cita</label><input type="text" data-k="pg" data-req="1" placeholder="12" ></div><div class="fg"><label>&nbsp;</label><button type="button" class="btn2" id="bCita" disabled>＋ Insertar cita en mi párrafo</button></div></div>
+      <div class="cite" id="citePrev" style="display:none"></div>
+      <textarea data-k="p2" data-req="1" data-minw="60" maxlength="1100" placeholder="Explica por qué ese estilo o técnica funciona en tu situación…"></textarea><div class="meter" data-mt="p2"></div>
+      <div class="cnt" data-hint="p2" style="text-align:left"></div></div>
+    <div class="qbox"><h4>Párrafo 3 · Lo que haría diferente</h4>
+      <div class="ss" style="margin-bottom:6px">Qué harías distinto si enfrentaras la situación otra vez. <b>Cierra con un compromiso personal</b>, explícito y accionable.</div>
+      <div class="fg"><label>Yo me comprometo a… (conducta observable)</label><input type="text" data-k="ca" data-req="1" data-min="8" placeholder="Ej. pedir un acuerdo escrito de tareas en cada reunión"></div>
+      <div class="g2"><div class="fg"><label>…cada vez que… (situación)</label><input type="text" data-k="cb" data-req="1" data-min="8" placeholder="Ej. un integrante no entregue a tiempo"></div>
+      <div class="fg"><label>…y sabré que lo logré porque… (evidencia)</label><input type="text" data-k="cc" data-req="1" data-min="8" placeholder="Ej. el equipo tiene fechas registradas"></div></div>
+      <div class="det" data-det="ca">Escribe tu compromiso y revisa si es observable.</div>
+      <div style="margin:8px 0"><button type="button" class="btn2" id="bComp" disabled>＋ Insertar compromiso al final del párrafo</button></div>
+      <div class="chips"><button type="button" class="chip sm" data-st="p3" data-t="Si volviera a vivir esa situación, yo…">＋ Si volviera a vivir esa situación, yo…</button><button type="button" class="chip sm" data-st="p3" data-t="En lugar de…, haría…">＋ En lugar de…, haría…</button></div>
+      <textarea data-k="p3" data-req="1" data-minw="60" maxlength="1100" placeholder="Escribe lo que harías diferente y cierra con tu compromiso…"></textarea><div class="meter" data-mt="p3"></div>
+      <div class="cnt" data-hint="p3" style="text-align:left"></div></div>
+  </div>
+
+  <div class="step" data-step="2" data-title="Revisión y entrega">
+    <span class="badge">Paso 3 · Revisa y genera tu PDF</span>
+    <div class="st">Revisión final</div>
+    <div class="ss">Esto es lo que se imprimirá. Verifica cada punto; el PDF se habilita al completar todo.</div>
+    <ul class="cl" id="cl"></ul>
+    <div class="fg"><label>¿Aceptas que tu caso se comparta en plenaria? (sin nombres)</label><div class="chips" data-ch="plen"><button type="button" class="chip" data-v="Sí, puedo compartirlo">Sí, puedo compartirlo</button><button type="button" class="chip" data-v="Prefiero que no">Prefiero que no</button></div><input type="hidden" data-k="plen"></div>
+    <div id="doc" class="screen"></div>
+    <div class="done-banner" id="doneB">🎉 ¡Listo! Genera tu PDF con el botón o Ctrl+P / ⌘+P y súbelo a Brightspace.</div>
+  </div>
+
+  <div class="nav"><button class="nbtn alt" id="bPrev" onclick="go(cur-1)">← Anterior</button><button class="nbtn" id="bNext" onclick="go(cur+1)">Siguiente →</button></div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+
+var KEY='t2_liderazgo_articulo_v1',cur=0,wasDone=false,soundOn=true,AC=null,loading=true,saved={};
+var STEPS=document.querySelectorAll('.content>.step'),N=STEPS.length;
+var VAGUE=/\b(intentar|intentaré|tratar de|trataré|procurar|mejorar|ser mejor|respeto|siempre|nunca|más)\b/i;
+function $(s){return document.querySelector(s);}
+function fld(k){return document.querySelector('[data-k="'+k+'"]');}
+function V(k){var e=fld(k);return e?(e.value||'').trim():'';}
+function words(t){t=(t||'').trim();return t?t.split(/\s+/).length:0;}
+function esc(t){return String(t).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+(function(){var d='';for(var s=0;s<N;s++)d+='<button class="dot" data-d="'+s+'" title="'+STEPS[s].getAttribute('data-title')+'">'+(s+1)+'</button>';$('#dots').innerHTML=d;})();
+function surnames(){var a=V('aut'),m=[],r=/([^,&]+),\s*[^,&]+?\./g,x;while((x=r.exec(a)))m.push(x[1].replace(/^[\s.]+/,'').trim());return m;}
+function who(){var s=surnames();if(!s.length)return V('aut').split(',')[0]||'Autor';return s.length===1?s[0]:s.length===2?s[0]+' & '+s[1]:s[0]+' et al.';}
+function pagsN(){var m=V('pags').match(/(\d+)\s*[-–—]\s*(\d+)/);return m?(+m[2]-+m[1]+1):0;}
+var VAL={
+ anio:function(v){var n=+v;return n>=2020&&n<=2025;},
+ pags:function(){return pagsN()>=5;},
+ aut:function(v){return /^[^,]{2,},\s*\S/.test(v);},
+ p2:function(v){var c=V('cita').slice(0,20).toLowerCase();return words(v)>=60&&c.length>=10&&v.toLowerCase().indexOf(c)>-1;},
+ p3:function(v){return words(v)>=60&&/me comprometo/i.test(v);}
+};
+function isFilled(el){var k=el.getAttribute('data-k'),v=(el.value||'').trim();if(VAL[k])return VAL[k](v);var mw=+el.getAttribute('data-minw');if(mw)return words(v)>=mw;var m=+el.getAttribute('data-min')||1;return v.length>=m;}
+function collect(){var d={};document.querySelectorAll('[data-k]').forEach(function(e){d[e.getAttribute('data-k')]=e.value;});d.__step=cur;return d;}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(collect()));}catch(e){}}
+function load(){try{saved=JSON.parse(localStorage.getItem(KEY)||'{}')||{};}catch(e){saved={};}
+ document.querySelectorAll('[data-k]').forEach(function(e){var k=e.getAttribute('data-k');if(saved[k]!==undefined)e.value=saved[k];});cur=Math.min(saved.__step||0,N-1);}
+function apa(){
+ var a=V('aut'),y=V('anio'),t=V('titulo'),r=V('rev'),vo=V('vol'),nu=V('num'),pg=V('pags'),d=V('doi');
+ if(!(a&&y&&t&&r&&vo&&pg))return null;
+ var url=d?(/^10\./.test(d)?'https://doi.org/'+d:d):'';
+ return esc(a)+' ('+esc(y)+'). '+esc(t.replace(/\.$/,''))+'. <i>'+esc(r)+'</i>, <i>'+esc(vo)+'</i>'+(nu?'('+esc(nu)+')':'')+', '+esc(pg)+'.'+(url?' '+esc(url):'');}
+function hint(k,t,c){var h=document.querySelector('[data-hint="'+k+'"]');if(h){h.textContent=t;h.style.color=c==='ok'?'#0b6b47':c==='warn'?'#b45309':'#94a3b8';}}
+function syncUI(){
+ document.querySelectorAll('.chips[data-ch]').forEach(function(g){var v=fld(g.getAttribute('data-ch')).value;g.querySelectorAll('.chip').forEach(function(c){c.classList.toggle('on',c.getAttribute('data-v')===v);});});
+ document.querySelectorAll('.chk[data-c]').forEach(function(b){b.classList.toggle('on',fld(b.getAttribute('data-c')).value==='1');});
+ document.querySelectorAll('[data-mt]').forEach(function(m){var k=m.getAttribute('data-mt'),n=words(V(k));m.textContent=n+' palabras · recomendado 60–150';m.className='meter '+(n>150?'warn':n>=60?'ok':'');if(n>150)m.textContent=n+' palabras · intenta resumir a máx. 150';});
+ var ap=apa(),ab=$('#apaPrev');ab.className='apa'+(ap?'':' empty');ab.innerHTML=ap||'Completa los datos para ver la referencia.';
+ var a=V('aut');hint('aut',!a?'':VAL.aut(a)?'✅ Formato APA':'⚠ Usa «Apellido, N.»',VAL.aut(a)?'ok':'warn');
+ var pn=pagsN();hint('pags',!V('pags')?'':pn>=5?'✅ '+pn+' páginas':'⚠ Mínimo 5 páginas (escribe «145-162»)',pn>=5?'ok':'warn');
+ var cita=V('cita'),pg=V('pg');$('#bCita').disabled=!(cita.length>=15&&pg&&V('aut')&&V('anio'));
+ var cp=$('#citePrev');if(!$('#bCita').disabled){cp.style.display='block';cp.textContent='“'+cita.replace(/^["“”«]|["“”»]$/g,'')+'” ('+who()+', '+V('anio')+', p. '+pg+')';}else cp.style.display='none';
+ var ok=V('ca').length>=8&&V('cb').length>=8&&V('cc').length>=8;$('#bComp').disabled=!ok;
+ var d=document.querySelector('[data-det="ca"]'),ca=V('ca'),m=ca.match(VAGUE);
+ if(!ca){d.className='det';d.textContent='Escribe tu compromiso y revisa si es observable.';}else if(m){d.className='det warn';d.textContent='⚠ «'+m[0]+'» suena a intención. Di qué harás, cuándo y cómo se verá.';}else if(ca.length<20){d.className='det warn';d.textContent='⚠ Muy corto: sé específico.';}else{d.className='det ok';d.textContent='✅ Suena a conducta observable.';}
+ hint('p2',V('p2')?(VAL.p2(V('p2'))?'✅ Incluye tu cita':'⚠ Inserta tu cita textual en el párrafo (botón arriba).'):'',VAL.p2(V('p2'))?'ok':'warn');
+ hint('p3',V('p3')?(/me comprometo/i.test(V('p3'))?'✅ Cierra con compromiso':'⚠ Debe incluir «me comprometo a…» (botón de insertar).'):'',/me comprometo/i.test(V('p3'))?'ok':'warn');
+ document.querySelectorAll('.qbox').forEach(function(q){var r=q.querySelectorAll('[data-req]');if(!r.length)return;var all=true;r.forEach(function(e){if(!isFilled(e))all=false;});q.classList.toggle('done',all);});
+ var L=[['Artículo de mínimo 5 páginas y año 2020–2025',pn>=5&&VAL.anio(V('anio'))],['Ruta de búsqueda completa (4 pasos)',['c1','c2','c3','c4'].every(function(k){return V(k)==='1';})],['Situación descrita sin nombres propios',words(V('p1'))>=60&&V('c5')==='1'],['Cita textual incluida en el párrafo 2',VAL.p2(V('p2'))],['Compromiso personal explícito al cierre',VAL.p3(V('p3'))&&V('ca').length>=8],['Referencia APA completa',!!ap]];
+ $('#cl').innerHTML=L.map(function(x){return '<li class="'+(x[1]?'ok':'')+'">'+(x[1]?'✅ ':'⬜ ')+x[0]+'</li>';}).join('');
+ renderDoc();
+}
+function renderDoc(){
+ var ap=apa(),p=function(k){return esc(V(k));};
+ $('#doc').innerHTML='<h1>Análisis de caso: del artículo a mi equipo</h1><div class="dm">'+p('alumno')+' · Equipo UChallenge: '+p('equipo')+' · '+$('#mFecha').textContent+'</div>'
+ +'<div class="art">Búsqueda en <b>'+p('base')+'</b> con «'+p('term')+'» · artículo de '+pagsN()+' páginas</div>'
+ +'<h2>Párrafo 1 · Situación vivida ('+p('ctx')+')</h2><p>'+p('p1')+'</p>'
+ +'<h2>Párrafo 2 · '+p('estilo')+' según el artículo</h2><p>'+p('p2')+'</p>'
+ +'<h2>Párrafo 3 · Lo que haría diferente</h2><p>'+p('p3')+'</p>'
+
+ +'<h2>Referencia (APA 7)</h2><div class="ref">'+(ap||'')+'</div>'
+ +(V('plen')?'<div class="dm" style="margin-top:8px">Plenaria: '+p('plen')+'</div>':'');
+}
+document.addEventListener('click',function(e){
+ var c=e.target.closest('.chip[data-v]');
+ if(c){var f=fld(c.closest('.chips').getAttribute('data-ch'));f.value=f.value===c.getAttribute('data-v')?'':c.getAttribute('data-v');click();onChange();return;}
+ var k=e.target.closest('.chk[data-c]');
+ if(k){var h=fld(k.getAttribute('data-c'));h.value=h.value==='1'?'':'1';click();onChange();return;}
+ var s=e.target.closest('.chip[data-st]');
+ if(s){var t=fld(s.getAttribute('data-st')),add=s.getAttribute('data-t');t.value=(t.value?t.value.trim()+' ':'')+add;t.focus();click();onChange();return;}
+ if(e.target.id==='bCita'&&!e.target.disabled){var t2=fld('p2'),q='“'+V('cita').replace(/^["“”«]|["“”»]$/g,'')+'” ('+who()+', '+V('anio')+', p. '+V('pg')+')';if(t2.value.toLowerCase().indexOf(V('cita').slice(0,20).toLowerCase())<0){t2.value=(t2.value?t2.value.trim()+' ':'')+q;}click();onChange();return;}
+ if(e.target.id==='bComp'&&!e.target.disabled){var t3=fld('p3'),q3='Me comprometo a '+V('ca')+' cada vez que '+V('cb')+', y sabré que lo logré porque '+V('cc')+'.';if(!/me comprometo/i.test(t3.value))t3.value=(t3.value?t3.value.trim()+' ':'')+q3;click();onChange();}
+});
+function onChange(){syncUI();refresh();save();}
+function refresh(){
+ var req=[].slice.call(document.querySelectorAll('[data-req]')),ok=0,per={};
+ req.forEach(function(el){var f=isFilled(el);if(f)ok++;var st=el.closest('.step').getAttribute('data-step');per[st]=per[st]||{t:0,o:0};per[st].t++;if(f)per[st].o++;var fg=el.closest('.fg');if(fg)fg.classList.toggle('ok',f);});
+ var pct=Math.round(100*ok/req.length);
+ $('#fill').style.width=pct+'%';$('#pPct').textContent=pct+'%';
+ document.querySelectorAll('.dot').forEach(function(d){var s=+d.getAttribute('data-d');d.classList.toggle('active',s===cur);var p=per[s];d.classList.toggle('done',!!p&&p.o===p.t&&s!==cur);});
+ var done=pct>=100;$('#bPdf').disabled=!done;document.body.classList.toggle('incomplete',!done);$('#doneB').style.display=done?'block':'none';
+ if(done&&!wasDone&&!loading){playDone();burst();toast('🎉 ¡Tarea completa al 100 %!');}
+ wasDone=done;var a=V('alumno')||'—';$('#mAlumno').textContent='Alumno: '+a;
+}
+function go(i){cur=Math.max(0,Math.min(N-1,i));STEPS.forEach(function(s,k){s.classList.toggle('active',k===cur);});$('#bPrev').disabled=cur===0;$('#bNext').disabled=cur===N-1;$('#pStep').textContent='Paso '+(cur+1)+' de '+N+' · '+STEPS[cur].getAttribute('data-title');click();refresh();save();window.scrollTo({top:0,behavior:'smooth'});}
+$('#dots').addEventListener('click',function(e){var b=e.target.closest('[data-d]');if(b)go(+b.getAttribute('data-d'));});
+document.addEventListener('input',function(e){if(e.target.getAttribute&&e.target.getAttribute('data-k'))onChange();});
+/* ---------- Sonido y confeti ---------- */
+function ctx(){if(!AC){try{AC=new (window.AudioContext||window.webkitAudioContext)();}catch(e){}}return AC;}
+function tone(f,d,at,v){var a=ctx();if(!a||!soundOn)return;var o=a.createOscillator(),g=a.createGain();o.type='triangle';o.frequency.value=f;var t=a.currentTime+(at||0);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(v||.2,t+.02);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g);g.connect(a.destination);o.start(t);o.stop(t+d+.02);}
+function click(){tone(660,.06,0,.08);}
+function playDone(){[523,659,784,1047,1319].forEach(function(f,i){tone(f,.25,i*.11,.22);});}
+function toggleSound(){soundOn=!soundOn;$('#bSound').textContent=soundOn?'🔊 Sonido':'🔇 Sonido';}
+function toast(t){var e=$('#toast');e.textContent=t;e.style.display='block';clearTimeout(e._t);e._t=setTimeout(function(){e.style.display='none';},3200);}
+function burst(){var em=['🎉','⭐','✨','🎮','🧩'];for(var i=0;i<22;i++){var s=document.createElement('span');s.className='pop';s.textContent=em[i%5];s.style.left=(10+Math.random()*80)+'vw';s.style.top=(40+Math.random()*30)+'vh';s.style.setProperty('--dx',(Math.random()*300-150)+'px');s.style.setProperty('--dy',(-150-Math.random()*250)+'px');document.body.appendChild(s);(function(n){setTimeout(function(){n.remove();},1700);})(s);}}
+
+
+function doPdf(){if($('#bPdf').disabled){toast('Completa el 100 % para generar el PDF.');return;}renderDoc();window.print();}
+document.addEventListener('keydown',function(e){if((e.ctrlKey||e.metaKey)&&(e.key==='p'||e.key==='P')){e.preventDefault();doPdf();}});
+function clearAll(){if(!confirm('¿Borrar todos los datos de esta tarea? Esta acción no se puede deshacer.'))return;try{localStorage.removeItem(KEY);}catch(e){}location.reload();}
+window.addEventListener('beforeprint',function(){renderDoc();});
+load();$('#mFecha').textContent=new Date().toLocaleDateString('es-MX',{day:'numeric',month:'long',year:'numeric'});
+syncUI();go(cur);loading=false;setInterval(save,30000);
+
+</script>
+</body>
+</html>
