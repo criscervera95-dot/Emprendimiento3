@@ -91,8 +91,8 @@ table.t td{border-bottom:1px solid var(--line);padding:7px 10px;vertical-align:t
   .card{padding:6px 10px;margin-bottom:6px;border-width:1px;break-inside:avoid}.card.skip{display:none!important}
   .card h4{font-size:.8em;margin-bottom:4px}
   .g2,.g3{gap:6px}
-  #s5 .fg{break-inside:avoid}
   .photo img{display:block;max-height:140px}
+  .photo input{display:none}
   body.incomplete .pwm{display:block;position:fixed;top:40%;left:0;right:0;text-align:center;font-size:56px;font-weight:800;color:rgba(220,38,38,.18);transform:rotate(-20deg);z-index:9}
 }
 </style>
@@ -103,8 +103,8 @@ table.t td{border-bottom:1px solid var(--line);padding:7px 10px;vertical-align:t
   <div class="hd">
     <span class="em">🎮</span>
     <h1>Sesión 10 — Liderazgo en acción</h1>
-    <p>Liderazgo situacional (Hersey-Blanchard) · Misión cooperativa en Pico Park · Emprendimiento 3er semestre</p>
-    <div class="meta"><span id="mAlumno">Alumno: —</span><span id="mEquipo">Equipo: —</span><span id="mFecha">—</span></div>
+    <p>Reflexión individual · Liderazgo situacional y trabajo en equipo · Emprendimiento 3er semestre</p>
+    <div class="meta"><span id="mAlumno">Alumno: —</span><span id="mFecha">—</span></div>
     <div class="phead" id="pHead"></div>
   </div>
   <div class="toolbar">
@@ -115,127 +115,68 @@ table.t td{border-bottom:1px solid var(--line);padding:7px 10px;vertical-align:t
   <div class="prog">
     <div class="dots" id="dots"></div>
     <div class="pct"><div class="track"><div class="fill" id="fill"></div></div>
-      <div class="plabel"><span id="pStep">Paso 1 de 7</span><span><b id="pPct">0%</b> completado · el PDF se habilita al 100 %</span></div></div>
+      <div class="plabel"><span id="pStep">Paso 1 de 4</span><span><b id="pPct">0%</b> completado · el PDF se habilita al 100 %</span></div></div>
   </div>
   <div class="content">
 
   <!-- 1 -->
-  <div class="step" data-step="0" data-title="Equipo y roles">
-    <span class="badge">Antes de jugar</span>
-    <div class="st">1 · Tu equipo y tu rol</div>
-    <div class="ss">Hasta 8 integrantes por equipo, uno por control. Tu equipo se formó por sorteo.</div>
-    <div class="box"><h4>Los roles no se asignan</h4><p>Nadie te dice qué rol tienes: tu equipo los va descubriendo mientras juega. Hay 8 roles posibles (consulta la chuleta de abajo); si el equipo es menor a 8, algunos se combinan. Al terminar, registra el rol que terminaste asumiendo.</p></div>
+  <div class="step" data-step="0" data-title="Tus datos">
+    <span class="badge">Entrega individual</span>
+    <div class="st">1 · Tus datos</div>
+    <div class="ss">Esta entrega es individual: reflexiona sobre lo que viviste en la misión de Pico Park. No necesitas capturar datos de tu equipo.</div>
     <div class="g2">
       <div class="fg"><label>Tu nombre completo</label><input type="text" data-k="alumno" data-req="1" placeholder="Nombre y apellidos"></div>
-      <div class="fg"><label>Nombre o número del equipo</label><input type="text" data-k="equipo" data-req="1" placeholder="Ej. Equipo 3"></div>
-    </div>
-    <div class="g2">
-      <div class="fg"><label>Nombre del líder del equipo</label><input type="text" data-k="lider" data-req="1"></div>
       <div class="fg"><label>Rol que terminaste asumiendo en la misión</label>
-        <select data-k="rol" data-req="1"><option value="">Selecciona…</option><option>Líder</option><option>Subcoordinador</option><option>Comunicador</option><option>Estratega</option><option>Motivador</option><option>Gestor de conflictos</option><option>Técnico</option><option>Analista de madurez</option></select></div>
+        <select data-k="rol" data-req="1"><option value="">Selecciona…</option><option>Líder</option><option>Subcoordinador</option><option>Comunicador</option><option>Estratega</option><option>Motivador</option><option>Gestor de conflictos</option><option>Técnico</option><option>Analista de madurez</option><option>Observador (equipo que esperaba turno)</option></select></div>
     </div>
-    <div class="fg"><label>Integrantes del equipo (incluyéndote)</label>
-      <div class="mem" id="members"></div>
-      <div class="hint">Escribe al menos 2 nombres. Estos nombres se usan en la tabla de participación.</div></div>
-    <details><summary>Chuleta: los 8 roles que tu equipo puede descubrir</summary>
-      <table class="t"><tr><th>Rol</th><th>Qué hace</th></tr>
-      <tr><td>Líder</td><td>Guía la estrategia, decide y elige el estilo en cada pit stop.</td></tr>
-      <tr><td>Subcoordinador</td><td>Apoya al líder en la organización y el seguimiento.</td></tr>
-      <tr><td>Comunicador</td><td>Transmite instrucciones y confirma que todos entienden la meta.</td></tr>
-      <tr><td>Estratega</td><td>Lee el nivel y propone rutas o soluciones.</td></tr>
-      <tr><td>Motivador</td><td>Sube el ánimo y reconoce los logros.</td></tr>
-      <tr><td>Gestor de conflictos</td><td>Interviene cuando hay desacuerdos o tensión.</td></tr>
-      <tr><td>Técnico</td><td>Domina los controles y ayuda a los demás.</td></tr>
-      <tr><td>Analista de madurez</td><td>Diagnostica M1–M4 de sus compañeros durante el juego.</td></tr></table></details>
+    <div class="box"><h4>Recuerda</h4><p>Los roles no se asignaron: tu equipo los fue descubriendo mientras jugaba. Elige el que terminaste asumiendo, aunque no lo hayas planeado.</p></div>
   </div>
 
   <!-- 2 -->
-  <div class="step" data-step="1" data-title="Plan del líder">
-    <span class="badge">Antes de jugar</span>
-    <div class="st">2 · Plan del líder</div>
-    <div class="ss">Tienen 1 minuto de organización antes de su turno. Escriban el plan en equipo.</div>
-    <div class="fg"><label>Estrategia general para superar los niveles</label><textarea data-k="estrategia" data-req="1" data-min="10" placeholder="¿Cómo van a coordinarse? ¿Quién va primero? ¿Qué señal usarán?"></textarea></div>
-    <div class="g2">
-      <div class="fg"><label>Método de decisión que declaran antes de discutir</label>
-        <select data-k="metodo" data-req="1"><option value="">Selecciona…</option><option>Consenso</option><option>Consulta + responsable decide</option><option>Votación con regla de desempate</option></select></div>
-      <div class="fg"><label>Regla de desempate o quién decide</label><input type="text" data-k="desempate" data-req="1" placeholder="Ej. decide la líder si hay empate"></div>
-    </div>
-    <div class="fg"><label>Si hay un desacuerdo durante el juego, ¿cómo lo manejan?</label><textarea data-k="conflictoPlan" data-req="1" data-min="10"></textarea></div>
-    <details open><summary>Chuleta: madurez y estilo (Hersey-Blanchard)</summary>
-      <table class="t"><tr><th>Madurez</th><th>Cómo se ve</th><th>Estilo</th></tr>
-      <tr><td>M1 · cap. baja, disp. baja</td><td>No sabe y no se anima.</td><td>S1 Dirigir (tarea alta, relación baja)</td></tr>
-      <tr><td>M2 · cap. baja, disp. alta</td><td>No sabe, pero quiere.</td><td>S2 Persuadir (tarea alta, relación alta)</td></tr>
-      <tr><td>M3 · cap. alta, disp. baja</td><td>Sabe, pero duda.</td><td>S3 Participar (tarea baja, relación alta)</td></tr>
-      <tr><td>M4 · cap. alta, disp. alta</td><td>Sabe y quiere.</td><td>S4 Delegar (tarea baja, relación baja)</td></tr></table></details>
+  <div class="step" data-step="1" data-title="Mi experiencia">
+    <span class="badge">Reflexión</span>
+    <div class="st">2 · Lo que viviste en la misión</div>
+    <div class="ss">Responde con ejemplos concretos de lo que pasó. Máximo 500 caracteres por respuesta.</div>
+    <div class="fg"><label>1. ¿Quién fue el líder y cómo ejerció su liderazgo? (menciona ejemplos concretos)</label><textarea data-k="r1" data-req="1" data-min="10" maxlength="500"></textarea></div>
+    <div class="fg"><label>2. Describe una situación en la que el liderazgo fue determinante para avanzar.</label><textarea data-k="r2" data-req="1" data-min="10" maxlength="500"></textarea></div>
+    <div class="fg"><label>3. Menciona dos momentos donde la comunicación fue clave.</label><textarea data-k="r3" data-req="1" data-min="10" maxlength="500"></textarea></div>
+    <div class="fg"><label>4. ¿Qué conflicto o reto enfrentaron como equipo y cómo se resolvió?</label><textarea data-k="r4" data-req="1" data-min="10" maxlength="500"></textarea></div>
   </div>
 
   <!-- 3 -->
-  <div class="step" data-step="2" data-title="Pit stops">
-    <span class="badge">Durante tu turno</span>
-    <div class="st">3 · Pit stops de liderazgo</div>
-    <div class="ss">Cada vez que superan o pierden un nivel hacen una pausa de 20 s: el Analista diagnostica, el Líder elige estilo. Regístrenlo (mínimo 1 pit stop).</div>
-    <div class="g2">
-      <div class="fg"><label>Niveles superados en tu turno</label><input type="number" min="0" data-k="niveles" data-req="1"></div>
-      <div class="fg"><label>Pit stops bien ejecutados (según observadores, máx. 3)</label><input type="number" min="0" max="3" data-k="psok"></div>
+  <div class="step" data-step="2" data-title="Liderazgo situacional">
+    <span class="badge">Reflexión</span>
+    <div class="st">3 · Liderazgo situacional en el juego</div>
+    <div class="ss">Piensa en un momento del juego en el que alguien de tu equipo necesitaba algo distinto de los demás.</div>
+    <div class="g3">
+      <div class="fg"><label>Madurez de esa persona en ese momento</label><select data-k="m" data-req="1"><option value="">Selecciona…</option><option>M1 · no sabe y no se anima</option><option>M2 · no sabe, pero quiere</option><option>M3 · sabe, pero duda</option><option>M4 · sabe y quiere</option></select></div>
+      <div class="fg"><label>Estilo que se usó con ella o él</label><select data-k="e1" data-req="1"><option value="">Selecciona…</option><option>S1 Dirigir</option><option>S2 Persuadir</option><option>S3 Participar</option><option>S4 Delegar</option></select></div>
+      <div class="fg"><label>Estilo que habría funcionado mejor</label><select data-k="e2" data-req="1"><option value="">Selecciona…</option><option>S1 Dirigir</option><option>S2 Persuadir</option><option>S3 Participar</option><option>S4 Delegar</option></select></div>
     </div>
-    <div id="pits"></div>
-    <div class="fg"><label>Conflicto o decisión difícil que ocurrió en el juego y cómo la resolvieron</label><textarea data-k="conflictoJuego" data-req="1" data-min="10"></textarea></div>
+    <div class="fg"><label>5. Explica qué pasó y por qué ese estilo funcionó o no. Si no hubo ajuste de estilo, ¿qué costo tuvo?</label><textarea data-k="s1" data-req="1" data-min="10" maxlength="500"></textarea></div>
+    <div class="g2">
+      <div class="fg"><label>6a. Tipo de liderazgo que predominó en tu equipo</label><select data-k="tipo" data-req="1"><option value="">Selecciona…</option><option>Autocrático</option><option>Participativo</option><option>Transformacional</option><option>Laissez-faire</option><option>Otro</option></select></div>
+      <div class="fg"><label>6b. Método con el que decidieron bajo presión</label><select data-k="met" data-req="1"><option value="">Selecciona…</option><option>Consenso</option><option>Consulta + responsable decide</option><option>Votación con desempate</option><option>No declararon método</option></select></div>
+    </div>
+    <div class="fg"><label>6c. Justifica tus dos respuestas con un ejemplo del juego.</label><textarea data-k="s2" data-req="1" data-min="10" maxlength="500"></textarea></div>
   </div>
 
   <!-- 4 -->
-  <div class="step" data-step="3" data-title="Observación">
-    <span class="badge">Mientras esperas</span>
-    <div class="st">4 · Observo a otros equipos</div>
-    <div class="ss">Mientras otro equipo juega, tú lo observas. Completa al menos 2 fichas; las demás son opcionales.</div>
-    <div id="obs"></div>
-  </div>
-
-  <!-- 5 -->
-  <div class="step" data-step="4" data-title="Reflexión" id="s5">
-    <span class="badge">Después de jugar</span>
-    <div class="st">5 · Reflexión individual</div>
-    <div class="ss">Responde con ejemplos concretos de lo que viviste en el juego.</div>
-    <div class="fg"><label>1. ¿Qué rol desempeñaste dentro del equipo?</label><textarea data-k="r1" data-req="1" data-min="10"></textarea></div>
-    <div class="fg"><label>2. ¿Quién fue el líder y cómo ejerció su liderazgo? (ejemplos concretos)</label><textarea data-k="r2" data-req="1" data-min="10"></textarea></div>
-    <div class="fg"><label>3. Describe una situación en la que el liderazgo fue determinante para avanzar.</label><textarea data-k="r3" data-req="1" data-min="10"></textarea></div>
-    <div class="fg"><label>4. Menciona dos momentos donde la comunicación fue clave.</label><textarea data-k="r4" data-req="1" data-min="10"></textarea></div>
-    <div class="g2">
-      <div class="fg"><label>5a. Tipo de liderazgo que predominó</label><select data-k="r5a" data-req="1"><option value="">Selecciona…</option><option>Autocrático</option><option>Participativo</option><option>Transformacional</option><option>Laissez-faire</option><option>Otro</option></select></div>
-      <div class="fg"><label>5b. Estilo situacional más usado</label><select data-k="r5b" data-req="1"><option value="">Selecciona…</option><option>S1 Dirigir</option><option>S2 Persuadir</option><option>S3 Participar</option><option>S4 Delegar</option></select></div>
-    </div>
-    <div class="fg"><label>5c. Justifica tu respuesta</label><textarea data-k="r5c" data-req="1" data-min="10"></textarea></div>
-    <div class="fg"><label>6. ¿Qué conflicto o reto enfrentaron como equipo y cómo se resolvió?</label><textarea data-k="r6" data-req="1" data-min="10"></textarea></div>
-    <div class="fg"><label>7. ¿Qué aprendiste sobre tu forma de colaborar y trabajar con otros?</label><textarea data-k="r7" data-req="1" data-min="10"></textarea></div>
-    <div class="fg"><label>8. ¿Consideras que esta actividad contribuye a tu formación como líder? ¿Por qué?</label><textarea data-k="r8" data-req="1" data-min="10"></textarea></div>
-    <div class="fg"><label>9. ¿Qué opinas de esta actividad de clase?</label><textarea data-k="r9" data-req="1" data-min="10"></textarea></div>
-    <div class="fg photo"><label>10. Foto donde aparezcas con tu equipo realizando la actividad</label>
-      <input type="file" accept="image/*" id="foto"><div class="hint">La imagen se reduce y se guarda en este navegador.</div><img id="fotoImg" alt="Foto del equipo"></div>
-    <div class="fg"><label>¿Qué me llevo de la clase? Estilo que uso en automático y a quién le queda mal</label><textarea data-k="llevo" data-req="1" data-min="10"></textarea></div>
-  </div>
-
-  <!-- 6 -->
-  <div class="step" data-step="5" data-title="Acuerdos">
-    <span class="badge">Entregable de equipo · 1 de noviembre</span>
-    <div class="st">6 · Acuerdos de conflicto y decisión del equipo</div>
-    <div class="ss">Cada acuerdo describe una <b>conducta observable</b>, no una intención. Si ya firmaron un Manifiesto del Equipo, revisen la regla «cómo decidimos sin consenso».</div>
-    <div id="acu"></div>
-    <div class="g2">
-      <div class="fg"><label>Fecha de la primera revisión de estos acuerdos</label><input type="date" data-k="revision" data-req="1"></div>
-      <div class="fg"><label>Firman (nombres de todos los integrantes)</label><input type="text" data-k="firmas" data-req="1"></div>
-    </div>
-  </div>
-
-  <!-- 7 -->
-  <div class="step" data-step="6" data-title="Participación">
+  <div class="step" data-step="3" data-title="Mi aprendizaje">
     <span class="badge">Cierre</span>
-    <div class="st">7 · Participación individual en el equipo</div>
-    <div class="ss">Cada integrante puede llegar como máximo a 100 %. No es necesario que la suma del equipo dé 100 %.</div>
-    <div id="part"></div>
+    <div class="st">4 · Mi aprendizaje</div>
+    <div class="ss">Conecta lo vivido con tu forma de liderar y de trabajar en equipo.</div>
+    <div class="fg"><label>7. ¿Qué aprendiste sobre tu forma de colaborar y trabajar con otros?</label><textarea data-k="a1" data-req="1" data-min="10" maxlength="500"></textarea></div>
+    <div class="fg"><label>8. ¿Qué estilo usas en automático y a quién le puede estar quedando mal en tu equipo de proyecto?</label><textarea data-k="a2" data-req="1" data-min="10" maxlength="500"></textarea></div>
+    <div class="fg"><label>9. ¿Consideras que esta actividad contribuye a tu formación como líder? ¿Por qué?</label><textarea data-k="a3" data-req="1" data-min="10" maxlength="500"></textarea></div>
+    <div class="fg"><label>10. ¿Qué opinas de esta actividad de clase?</label><textarea data-k="a4" data-req="1" data-min="10" maxlength="500"></textarea></div>
+    <div class="fg photo"><label>11. Foto donde aparezcas con tu equipo realizando la actividad</label>
+      <input type="file" accept="image/*" id="foto"><div class="hint">La imagen se reduce y se guarda en este navegador.</div><img id="fotoImg" alt="Foto del equipo"></div>
     <div class="done-banner" id="doneB">🎉 ¡Actividad completa! Ya puedes generar tu PDF con el botón o con Ctrl+P / ⌘+P.</div>
   </div>
 
   <!-- Tarea -->
-  <div class="step" data-step="7" data-title="Tarea">
+  <div class="step" data-step="4" data-title="Tarea">
     <span class="badge t">Tarea individual · pestaña adicional</span>
     <div class="st">+ Tarea · El líder ante el conflicto (Biblioteca Virtual)</div>
     <div class="ss">No cuenta para el avance de la actividad. Confirma la fecha de entrega en Brightspace.</div>
@@ -255,39 +196,12 @@ table.t td{border-bottom:1px solid var(--line);padding:7px 10px;vertical-align:t
 <script>
 var KEY='s10_liderazgo_pico_v1', cur=0, photo='', wasDone=false, soundOn=true, AC=null, loading=true;
 var STEPS=document.querySelectorAll('.step'), N=STEPS.length; // 8 (7 + tarea)
-var STYLE='<option value="">Selecciona…</option><option>S1 Dirigir</option><option>S2 Persuadir</option><option>S3 Participar</option><option>S4 Delegar</option>';
-var MAT='<option value="">Selecciona…</option><option>M1</option><option>M2</option><option>M3</option><option>M4</option>';
-var METH='<option value="">Selecciona…</option><option>Consenso</option><option>Consulta + responsable decide</option><option>Votación con desempate</option><option>No declararon método</option>';
-var SINO='<option value="">Selecciona…</option><option>Sí</option><option>Parcialmente</option><option>No</option>';
-var N15='<option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>';
 function $(s){return document.querySelector(s);}
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
 
-/* ---------- Generar bloques ---------- */
-(function build(){
-  var m='';for(var i=1;i<=8;i++)m+='<div class="fg" style="margin:0"><input type="text" data-k="m'+i+'" '+(i<=2?'data-req="1" ':'')+'placeholder="Integrante '+i+'"></div>';
-  $('#members').innerHTML=m;
-  var p='';for(var j=1;j<=3;j++)p+='<div class="card"><h4>Pit stop '+j+(j>1?' (opcional)':'')+'</h4><div class="g2"><div class="fg"><label>Persona diagnosticada</label><input type="text" data-k="p'+j+'a" '+(j===1?'data-req="1"':'')+'></div><div class="fg"><label>Tarea o momento del nivel</label><input type="text" data-k="p'+j+'b" '+(j===1?'data-req="1"':'')+'></div></div><div class="g3"><div class="fg"><label>Madurez</label><select data-k="p'+j+'c" '+(j===1?'data-req="1"':'')+'>'+MAT+'</select></div><div class="fg"><label>Estilo elegido</label><select data-k="p'+j+'d" '+(j===1?'data-req="1"':'')+'>'+STYLE+'</select></div><div class="fg"><label>¿Funcionó?</label><select data-k="p'+j+'e">'+SINO+'</select></div></div><div class="fg" style="margin:0"><label>Frase concreta que dijo el líder</label><input type="text" data-k="p'+j+'f" '+(j===1?'data-req="1"':'')+'></div></div>';
-  $('#pits').innerHTML=p;
-  var o='';for(var k=1;k<=4;k++){var r=k<=2?'data-req="1"':'';o+='<div class="card"><h4>Observación '+k+(k>2?' (opcional)':'')+'</h4><div class="g2"><div class="fg"><label>Equipo observado</label><input type="text" data-k="o'+k+'a" '+r+'></div><div class="fg"><label>Estilo predominante del líder</label><select data-k="o'+k+'b" '+r+'>'+STYLE+'</select></div></div><div class="g2"><div class="fg"><label>¿El estilo coincidió con la madurez de los jugadores?</label><select data-k="o'+k+'c" '+r+'>'+SINO+'</select></div><div class="fg"><label>Método de decisión usado</label><select data-k="o'+k+'d" '+r+'>'+METH+'</select></div></div><div class="fg"><label>Conflicto observado y cómo se resolvió</label><input type="text" data-k="o'+k+'e" '+r+' placeholder="Si no hubo, escribe «sin conflicto»"></div><div class="fg"><label>Frase o conducta que sirve de evidencia</label><input type="text" data-k="o'+k+'f" '+r+'></div><div class="g3"><div class="fg"><label>Comunicación (1–5)</label><select data-k="o'+k+'g" '+r+'>'+N15+'</select></div><div class="fg"><label>Coordinación (1–5)</label><select data-k="o'+k+'h" '+r+'>'+N15+'</select></div><div class="fg"><label>Adaptación del estilo (1–5)</label><select data-k="o'+k+'i" '+r+'>'+N15+'</select></div></div></div>';}
-  $('#obs').innerHTML=o;
-  var AC6=['1. Qué decisiones toma cada quién, por área (con nombre)','2. Qué decisiones requieren consenso','3. Cómo se desempata','4. Qué pasa después de decidir («disiento y me comprometo»)','5. Cómo se aborda un conflicto de relación','6. Qué conductas no se toleran (2 o 3, nombradas)'];
-  var a='';AC6.forEach(function(t,i){a+='<div class="card"><h4>'+t+'</h4><div class="g2" style="grid-template-columns:2fr 1fr"><div class="fg" style="margin:0"><label>Cómo se ve en la práctica (conducta observable)</label><textarea data-k="a'+(i+1)+'a" data-req="1" data-min="10" style="min-height:60px"></textarea></div><div class="fg" style="margin:0"><label>Responsable</label><input type="text" data-k="a'+(i+1)+'b" data-req="1"></div></div></div>';});
-  $('#acu').innerHTML=a;
-  var d='';for(var q=1;q<=N;q++){}
-  var dots='';for(var s=0;s<N;s++){dots+='<button class="dot'+(s===7?' tarea':'')+'" data-d="'+s+'" title="'+STEPS[s].getAttribute('data-title')+'">'+(s===7?'+ Tarea':(s+1))+'</button>';}
-  $('#dots').innerHTML=dots;
-})();
-
-/* ---------- Participación dinámica ---------- */
-function names(){var a=[];for(var i=1;i<=8;i++){var v=($('[data-k=m'+i+']').value||'').trim();if(v)a.push({i:i,n:v});}return a;}
-function buildPart(){
-  var ns=names(),h='';
-  if(!ns.length)h='<p class="hint">Escribe los integrantes en el paso 1 para calificar su participación.</p>';
-  ns.forEach(function(x){var old=$('[data-k=pc'+x.i+']');var val=old?old.value:(saved['pc'+x.i]||'');h+='<div class="card" style="display:grid;grid-template-columns:1fr 160px;gap:14px;align-items:center"><b>'+esc(x.n)+'</b><div class="fg" style="margin:0"><label>% de participación (0–100)</label><input type="number" min="0" max="100" data-k="pc'+x.i+'" data-req="1" value="'+esc(val)+'"></div></div>';});
-  $('#part').innerHTML=h;
-  $('#part').querySelectorAll('input').forEach(function(el){el.addEventListener('input',function(){if(+el.value>100)el.value=100;if(+el.value<0)el.value=0;refresh();});});
-}
+/* ---------- Indicadores de paso ---------- */
+var TAREA=N-1;
+(function(){var dots='';for(var s=0;s<N;s++){dots+='<button class="dot'+(s===TAREA?' tarea':'')+'" data-d="'+s+'" title="'+STEPS[s].getAttribute('data-title')+'">'+(s===TAREA?'+ Tarea':(s+1))+'</button>';}$('#dots').innerHTML=dots;})();
 var saved={};
 
 /* ---------- Estado ---------- */
@@ -305,27 +219,27 @@ function refresh(){
   var ok=0,perStep={};
   req.forEach(function(el){var f=isFilled(el);if(f)ok++;var st=el.closest('.step').getAttribute('data-step');perStep[st]=perStep[st]||{t:0,o:0};perStep[st].t++;if(f)perStep[st].o++;el.closest('.fg').classList.toggle('ok',f);});
   var total=req.length+1; // +1 foto
-  if(photo)ok++; var st4=perStep['4']=perStep['4']||{t:0,o:0};st4.t++;if(photo)st4.o++;
+  if(photo)ok++; var st4=perStep['3']=perStep['3']||{t:0,o:0};st4.t++;if(photo)st4.o++;
   var pct=Math.round(100*ok/total);
   $('#fill').style.width=pct+'%';$('#pPct').textContent=pct+'%';
-  document.querySelectorAll('.dot').forEach(function(d){var s=+d.getAttribute('data-d');d.classList.toggle('active',s===cur);if(s<7){var p=perStep[s];d.classList.toggle('done',!!p&&p.o===p.t&&s!==cur);}});
+  document.querySelectorAll('.dot').forEach(function(d){var s=+d.getAttribute('data-d');d.classList.toggle('active',s===cur);if(s<TAREA){var p=perStep[s];d.classList.toggle('done',!!p&&p.o===p.t&&s!==cur);}});
   var done=pct>=100;
   $('#bPdf').disabled=!done;document.body.classList.toggle('incomplete',!done);$('#doneB').style.display=done?'block':'none';
   if(done&&!wasDone&&!loading){playDone();toast('🎉 ¡Completaste la actividad al 100 %!');}
   wasDone=done;
-  $('#mAlumno').textContent='Alumno: '+($('[data-k=alumno]').value||'—');$('#mEquipo').textContent='Equipo: '+($('[data-k=equipo]').value||'—');
-  $('#pHead').textContent='Alumno: '+($('[data-k=alumno]').value||'—')+' · Equipo: '+($('[data-k=equipo]').value||'—')+' · '+$('#mFecha').textContent;
+  $('#mAlumno').textContent='Alumno: '+($('[data-k=alumno]').value||'—');
+  $('#pHead').textContent='Alumno: '+($('[data-k=alumno]').value||'—')+' · '+$('#mFecha').textContent;
 }
 function go(i){
   cur=Math.max(0,Math.min(N-1,i));
   STEPS.forEach(function(s,k){s.classList.toggle('active',k===cur);});
   $('#bPrev').disabled=cur===0;$('#bNext').disabled=cur===N-1;
-  $('#pStep').textContent=cur===7?'Pestaña adicional · Tarea':'Paso '+(cur+1)+' de 7';
+  $('#pStep').textContent=cur===TAREA?'Pestaña adicional · Tarea':'Paso '+(cur+1)+' de 4';
   click();refresh();save();window.scrollTo({top:0,behavior:'smooth'});
 }
 document.getElementById('dots').addEventListener('click',function(e){var b=e.target.closest('[data-d]');if(b)go(+b.getAttribute('data-d'));});
 document.addEventListener('input',function(e){
-  if(e.target.getAttribute&&e.target.getAttribute('data-k')){var k=e.target.getAttribute('data-k');if(/^m[1-8]$/.test(k)){saved=collect();buildPart();}refresh();}
+  if(e.target.getAttribute&&e.target.getAttribute('data-k')){var k=e.target.getAttribute('data-k');refresh();}
 });
 $('#foto').addEventListener('change',function(e){
   var f=e.target.files[0];if(!f)return;var r=new FileReader();
@@ -348,14 +262,13 @@ function clearAll(){if(!confirm('¿Borrar todos los datos de esta actividad? Est
 var _h=[];
 window.addEventListener('beforeprint',function(){
   document.querySelectorAll('.card').forEach(function(c){var ks=c.querySelectorAll('[data-k]');if(!ks.length)return;var any=false,req=false;ks.forEach(function(k){if((k.value||'').trim())any=true;if(k.hasAttribute('data-req'))req=true;});c.classList.toggle('skip',!any&&!req);});
-  var t=document.querySelector('[data-step="7"]');var tf=false;t.querySelectorAll('[data-k]').forEach(function(k){if((k.value||'').trim())tf=true;});t.classList.toggle('skip',!tf);
+  var t=document.querySelector('[data-step="4"]');var tf=false;t.querySelectorAll('[data-k]').forEach(function(k){if((k.value||'').trim())tf=true;});t.classList.toggle('skip',!tf);
   _h=[];document.querySelectorAll('textarea').forEach(function(t){_h.push(t.style.height);t.style.height='auto';t.style.height=t.scrollHeight+4+'px';});});
 window.addEventListener('afterprint',function(){document.querySelectorAll('textarea').forEach(function(t,i){t.style.height=_h[i]||'';});});
 
 /* ---------- Inicio ---------- */
 load();
 $('#mFecha').textContent=new Date().toLocaleDateString('es-MX',{day:'numeric',month:'long',year:'numeric'});
-buildPart();
 go(cur);
 loading=false;
 setInterval(save,30000);
